@@ -18,7 +18,7 @@ The [mkxp-z wiki](https://github.com/mkxp-z/mkxp-z/wiki) might answer some of yo
 ---
 
 ## License
-**mkshot-z** is licensed under **GPLv2 or later**. See [COPYING](COPYING) for more details.
+**mkshot-z** is licensed under **GPLv3 or later**. See [LICENSE](LICENSE) for more details.
 
 ## Contributing
 Contributions are welcome.
