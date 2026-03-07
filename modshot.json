@@ -76,7 +76,7 @@
     //   1: Bilinear
     //   2: Bicubic
     //   3: Lanczos3
-    //   4: xBRZ (available on GPLv3 builds)
+    //   4: xBRZ
     // (Default: 0)
     // 
     // "smoothScaling": 0,

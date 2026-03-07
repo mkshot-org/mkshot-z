@@ -140,9 +140,7 @@ void Config::read(int argc, char *argv[]) {
         {"bitmapSmoothScalingDown", 0},
         {"smoothScalingMipmaps", false},
         {"bicubicSharpness", 100},
-#ifdef MKXPZ_SSL
         {"xbrzScalingFactor", 1.},
-#endif
         {"enableHires", false},
         {"textureScalingFactor", 1.},
         {"framebufferScalingFactor", 1.},
@@ -280,9 +278,7 @@ try { exp } catch (...) {}
     SET_OPT(bitmapSmoothScalingDown, integer);
     SET_OPT(smoothScalingMipmaps, boolean);
     SET_OPT(bicubicSharpness, integer);
-#ifdef MKXPZ_SSL
     SET_OPT(xbrzScalingFactor, integer);
-#endif
     SET_OPT(enableHires, boolean);
     SET_OPT(textureScalingFactor, number);
     SET_OPT(framebufferScalingFactor, number);

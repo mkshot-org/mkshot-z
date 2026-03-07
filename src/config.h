@@ -49,9 +49,7 @@ struct Config {
     int bitmapSmoothScalingDown;
     bool smoothScalingMipmaps;
     int bicubicSharpness;
-#ifdef MKXPZ_SSL
     double xbrzScalingFactor;
-#endif
     bool enableHires;
     double textureScalingFactor;
     double framebufferScalingFactor;

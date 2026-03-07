@@ -364,7 +364,6 @@ protected:
 	GLint u_bc;
 };
 
-#ifdef MKXPZ_SSL
 class XbrzShader : public Lanczos3Shader
 {
 public:
@@ -375,7 +374,6 @@ public:
 protected:
 	GLint u_targetScale;
 };
-#endif
 
 class Lanczos3SpriteShader : public SimpleSpriteShader
 {
@@ -434,14 +432,10 @@ struct ShaderSet
 	ObscuredShader obscured;
 	BicubicShader bicubic;
 	Lanczos3Shader lanczos3;
-#ifdef MKXPZ_SSL
 	XbrzShader xbrz;
-#endif
 	Lanczos3SpriteShader lanczos3Sprite;
 	BicubicSpriteShader bicubicSprite;
-#ifdef MKXPZ_SSL
 	XbrzSpriteShader xbrzSprite;
-#endif
 };
 
 #endif // SHADER_H

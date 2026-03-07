@@ -65,13 +65,6 @@ option(
 )
 
 option(
-    'https',
-    type: 'boolean',
-    value: false,
-    description: 'Enable HTTPLite Ruby bindings (HTTPS support, Requires OpenSSL)'
-)
-
-option(
     'cxx11_experimental',
     type: 'boolean',
     value: false,

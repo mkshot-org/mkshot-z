@@ -2,7 +2,7 @@ project(
     'ModShot',
     ['cpp', 'c'],
     version: '2.0.0',
-    license: 'GPL-2.0 or later',
+    license: 'GPL-3.0 or later',
     meson_version: '>=0.56.0',
     default_options: [
         'cpp_std=c++14',
@@ -145,10 +145,6 @@ if is_static
     endif
 endif
 
-mkxp_gplv3 = false
-if get_option('https') == true
-    mkxp_gplv3 = true
-endif
 
 if get_option('workdir_current') == true
     mkxp_cflags += '-DWORKDIR_CURRENT'

@@ -26,14 +26,9 @@ mkxp_shaders = files(
     'flashMap.frag',
     'bicubic.frag',
     'lanczos3.frag',
-    'obscured.frag'
+    'obscured.frag',
+    'xbrz.frag'
 )
-
-# xBRZ shader is licensed under GPLv3, so checking for enabled OpenSSL support
-# as it's also requires to be GPLv3 compatable
-if mkxp_gplv3 == true
-    mkxp_shaders += files('xbrz.frag')
-endif
 
 mkxp_shaders_xxd = xxd_gen.process(mkxp_shaders)
 

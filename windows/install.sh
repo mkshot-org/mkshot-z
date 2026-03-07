@@ -14,9 +14,8 @@ fi
 set -e
 
 # Get script arguments
-GPLV3=$1
-STEAM_PATH=$2
-STEAM_LIBNAME=$3
+STEAM_PATH=$1
+STEAM_LIBNAME=$2
 
 # Get source, build and install paths
 SOURCE="$MESON_SOURCE_ROOT"
@@ -53,12 +52,6 @@ function make_prefix {
   echo "Installing Ruby library to rubylib/3.1.0..."
   mkdir -p "$INSTALL/rubylib"
   cp -pur "$MKXPZ_PREFIX/lib/ruby/3.1.0/." "$INSTALL/rubylib/3.1.0/"
-
-  # Copy GPL-3.0 license file
-  if [[ -n "$GPLV3" ]] && [[ "$GPLV3" == "1" ]]; then
-    echo "Installing LICENSE.mkxp-z-with-https.txt..."
-    cp -pu "$SOURCE/assets/LICENSE.mkxp-z-with-https.txt" "$INSTALL/"
-  fi
 }
 
 # ------------------------------------------------------------------------------

@@ -16,9 +16,8 @@ set -e
 # Get script arguments
 MKXP_NAME=$1
 BITS=$2
-GPLV3=$3
-APPIMAGETOOL=$4
-STEAM_PATH=$5
+APPIMAGETOOL=$3
+STEAM_PATH=$4
 
 # Get source, build and install paths
 SOURCE="$MESON_SOURCE_ROOT"
@@ -79,12 +78,6 @@ function make_prefix {
 
   # Remove RPATH from native extensions in Ruby library
   patchelf "$INSTALL/rubylib/3.1.0"/*/*.so --remove-rpath
-
-  # Copy GPL-3.0 license file
-  if [[ -n "$GPLV3" ]] && [[ "$GPLV3" == "1" ]]; then
-    echo "Installing LICENSE.mkxp-z-with-https.txt..."
-    cp -pu "$SOURCE/assets/LICENSE.mkxp-z-with-https.txt" "$INSTALL/"
-  fi
 }
 
 function make_appdir {
@@ -152,10 +145,6 @@ function make_appdir {
     echo "Copying libsteam_api.so to $MKXP_NAME.AppDir/usr/lib..."
     cp -pu "$STEAM_PATH/libsteam_api.so" "$APPDIR_LIB/"
   fi
-
-  # Copy GPL-3.0 license file
-  echo "Copying LICENSE.mkxp-z-with-https.txt to $MKXP_NAME.AppDir/usr/licenses/$MKXP_NAME..."
-  cp -pu "$SOURCE/assets/LICENSE.mkxp-z-with-https.txt" "$APPDIR_SHARE/licenses/$MKXP_NAME/"
 }
 
 function make_appimage {
@@ -184,12 +173,6 @@ function make_appimage {
       echo "Installing steam_appid.txt..."
       cp -pu "$SOURCE/assets/steam_appid.txt" "$INSTALL/"
     fi
-  fi
-
-  # Copy GPL-3.0 license file
-  if [[ -n "$GPLV3" ]] && [[ "$GPLV3" == "1" ]]; then
-    echo "Installing LICENSE.mkxp-z-with-https.txt..."
-    cp -pu "$SOURCE/assets/LICENSE.mkxp-z-with-https.txt" "$INSTALL/"
   fi
 }
 

@@ -23,7 +23,6 @@ endif
 
 # Define install script parameters
 install_arch = ''
-install_gplv3 = '0'
 
 if appimagetool != ''
     install_arch = host_arch
@@ -35,9 +34,5 @@ else
     endif
 endif
 
-if mkxp_gplv3 == true
-    install_gplv3 = '1'
-endif
-
 # Linux install script
-meson.add_install_script('install.sh', mkxp_name, install_arch, install_gplv3, appimagetool, steamworks_libpath)
+meson.add_install_script('install.sh', mkxp_name, install_arch, appimagetool, steamworks_libpath)

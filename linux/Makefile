@@ -13,6 +13,10 @@ NPROC ?= $(shell nproc)
 # (Default: 0 (False))
 LTO ?= 0
 
+# Compilers
+CC  ?= cc
+CXX ?= c++
+
 
 # ==============================================================================
 
@@ -20,15 +24,8 @@ LTO ?= 0
 # Get build target
 ARCH ?= $(shell uname -m)
 
-# Define OpenSSL build target configuration
-OPENSSL_TARGET := linux-$(ARCH)
-
 # Ruby native libraries architecture name
 RUBY_ARCH = $(shell $(BINDIR)/ruby -e "require 'rbconfig'; puts RbConfig::CONFIG['arch']")
-
-# Define compilers
-CC  := gcc
-CXX := g++
 
 # Declare directories
 MKFDIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
@@ -57,6 +54,7 @@ AC_ARGS := --prefix="$(PREFIX)" --libdir="$(PREFIX)/lib"
 
 # CMake options
 CMAKE_ARGS := \
+	-DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
 	-DCMAKE_INSTALL_PREFIX="$(PREFIX)" \
 	-DCMAKE_PREFIX_PATH="$(PREFIX)" \
 	-DCMAKE_C_COMPILER="$(CC)" \
@@ -76,9 +74,8 @@ RUBY_ARGS := \
 	--with-zlib-dir="$(PREFIX)" \
 	--with-libyaml-dir="$(PREFIX)" \
 	--with-libffi-dir="$(PREFIX)" \
-	--with-openssl-dir="$(PREFIX)" \
 	--with-static-linked-ext \
-	--with-out-ext=openssl,readline,pty,syslog,win32,win32ole
+	--with-out-ext=readline,pty,syslog,win32,win32ole
 
 # Shortcut shell build commands
 GIT           := git clone -q -c advice.detachedHead=false --single-branch --no-tags --depth 1
@@ -117,7 +114,6 @@ download: \
 	$(DLDIR)/fluidsynth/CMakeLists.txt \
 	$(DLDIR)/libyaml/CMakeLists.txt \
 	$(DLDIR)/$(DLARCH)/libffi/configure.ac \
-	$(DLDIR)/$(DLARCH)/openssl/Configure \
 	$(DLDIR)/$(DLARCH)/ruby/configure.ac
 
 # Build target recipes
@@ -141,9 +137,7 @@ build: \
 	sdl2_sound \
 	openal \
 	fluidsynth \
-	openssl \
-	ruby \
-	ruby-ext-openssl
+	ruby
 
 
 init: $(DLDIR) $(BINDIR) $(LIBDIR) $(INCDIR)
@@ -156,6 +150,8 @@ $(BINDIR):
 
 $(LIBDIR):
 	@mkdir -p $(LIBDIR)
+	@ln -s lib $(PREFIX)/lib64
+	@ln -s lib $(PREFIX)/lib32
 
 $(INCDIR):
 	@mkdir -p $(INCDIR)
@@ -176,7 +172,7 @@ clean-prefix:
 	all download build init clean clean-download clean-prefix \
 	libogg libvorbis libtheora zlib physfs uchardet libiconv libpng libjpeg \
 	pixman harfbuzz freetype harfbuzz-ft sdl2 sdl2_image sdl2_ttf sdl2_sound \
-	openal fluidsynth libyaml libffi openssl ruby ruby-ext-openssl
+	openal fluidsynth libyaml libffi ruby
 
 
 # ============================ Dependencies options ============================
@@ -293,15 +289,6 @@ OPTS_LIBFFI := \
 	--disable-shared \
 	--enable-static \
 	--disable-docs
-
-OPTS_OPENSSL := \
-	--prefix="$(PREFIX)" \
-	--libdir="lib" \
-	--openssldir="$(PREFIX)/ssl" \
-	$(OPENSSL_TARGET) \
-	no-shared \
-	no-makedepend \
-	no-tests
 
 
 # ================================= Xiph codecs ================================
@@ -427,15 +414,15 @@ $(DLDIR)/$(DLARCH)/libiconv/Makefile: $(DLDIR)/$(DLARCH)/libiconv/configure.ac
 	@printf "\e[94m=>\e[0m \e[36mConfiguring libiconv...\e[0m\n"
 	@cd $(DLDIR)/$(DLARCH)/libiconv; $(CONFIGURE) $(OPTS_LIBICONV)
 
-$(DLDIR)/$(DLARCH)/libiconv/configure.ac: $(DLDIR)/libiconv-1.17.tar.gz
+$(DLDIR)/$(DLARCH)/libiconv/configure.ac: $(DLDIR)/libiconv-1.18.tar.gz
 	@printf "\e[94m=>\e[0m \e[36mUnpacking GNU iconv...\e[0m\n"
-	@tar -xzf $(DLDIR)/libiconv-1.17.tar.gz -C $(DLDIR)/$(DLARCH)/
-	@mv $(DLDIR)/$(DLARCH)/libiconv-1.17 $(DLDIR)/$(DLARCH)/libiconv
+	@tar -xzf $(DLDIR)/libiconv-1.18.tar.gz -C $(DLDIR)/$(DLARCH)/
+	@mv $(DLDIR)/$(DLARCH)/libiconv-1.18 $(DLDIR)/$(DLARCH)/libiconv
 	@touch $(DLDIR)/$(DLARCH)/libiconv/configure.ac
 
-$(DLDIR)/libiconv-1.17.tar.gz:
-	@printf "\e[94m=>\e[0m \e[36mDownloading GNU iconv 1.17...\e[0m\n"
-	@wget -q https://ftp.gnu.org/pub/gnu/libiconv/libiconv-1.17.tar.gz -P $(DLDIR)/
+$(DLDIR)/libiconv-1.18.tar.gz:
+	@printf "\e[94m=>\e[0m \e[36mDownloading GNU iconv 1.18...\e[0m\n"
+	@wget -q https://ftp.gnu.org/pub/gnu/libiconv/libiconv-1.18.tar.gz -P $(DLDIR)/
 
 # ---------------------------------- uchardet ----------------------------------
 uchardet: init $(LIBDIR)/libuchardet.a
@@ -594,8 +581,8 @@ $(DLDIR)/sdl2/$(BDIR)/Makefile: $(DLDIR)/sdl2/CMakeLists.txt
 	@cd $(DLDIR)/sdl2; $(CMAKE) $(OPTS_SDL)
 
 $(DLDIR)/sdl2/CMakeLists.txt:
-	@printf "\e[94m=>\e[0m \e[36mDownloading SDL2 2.30.3...\e[0m\n"
-	@$(GIT) -b release-2.30.3 https://github.com/libsdl-org/SDL $(DLDIR)/sdl2
+	@printf "\e[94m=>\e[0m \e[36mDownloading SDL2 2.32.10...\e[0m\n"
+	@$(GIT) -b release-2.32.10 https://github.com/libsdl-org/SDL $(DLDIR)/sdl2
 
 # --------------------------------- SDL2_image ---------------------------------
 sdl2_image: init sdl2 libpng libjpeg $(LIBDIR)/libSDL2_image.a
@@ -677,10 +664,10 @@ $(DLDIR)/openal/$(BDIR)/Makefile: $(DLDIR)/openal/CMakeLists.txt
 	@cd $(DLDIR)/openal; $(CMAKE) $(OPTS_OPENAL)
 
 $(DLDIR)/openal/CMakeLists.txt:
-	@printf "\e[94m=>\e[0m \e[36mDownloading OpenAL 1.23.1...\e[0m\n"
-	@$(GIT) -b 1.23.1 https://github.com/kcat/openal-soft $(DLDIR)/openal
+	@printf "\e[94m=>\e[0m \e[36mDownloading OpenAL 1.25.1...\e[0m\n"
+	@$(GIT) -b 1.25.1 https://github.com/kcat/openal-soft $(DLDIR)/openal
 
-# ---------------------------- FluidSynth (no glib) ----------------------------
+# ---------------------------- FluidSynth ----------------------------
 fluidsynth: init $(LIBDIR)/libfluidsynth.a
 
 $(LIBDIR)/libfluidsynth.a: $(DLDIR)/fluidsynth/$(BDIR)/src/libfluidsynth.a
@@ -694,11 +681,11 @@ $(DLDIR)/fluidsynth/$(BDIR)/src/libfluidsynth.a: $(DLDIR)/fluidsynth/$(BDIR)/Mak
 
 $(DLDIR)/fluidsynth/$(BDIR)/Makefile: $(DLDIR)/fluidsynth/CMakeLists.txt
 	@printf "\e[94m=>\e[0m \e[36mConfiguring FluidSynth...\e[0m\n"
-	@cd $(DLDIR)/fluidsynth; $(CMAKE) $(OPTS_FLUIDSYNTH)
+	@cd $(DLDIR)/fluidsynth; $(CMAKE) $(OPTS_FLUIDSYNTH) -Dosal=cpp11
 
 $(DLDIR)/fluidsynth/CMakeLists.txt:
-	@printf "\e[94m=>\e[0m \e[36mDownloading FluidSynth 2.1.5 (no glib)...\e[0m\n"
-	@$(GIT) https://github.com/mkxp-z/fluidsynth-sans-glib $(DLDIR)/fluidsynth
+	@printf "\e[94m=>\e[0m \e[36mDownloading FluidSynth 2.5.3...\e[0m\n"
+	@$(GIT) -b v2.5.3 https://github.com/FluidSynth/fluidsynth $(DLDIR)/fluidsynth
 
 
 # ============================== Ruby 3.1 and etc. =============================
@@ -743,30 +730,11 @@ $(DLDIR)/$(DLARCH)/libffi/configure: $(DLDIR)/$(DLARCH)/libffi/configure.ac
 	@cd $(DLDIR)/$(DLARCH)/libffi; autoreconf -fi
 
 $(DLDIR)/$(DLARCH)/libffi/configure.ac:
-	@printf "\e[94m=>\e[0m \e[36mDownloading libffi 3.4.6...\e[0m\n"
-	@$(GIT) -b v3.4.6 https://github.com/libffi/libffi $(DLDIR)/$(DLARCH)/libffi
-
-# --------------------------------- OpenSSL 3.0 --------------------------------
-openssl: init $(LIBDIR)/libssl.a
-
-$(LIBDIR)/libssl.a: $(DLDIR)/$(DLARCH)/openssl/libssl.a
-	@printf "\e[94m=>\e[0m \e[36mInstalling OpenSSL...\e[0m\n"
-	@cd $(DLDIR)/$(DLARCH)/openssl; make install_sw
-
-$(DLDIR)/$(DLARCH)/openssl/libssl.a: $(DLDIR)/$(DLARCH)/openssl/Makefile
-	@printf "\e[94m=>\e[0m \e[36mBuilding OpenSSL...\e[0m\n"
-	@cd $(DLDIR)/$(DLARCH)/openssl; make -j $(NPROC)
-
-$(DLDIR)/$(DLARCH)/openssl/Makefile: $(DLDIR)/$(DLARCH)/openssl/Configure
-	@printf "\e[94m=>\e[0m \e[36mConfiguring OpenSSL...\e[0m\n"
-	@cd $(DLDIR)/$(DLARCH)/openssl; CC="$(CC)" CXX="$(CXX)" perl ./Configure $(OPTS_OPENSSL)
-
-$(DLDIR)/$(DLARCH)/openssl/Configure:
-	@printf "\e[94m=>\e[0m \e[36mDownloading OpenSSL 3.0.13...\e[0m\n"
-	@$(GIT) -b openssl-3.0.13 https://github.com/openssl/openssl $(DLDIR)/$(DLARCH)/openssl
+	@printf "\e[94m=>\e[0m \e[36mDownloading libffi 3.5.2...\e[0m\n"
+	@$(GIT) -b v3.5.2 https://github.com/libffi/libffi $(DLDIR)/$(DLARCH)/libffi
 
 # ---------------------------------- Ruby 3.1 ----------------------------------
-ruby: init zlib libyaml libffi openssl $(LIBDIR)/libruby.so
+ruby: init zlib libyaml libffi $(LIBDIR)/libruby.so
 
 $(LIBDIR)/libruby.so: $(DLDIR)/$(DLARCH)/ruby/libruby.so.3.1
 	@printf "\e[94m=>\e[0m \e[36mInstalling Ruby...\e[0m\n"
@@ -781,11 +749,14 @@ $(DLDIR)/$(DLARCH)/ruby/Makefile: $(DLDIR)/$(DLARCH)/ruby/configure
 ifeq ($(LTO),1)
 	@cd $(DLDIR)/$(DLARCH)/ruby; \
 	export $(AC_ENV); \
-	export CFLAGS="$$CFLAGS -flto"; \
+	export CFLAGS="$$CFLAGS -std=gnu99 -flto"; \
 	export LDFLAGS="$$LDFLAGS -flto"; \
 	./configure $(AC_ARGS) $(RUBY_ARGS)
 else
-	@cd $(DLDIR)/$(DLARCH)/ruby; $(CONFIGURE) $(RUBY_ARGS)
+	@cd $(DLDIR)/$(DLARCH)/ruby; \
+	export $(AC_ENV); \
+	export CFLAGS="$$CFLAGS -std=gnu99"; \
+	./configure $(AC_ARGS) $(RUBY_ARGS)
 endif
 
 $(DLDIR)/$(DLARCH)/ruby/configure: $(DLDIR)/$(DLARCH)/ruby/configure.ac
@@ -793,26 +764,5 @@ $(DLDIR)/$(DLARCH)/ruby/configure: $(DLDIR)/$(DLARCH)/ruby/configure.ac
 	@cd $(DLDIR)/$(DLARCH)/ruby; autoreconf -fi
 
 $(DLDIR)/$(DLARCH)/ruby/configure.ac:
-	@printf "\e[94m=>\e[0m \e[36mDownloading Ruby 3.1.5...\e[0m\n"
-	@$(GIT) -b v3_1_5 https://github.com/ruby/ruby $(DLDIR)/$(DLARCH)/ruby
-
-# --------------------------- Ruby OpenSSL shared ext --------------------------
-ruby-ext-openssl: openssl ruby $(LIBDIR)/ruby/3.1.0/openssl
-
-$(LIBDIR)/ruby/3.1.0/openssl: $(DLDIR)/$(DLARCH)/ruby/ext/openssl/openssl.so
-	@printf "\e[94m=>\e[0m \e[36mInstalling openssl Ruby extension...\e[0m\n"
-	cd $(DLDIR)/$(DLARCH)/ruby/ext/openssl; \
-	cp -pv openssl.so $(LIBDIR)/ruby/3.1.0/$(RUBY_ARCH); \
-	cp -rv lib/* $(LIBDIR)/ruby/3.1.0
-
-$(DLDIR)/$(DLARCH)/ruby/ext/openssl/openssl.so: $(DLDIR)/$(DLARCH)/ruby/ext/openssl/Makefile
-	@printf "\e[94m=>\e[0m \e[36mBuilding openssl Ruby extension...\e[0m\n"
-	cd $(DLDIR)/$(DLARCH)/ruby/ext/openssl; make -j $(NPROC)
-
-$(DLDIR)/$(DLARCH)/ruby/ext/openssl/Makefile: $(DLDIR)/$(DLARCH)/ruby/ext/openssl/extconf.rb.orig
-	@printf "\e[94m=>\e[0m \e[36mConfiguring openssl Ruby extension...\e[0m\n"
-	cd $(DLDIR)/$(DLARCH)/ruby/ext/openssl; $(BINDIR)/ruby extconf.rb
-
-$(DLDIR)/$(DLARCH)/ruby/ext/openssl/extconf.rb.orig:
-	@printf "\e[94m=>\e[0m \e[36mPatching openssl extconf.rb...\e[0m\n"
-	patch -s -b $(DLDIR)/$(DLARCH)/ruby/ext/openssl/extconf.rb $(MKFDIR)/ruby-extconf-openssl.patch
+	@printf "\e[94m=>\e[0m \e[36mDownloading Ruby 3.1.7...\e[0m\n"
+	@$(GIT) -b v3_1_7 https://github.com/ruby/ruby $(DLDIR)/$(DLARCH)/ruby

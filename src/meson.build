@@ -46,17 +46,6 @@ if get_option('fluidsynth') == true
     endif
 endif
 
-# Include OpenSSL when option is true
-if get_option('https') == true
-    dep_openssl = dependency('openssl', required: false, static: is_static)
-    if dep_openssl.found()
-        mkxp_dependencies += dep_openssl
-        mkxp_cflags += '-DMKXPZ_SSL'
-    else
-        warning('Could not locate OpenSSL library; HTTPS support remains disabled')
-    endif
-endif
-
 # Win32 API: Required for GetUserNameEx
 if host_system == 'windows'
     mkxp_dependencies += cc.find_library('Secur32', required: true)
