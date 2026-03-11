@@ -39,4 +39,3 @@ std::string selectPath(SDL_Window *win, const char *msg, const char *prompt);
 #endif
 
 };
-#endif /* filesystemImpl_h */

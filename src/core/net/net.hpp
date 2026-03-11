@@ -52,5 +52,3 @@ private:
     bool follow_location;
 };
 }
-
-#endif /* NET_H */

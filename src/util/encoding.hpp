@@ -68,5 +68,3 @@ static std::string convertString(std::string &str) {
     return buf;
 }
 }
-
-#endif /* ENCODING_H */
