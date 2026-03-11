@@ -10,8 +10,7 @@
 ** mkshot-z is licensed under GPLv3-or-later.
 */
 
-#ifndef ONESHOT_JOURNAL_H
-#define ONESHOT_JOURNAL_H
+#pragma once
 
 struct JournalPrivate;
 
@@ -31,5 +30,3 @@ public:
 	void nikoPrepare();
 	void nikoStart();
 };
-
-#endif // ONESHOT_JOURNAL_H

@@ -5,8 +5,7 @@
 //  MIT License
 //
 
-#ifndef CPPHTTPLIB_HTTPLIB_H
-#define CPPHTTPLIB_HTTPLIB_H
+#pragma once
 
 #define CPPHTTPLIB_VERSION "0.37.0"
 #define CPPHTTPLIB_VERSION_NUM "0x002500"
@@ -20048,5 +20047,3 @@ WebSocketClient::enable_server_certificate_verification(bool enabled) {
 // ----------------------------------------------------------------------------
 
 } // namespace httplib
-
-#endif // CPPHTTPLIB_HTTPLIB_H

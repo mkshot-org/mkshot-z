@@ -10,8 +10,7 @@
 ** mkshot-z is licensed under GPLv3-or-later.
 */
 
-#ifndef XFCONF_FUN_H
-#define XFCONF_FUN_H
+#pragma once
 
 #include <cstddef>
 
@@ -57,5 +56,3 @@ struct XfconfFunctions
 extern XfconfFunctions dynXfconf;
 
 void initXfconfFunctions();
-
-#endif // XFCONF_FUN_H

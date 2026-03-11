@@ -9,9 +9,7 @@
 ** ModShot-mkxp-z is licensed under GPLv2 or later.
 ** mkshot-z is licensed under GPLv3-or-later.
 */
-
-#ifndef ONESHOT_APPLE_H
-#define ONESHOT_APPLE_H
+#pragma once
 
 #include <string>
 
@@ -21,5 +19,3 @@ namespace OneshotApple
 	void desktopImageReset();
 	void desktopImageCache();
 }
-
-#endif // ONESHOT_APPLE_H

@@ -10,8 +10,7 @@
 ** mkshot-z is licensed under GPLv3-or-later.
 */
 
-#ifndef ONESHOT_WALLPAPER_H
-#define ONESHOT_WALLPAPER_H
+#pragma once
 
 struct WallpaperPrivate;
 
@@ -29,5 +28,3 @@ public:
 	void set(const char *name, int color);
 	void reset();
 };
-
-#endif // ONESHOT_WALLPAPER_H

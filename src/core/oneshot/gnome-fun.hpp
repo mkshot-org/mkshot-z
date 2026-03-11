@@ -10,8 +10,7 @@
 ** mkshot-z is licensed under GPLv3-or-later.
 */
 
-#ifndef GNOME_FUN_H
-#define GNOME_FUN_H
+#pragma once
 
 #include <cstddef>
 
@@ -268,5 +267,3 @@ extern GdkFunctions dynGdk;
 void initGnomeFunctions();
 void initGioFunctions();
 void initGdkFunctions();
-
-#endif // GNOME_FUN_H

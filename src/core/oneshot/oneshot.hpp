@@ -10,8 +10,7 @@
 ** mkshot-z is licensed under GPLv3-or-later.
 */
 
-#ifndef ONESHOT_H
-#define ONESHOT_H
+#pragma once
 
 #include "core/etc/internal.hpp"
 
@@ -76,5 +75,3 @@ public:
 	// Linux: Desktop Environment string
 	std::string desktopEnv;
 };
-
-#endif // ONESHOT_H
