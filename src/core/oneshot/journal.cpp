@@ -315,7 +315,7 @@ void Journal::nikoPrepare()
 {
 #if MKSHOT_PLATFORM != MKSHOT_PLATFORM_WINDOWS
 	std::string name;
-	std::string cwd = mkxp_fs::getCurrentDirectory();
+	std::string cwd = mkshot_fs::getCurrentDirectory();
 
 #if MKSHOT_PLATFORM == MKSHOT_PLATFORM_MACOS
 	name = "_______.app/Contents/MacOS/_______";
@@ -359,7 +359,7 @@ void Journal::nikoStart()
 	// Prepare process information
 	std::string name = "_______.exe";
 
-	std::string cwd = mkxp_fs::getCurrentDirectory();
+	std::string cwd = mkshot_fs::getCurrentDirectory();
 	std::string path = cwd + "\\" + name;
 
 	std::wstring wPath = utf8ToWide(path.c_str());

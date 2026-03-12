@@ -185,8 +185,8 @@ Oneshot::Oneshot(RGSSThreadData &threadData) : threadData(threadData)
 	p->window = threadData.window;
 	p->savePath = threadData.config.customDataPath.substr(0, threadData.config.customDataPath.size() - 1);
 
-	p->lang = mkxp_sys::getLanguage();
-	p->userName = mkxp_sys::getUserFullName();
+	p->lang = mkshot_sys::getLanguage();
+	p->userName = mkshot_sys::getUserFullName();
 
 #if MKSHOT_PLATFORM == MKSHOT_PLATFORM_WINDOWS
 	wchar_t wcPath[MAX_PATH];

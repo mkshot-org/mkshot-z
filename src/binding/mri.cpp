@@ -44,7 +44,6 @@ extern "C" {
 
 #include <assert.h>
 #include <string>
-#include <zlib.h>
 
 #include <SDL_cpuinfo.h>
 #include <SDL_filesystem.h>
@@ -98,52 +97,52 @@ void wallpaperBindingInit();
 
 void steamBindingInit();
 
-RB_METHOD(mkxpDelta);
+RB_METHOD(mkshotDelta);
 RB_METHOD(mriPrint);
 RB_METHOD(mriP);
-RB_METHOD(mkxpDataDirectory);
-RB_METHOD(mkxpSetTitle);
-RB_METHOD(mkxpGetTitle);
-RB_METHOD(mkxpDesensitize);
-RB_METHOD(mkxpPuts);
+RB_METHOD(mkshotDataDirectory);
+RB_METHOD(mkshotSetTitle);
+RB_METHOD(mkshotGetTitle);
+RB_METHOD(mkshotDesensitize);
+RB_METHOD(mkshotPuts);
 
-RB_METHOD(mkxpPlatform);
-RB_METHOD(mkxpIsMacHost);
-RB_METHOD(mkxpIsWindowsHost);
-RB_METHOD(mkxpIsLinuxHost);
-RB_METHOD(mkxpIsUsingRosetta);
-RB_METHOD(mkxpIsUsingWine);
-RB_METHOD(mkxpIsReallyMacHost);
-RB_METHOD(mkxpIsReallyLinuxHost);
-RB_METHOD(mkxpIsReallyWindowsHost);
+RB_METHOD(mkshotPlatform);
+RB_METHOD(mkshotIsMacHost);
+RB_METHOD(mkshotIsWindowsHost);
+RB_METHOD(mkshotIsLinuxHost);
+RB_METHOD(mkshotIsUsingRosetta);
+RB_METHOD(mkshotIsUsingWine);
+RB_METHOD(mkshotIsReallyMacHost);
+RB_METHOD(mkshotIsReallyLinuxHost);
+RB_METHOD(mkshotIsReallyWindowsHost);
 
-RB_METHOD(mkxpUserLanguage);
-RB_METHOD(mkxpUserName);
-RB_METHOD(mkxpUserFullName);
+RB_METHOD(mkshotUserLanguage);
+RB_METHOD(mkshotUserName);
+RB_METHOD(mkshotUserFullName);
 
-RB_METHOD(mkxpGameTitle);
-RB_METHOD(mkxpPowerState);
-RB_METHOD(mkxpSettingsMenu);
-RB_METHOD(mkxpCpuCount);
-RB_METHOD(mkxpSystemMemory);
-RB_METHOD(mkxpReloadPathCache);
-RB_METHOD(mkxpAddPath);
-RB_METHOD(mkxpRemovePath);
-RB_METHOD(mkxpFileExists);
-RB_METHOD(mkxpLaunch);
+RB_METHOD(mkshotGameTitle);
+RB_METHOD(mkshotPowerState);
+RB_METHOD(mkshotSettingsMenu);
+RB_METHOD(mkshotCpuCount);
+RB_METHOD(mkshotSystemMemory);
+RB_METHOD(mkshotReloadPathCache);
+RB_METHOD(mkshotAddPath);
+RB_METHOD(mkshotRemovePath);
+RB_METHOD(mkshotFileExists);
+RB_METHOD(mkshotLaunch);
 
-RB_METHOD(mkxpGetJSONSetting);
-RB_METHOD(mkxpSetJSONSetting);
-RB_METHOD(mkxpGetAllJSONSettings);
+RB_METHOD(mkshotGetJSONSetting);
+RB_METHOD(mkshotSetJSONSetting);
+RB_METHOD(mkshotGetAllJSONSettings);
 
-RB_METHOD(mkxpSetDefaultFontFamily);
+RB_METHOD(mkshotSetDefaultFontFamily);
 
 RB_METHOD(mriRgssMain);
 RB_METHOD(mriRgssStop);
 RB_METHOD(_kernelCaller);
 
-RB_METHOD(mkxpStringToUTF8);
-RB_METHOD(mkxpStringToUTF8Bang);
+RB_METHOD(mkshotStringToUTF8);
+RB_METHOD(mkshotStringToUTF8Bang);
 
 VALUE json2rb(json5pp::value const &v);
 json5pp::value rb2json(VALUE v);
@@ -214,51 +213,51 @@ static void mriBindingInit() {
         assert(!"unreachable");
     
     VALUE mod = rb_define_module("System");
-    _rb_define_module_function(mod, "delta", mkxpDelta);
-    _rb_define_module_function(mod, "uptime", mkxpDelta);
-    _rb_define_module_function(mod, "data_directory", mkxpDataDirectory);
-    _rb_define_module_function(mod, "set_window_title", mkxpSetTitle);
-    _rb_define_module_function(mod, "window_title", mkxpGetTitle);
-    _rb_define_module_function(mod, "window_title=", mkxpSetTitle);
-    _rb_define_module_function(mod, "show_settings", mkxpSettingsMenu);
-    _rb_define_module_function(mod, "puts", mkxpPuts);
-    _rb_define_module_function(mod, "desensitize", mkxpDesensitize);
-    _rb_define_module_function(mod, "platform", mkxpPlatform);
+    _rb_define_module_function(mod, "delta", mkshotDelta);
+    _rb_define_module_function(mod, "uptime", mkshotDelta);
+    _rb_define_module_function(mod, "data_directory", mkshotDataDirectory);
+    _rb_define_module_function(mod, "set_window_title", mkshotSetTitle);
+    _rb_define_module_function(mod, "window_title", mkshotGetTitle);
+    _rb_define_module_function(mod, "window_title=", mkshotSetTitle);
+    _rb_define_module_function(mod, "show_settings", mkshotSettingsMenu);
+    _rb_define_module_function(mod, "puts", mkshotPuts);
+    _rb_define_module_function(mod, "desensitize", mkshotDesensitize);
+    _rb_define_module_function(mod, "platform", mkshotPlatform);
     
-    _rb_define_module_function(mod, "is_mac?", mkxpIsMacHost);
-    _rb_define_module_function(mod, "is_rosetta?", mkxpIsUsingRosetta);
+    _rb_define_module_function(mod, "is_mac?", mkshotIsMacHost);
+    _rb_define_module_function(mod, "is_rosetta?", mkshotIsUsingRosetta);
     
-    _rb_define_module_function(mod, "is_linux?", mkxpIsLinuxHost);
+    _rb_define_module_function(mod, "is_linux?", mkshotIsLinuxHost);
     
-    _rb_define_module_function(mod, "is_windows?", mkxpIsWindowsHost);
-    _rb_define_module_function(mod, "is_wine?", mkxpIsUsingWine);
-    _rb_define_module_function(mod, "is_really_mac?", mkxpIsReallyMacHost);
-    _rb_define_module_function(mod, "is_really_linux?", mkxpIsReallyLinuxHost);
-    _rb_define_module_function(mod, "is_really_windows?", mkxpIsReallyWindowsHost);
+    _rb_define_module_function(mod, "is_windows?", mkshotIsWindowsHost);
+    _rb_define_module_function(mod, "is_wine?", mkshotIsUsingWine);
+    _rb_define_module_function(mod, "is_really_mac?", mkshotIsReallyMacHost);
+    _rb_define_module_function(mod, "is_really_linux?", mkshotIsReallyLinuxHost);
+    _rb_define_module_function(mod, "is_really_windows?", mkshotIsReallyWindowsHost);
     
-    _rb_define_module_function(mod, "user_language", mkxpUserLanguage);
-    _rb_define_module_function(mod, "user_name", mkxpUserName);
-    _rb_define_module_function(mod, "user_fullname", mkxpUserFullName);
+    _rb_define_module_function(mod, "user_language", mkshotUserLanguage);
+    _rb_define_module_function(mod, "user_name", mkshotUserName);
+    _rb_define_module_function(mod, "user_fullname", mkshotUserFullName);
     
-    _rb_define_module_function(mod, "game_title", mkxpGameTitle);
-    _rb_define_module_function(mod, "power_state", mkxpPowerState);
-    _rb_define_module_function(mod, "nproc", mkxpCpuCount);
-    _rb_define_module_function(mod, "memory", mkxpSystemMemory);
-    _rb_define_module_function(mod, "reload_cache", mkxpReloadPathCache);
-    _rb_define_module_function(mod, "mount", mkxpAddPath);
-    _rb_define_module_function(mod, "unmount", mkxpRemovePath);
-    _rb_define_module_function(mod, "file_exist?", mkxpFileExists);
-    _rb_define_module_function(mod, "launch", mkxpLaunch);
+    _rb_define_module_function(mod, "game_title", mkshotGameTitle);
+    _rb_define_module_function(mod, "power_state", mkshotPowerState);
+    _rb_define_module_function(mod, "nproc", mkshotCpuCount);
+    _rb_define_module_function(mod, "memory", mkshotSystemMemory);
+    _rb_define_module_function(mod, "reload_cache", mkshotReloadPathCache);
+    _rb_define_module_function(mod, "mount", mkshotAddPath);
+    _rb_define_module_function(mod, "unmount", mkshotRemovePath);
+    _rb_define_module_function(mod, "file_exist?", mkshotFileExists);
+    _rb_define_module_function(mod, "launch", mkshotLaunch);
     
-    _rb_define_module_function(mod, "default_font_family=", mkxpSetDefaultFontFamily);
+    _rb_define_module_function(mod, "default_font_family=", mkshotSetDefaultFontFamily);
     
-    _rb_define_method(rb_cString, "to_utf8", mkxpStringToUTF8);
-    _rb_define_method(rb_cString, "to_utf8!", mkxpStringToUTF8Bang);
+    _rb_define_method(rb_cString, "to_utf8", mkshotStringToUTF8);
+    _rb_define_method(rb_cString, "to_utf8!", mkshotStringToUTF8Bang);
     
     VALUE cmod = rb_define_module("CFG");
-    _rb_define_module_function(cmod, "[]", mkxpGetJSONSetting);
-    _rb_define_module_function(cmod, "[]=", mkxpSetJSONSetting);
-    _rb_define_module_function(cmod, "to_hash", mkxpGetAllJSONSettings);
+    _rb_define_module_function(cmod, "[]", mkshotGetJSONSetting);
+    _rb_define_module_function(cmod, "[]=", mkshotSetJSONSetting);
+    _rb_define_module_function(cmod, "to_hash", mkshotGetAllJSONSettings);
     
     /* Load global constants */
     rb_gv_set("MKSHOT", Qtrue);
@@ -278,28 +277,22 @@ static void mriBindingInit() {
         rb_gv_set("debug", Qfalse);
     
     /* Set mkshot-z git hash constants */
-    std::string git_hash;
-    
-    VALUE rbstr_git_hash = rb_utf8_str_new_cstr(git_hash.c_str());
-    VALUE rbstr_git_hash_short = rb_utf8_str_new_cstr(git_hash.substr(0, 7).c_str());
-    
-    rb_str_freeze(rbstr_git_hash);
-    rb_str_freeze(rbstr_git_hash_short);
-    
-    rb_define_const(mod, "GIT_HASH", rbstr_git_hash);
-    rb_define_const(mod, "GIT_HASH_SHORT", rbstr_git_hash_short);
-    
-    // Automatically load zlib if it's present -- the correct way this time
-    /*
-    int state;
-    rb_eval_string_protect("require('zlib') if !Kernel.const_defined?(:Zlib)", &state);
-    if (state) {
-        Debug() << "Could not load Zlib. If this is important, make sure Ruby was built with static extensions, or that"
-        << ((MKSHOT_PLATFORM == MKSHOT_PLATFORM_MACOS) ? "zlib.bundle" : "zlib.so")
-        << "is present and reachable by Ruby's loadpath.";
+    std::string ver_hash;
+
+#if defined(MKSHOT_BUILD_XCODE)
+    ver_hash = getPlistValue("MKShotGitHash");
+#elif defined(MKSHOT_VER_HASH)
+    ver_hash = MKSHOT_VER_HASH;
+#endif
+
+    if (ver_hash.empty()) {
+        ver_hash = "no hash found :p";
     }
-    */
-    
+
+    VALUE rbstr_ver_hash = rb_utf8_str_new_cstr(ver_hash.c_str());
+    rb_str_freeze(rbstr_ver_hash);    
+    rb_define_const(mod, "VER_HASH", rbstr_ver_hash);
+
     // Set $stdout and its ilk accordingly on Windows
     // I regret teaching you that word
 #ifdef __WIN32__
@@ -345,12 +338,12 @@ RB_METHOD(mriP) {
     return Qnil;
 }
 
-RB_METHOD(mkxpDelta) {
+RB_METHOD(mkshotDelta) {
     RB_UNUSED_PARAM;
     return rb_float_new(shState->runTime());
 }
 
-RB_METHOD(mkxpDataDirectory) {
+RB_METHOD(mkshotDataDirectory) {
     RB_UNUSED_PARAM;
     
     const std::string &path = shState->config().customDataPath;
@@ -362,7 +355,7 @@ RB_METHOD(mkxpDataDirectory) {
     return ret;
 }
 
-RB_METHOD(mkxpSetTitle) {
+RB_METHOD(mkshotSetTitle) {
     RB_UNUSED_PARAM;
     
     VALUE s;
@@ -373,7 +366,7 @@ RB_METHOD(mkxpSetTitle) {
     return s;
 }
 
-RB_METHOD(mkxpGetTitle) {
+RB_METHOD(mkshotGetTitle) {
     RB_UNUSED_PARAM;
     
     rb_check_argc(argc, 0);
@@ -381,7 +374,7 @@ RB_METHOD(mkxpGetTitle) {
     return rb_utf8_str_new_cstr(SDL_GetWindowTitle(shState->sdlWindow()));
 }
 
-RB_METHOD(mkxpDesensitize) {
+RB_METHOD(mkshotDesensitize) {
     RB_UNUSED_PARAM;
     
     VALUE filename;
@@ -392,7 +385,7 @@ RB_METHOD(mkxpDesensitize) {
                                 shState->fileSystem().desensitize(RSTRING_PTR(filename)));
 }
 
-RB_METHOD(mkxpPuts) {
+RB_METHOD(mkshotPuts) {
     RB_UNUSED_PARAM;
     
     const char *str;
@@ -403,7 +396,7 @@ RB_METHOD(mkxpPuts) {
     return Qnil;
 }
 
-RB_METHOD(mkxpPlatform) {
+RB_METHOD(mkshotPlatform) {
     RB_UNUSED_PARAM;
     
 #if MKSHOT_PLATFORM == MKSHOT_PLATFORM_MACOS
@@ -433,75 +426,75 @@ RB_METHOD(mkxpPlatform) {
     return rb_utf8_str_new_cstr(platform.c_str());
 }
 
-RB_METHOD(mkxpIsMacHost) {
+RB_METHOD(mkshotIsMacHost) {
     RB_UNUSED_PARAM;
     
     return rb_bool_new(MKSHOT_PLATFORM == MKSHOT_PLATFORM_MACOS);
 }
 
-RB_METHOD(mkxpIsUsingRosetta) {
+RB_METHOD(mkshotIsUsingRosetta) {
     RB_UNUSED_PARAM;
     
     return rb_bool_new(mkshot_sys::isRosetta());
 }
 
-RB_METHOD(mkxpIsLinuxHost) {
+RB_METHOD(mkshotIsLinuxHost) {
     RB_UNUSED_PARAM;
     
     return rb_bool_new(MKSHOT_PLATFORM == MKSHOT_PLATFORM_LINUX);
 }
 
-RB_METHOD(mkxpIsWindowsHost) {
+RB_METHOD(mkshotIsWindowsHost) {
     RB_UNUSED_PARAM;
     
     return rb_bool_new(MKSHOT_PLATFORM == MKSHOT_PLATFORM_WINDOWS);
 }
 
-RB_METHOD(mkxpIsUsingWine) {
+RB_METHOD(mkshotIsUsingWine) {
     RB_UNUSED_PARAM;
     return rb_bool_new(mkshot_sys::isWine());
 }
 
-RB_METHOD(mkxpIsReallyMacHost) {
+RB_METHOD(mkshotIsReallyMacHost) {
     RB_UNUSED_PARAM;
     return rb_bool_new(mkshot_sys::getRealHostType() == mkshot_sys::WineHostType::Mac);
 }
 
-RB_METHOD(mkxpIsReallyLinuxHost) {
+RB_METHOD(mkshotIsReallyLinuxHost) {
     RB_UNUSED_PARAM;
     return rb_bool_new(mkshot_sys::getRealHostType() == mkshot_sys::WineHostType::Linux);
 }
 
-RB_METHOD(mkxpIsReallyWindowsHost) {
+RB_METHOD(mkshotIsReallyWindowsHost) {
     RB_UNUSED_PARAM;
     return rb_bool_new(mkshot_sys::getRealHostType() == mkshot_sys::WineHostType::Windows);
 }
 
-RB_METHOD(mkxpUserLanguage) {
+RB_METHOD(mkshotUserLanguage) {
     RB_UNUSED_PARAM;
     
     return rb_utf8_str_new_cstr(mkshot_sys::getLanguage().c_str());
 }
 
-RB_METHOD(mkxpUserName) {
+RB_METHOD(mkshotUserName) {
     RB_UNUSED_PARAM;
     
     return rb_utf8_str_new_cstr(mkshot_sys::getUserName().c_str());
 }
 
-RB_METHOD(mkxpUserFullName) {
+RB_METHOD(mkshotUserFullName) {
     RB_UNUSED_PARAM;
     
     return rb_utf8_str_new_cstr(mkshot_sys::getUserFullName().c_str());
 }
 
-RB_METHOD(mkxpGameTitle) {
+RB_METHOD(mkshotGameTitle) {
     RB_UNUSED_PARAM;
     
     return rb_utf8_str_new_cstr(shState->config().game.title.c_str());
 }
 
-RB_METHOD(mkxpPowerState) {
+RB_METHOD(mkshotPowerState) {
     RB_UNUSED_PARAM;
     
     int secs, pct;
@@ -521,7 +514,7 @@ RB_METHOD(mkxpPowerState) {
     return hash;
 }
 
-RB_METHOD(mkxpSettingsMenu) {
+RB_METHOD(mkshotSettingsMenu) {
     RB_UNUSED_PARAM;
     
     shState->eThread().requestSettingsMenu();
@@ -529,26 +522,26 @@ RB_METHOD(mkxpSettingsMenu) {
     return Qnil;
 }
 
-RB_METHOD(mkxpCpuCount) {
+RB_METHOD(mkshotCpuCount) {
     RB_UNUSED_PARAM;
     
     return INT2NUM(SDL_GetCPUCount());
 }
 
-RB_METHOD(mkxpSystemMemory) {
+RB_METHOD(mkshotSystemMemory) {
     RB_UNUSED_PARAM;
     
     return INT2NUM(SDL_GetSystemRAM());
 }
 
-RB_METHOD(mkxpReloadPathCache) {
+RB_METHOD(mkshotReloadPathCache) {
     RB_UNUSED_PARAM;
     
     GUARD_EXC(shState->fileSystem().reloadPathCache(););
     return Qnil;
 }
 
-RB_METHOD(mkxpAddPath) {
+RB_METHOD(mkshotAddPath) {
     RB_UNUSED_PARAM;
     
     VALUE path, mountpoint, reload;
@@ -570,7 +563,7 @@ RB_METHOD(mkxpAddPath) {
     return path;
 }
 
-RB_METHOD(mkxpRemovePath) {
+RB_METHOD(mkshotRemovePath) {
     RB_UNUSED_PARAM;
     
     VALUE path, reload;
@@ -589,7 +582,7 @@ RB_METHOD(mkxpRemovePath) {
     return path;
 }
 
-RB_METHOD(mkxpFileExists) {
+RB_METHOD(mkshotFileExists) {
     RB_UNUSED_PARAM;
     
     VALUE path;
@@ -601,7 +594,7 @@ RB_METHOD(mkxpFileExists) {
     return Qfalse;
 }
 
-RB_METHOD(mkxpSetDefaultFontFamily) {
+RB_METHOD(mkshotSetDefaultFontFamily) {
     RB_UNUSED_PARAM;
     
     VALUE familyV;
@@ -614,7 +607,7 @@ RB_METHOD(mkxpSetDefaultFontFamily) {
     return Qnil;
 }
 
-RB_METHOD(mkxpStringToUTF8) {
+RB_METHOD(mkshotStringToUTF8) {
     RB_UNUSED_PARAM;
     
     rb_check_argc(argc, 0);
@@ -625,7 +618,7 @@ RB_METHOD(mkxpStringToUTF8) {
     return rb_utf8_str_new(ret.c_str(), ret.length());
 }
 
-RB_METHOD(mkxpStringToUTF8Bang) {
+RB_METHOD(mkshotStringToUTF8Bang) {
     RB_UNUSED_PARAM;
     
     rb_check_argc(argc, 0);
@@ -652,7 +645,7 @@ RB_METHOD(mkxpStringToUTF8Bang) {
 #define OPENARGS ""
 #endif
 
-RB_METHOD(mkxpLaunch) {
+RB_METHOD(mkshotLaunch) {
     RB_UNUSED_PARAM;
     
     VALUE cmdname, args;
@@ -715,7 +708,7 @@ void saveUserSettings(json5pp::value &settings) {
     rb_funcall(f, rb_intern("close"), 0);
 }
 
-RB_METHOD(mkxpGetJSONSetting) {
+RB_METHOD(mkshotGetJSONSetting) {
     RB_UNUSED_PARAM;
     
     VALUE sname;
@@ -733,7 +726,7 @@ RB_METHOD(mkxpGetJSONSetting) {
     
 }
 
-RB_METHOD(mkxpSetJSONSetting) {
+RB_METHOD(mkshotSetJSONSetting) {
     RB_UNUSED_PARAM;
     
     VALUE sname, svalue;
@@ -748,7 +741,7 @@ RB_METHOD(mkxpSetJSONSetting) {
     return Qnil;
 }
 
-RB_METHOD(mkxpGetAllJSONSettings) {
+RB_METHOD(mkshotGetAllJSONSettings) {
     RB_UNUSED_PARAM;
     
     return json2rb(shState->config().raw);

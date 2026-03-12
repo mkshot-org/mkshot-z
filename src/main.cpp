@@ -263,11 +263,9 @@ int main(int argc, char *argv[]) {
 
     /* Print welcoming text to console output */
     {
-        std::string git_hash;
+        std::string ver_hash;
 
-        std::string str_hash = "(" + git_hash.substr(0, 7) + ")";
-
-        Debug() << "Starting mkshot-z " + str_hash;
+        Debug() << "Starting mkshot-z (" + ver_hash + ")";
     }
 
 #ifdef MKSHOT_STEAM

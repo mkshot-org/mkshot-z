@@ -57,7 +57,7 @@ static SDL_RWops *openBundledFont()
 #ifndef MKSHOT_BUILD_XCODE
     return SDL_RWFromConstMem(BNDL_F_D(BUNDLED_FONT), BNDL_F_L(BUNDLED_FONT));
 #else
-    return SDL_RWFromFile(mkxp_fs::getPathForAsset("Fonts/liberation", "ttf").c_str(), "rb");
+    return SDL_RWFromFile(mkshot_fs::getPathForAsset("Fonts/liberation", "ttf").c_str(), "rb");
 #endif
 }
 

@@ -253,7 +253,7 @@ void Wallpaper::set(const char *name, int color)
 	fs::path pathFS(name);
 
 	if (!pathFS.is_absolute())
-		pathFS = mkxp_fs::getCurrentDirectory() + "/Wallpaper/" + std::string(name);
+		pathFS = mkshot_fs::getCurrentDirectory() + "/Wallpaper/" + std::string(name);
 
 	if (!pathFS.has_extension())
 #if MKSHOT_PLATFORM == MKSHOT_PLATFORM_WINDOWS
@@ -273,7 +273,7 @@ void Wallpaper::set(const char *name, int color)
 
 	Debug() << "Setting wallpaper to" << pathFS.c_str();
 
-	std::string path = mkxp_fs::normalizePath(pathFS.c_str(), true, true);
+	std::string path = mkshot_fs::normalizePath(pathFS.c_str(), true, true);
 
 	cache();
 
