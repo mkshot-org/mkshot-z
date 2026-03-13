@@ -4,7 +4,8 @@
 </i></p>
 
 >[!WARNING]
-> wip
+> wip<br>
+> although the build files are present, those are unfinished, hence nothing will build
 
 Experimental OneShot (2016) engine reimplementation for modders.
 
