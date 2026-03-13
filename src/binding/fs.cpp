@@ -1,6 +1,4 @@
 /*
-** filesystem-binding.cpp
-**
 ** This file is part of mkxp, further modified for mkshot-z.
 **
 ** Copyright (C) 2026 mkshot-z contributors <https://github.com/mkshot-org>
