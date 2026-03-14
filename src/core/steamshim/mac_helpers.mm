@@ -17,7 +17,7 @@
 */
 
 #import <Foundation/Foundation.h>
-#import "core/steam/steamshim_mac_helpers.h"
+#import "core/steamshim/mac_helpers.h"
 
 std::string execPath() {
     NSString *p = [NSBundle.mainBundle.executablePath stringByDeletingLastPathComponent];

@@ -61,7 +61,7 @@ __declspec(dllexport) int AmdPowerXpressRequestHighPerformance = 1;
 #endif
 
 #ifdef MKSHOT_STEAM
-#include "steamshim/child.h"
+#include "core/steamshim/child.h"
 #endif
 
 #ifdef MKSHOT_BUILD_XCODE
