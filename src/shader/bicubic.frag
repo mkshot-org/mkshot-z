@@ -1,7 +1,9 @@
-// From https://raw.githubusercontent.com/Sentmoraap/doing-sdl-right/f1a0183692abbd5d899fb432ab8dafe228a4929a/assets/bicubic.frag
+// From https://github.com/Sentmoraap/doing-sdl-right
 // Copyright 2020 Lilian Gimenez (Sentmoraap).
 // mkxp-z modifications Copyright 2022-2023 Splendide Imaginarius.
-// MIT license.
+// mkshot-z modifications Copyright 2026 Team Reverium.
+// Licensed under the MIT License.
+// Distributed as part of mkshot-z under the GNU GPLv3 or later.
 
 #ifdef GLSLES
 	precision highp float;

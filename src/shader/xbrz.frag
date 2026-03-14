@@ -1,6 +1,7 @@
-// From https://github.com/bsnes-emu/bsnes/tree/c0c60c83a84a49d4a2b822a0491cb258a3c5b98a/shaders/xBRZ.shader
+// From https://github.com/bsnes-emu/bsnes
 // Copyright bsnes contributors.
 // mkxp-z modifications Copyright 2022-2023 Splendide Imaginarius.
+// mkshot-z modifications Copyright 2026 Team Reverium.
 // GPLv3+ license.
 
 // xBRZ freescale
