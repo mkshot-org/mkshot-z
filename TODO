@@ -5,9 +5,11 @@ everything is positioned relative to priority
 _________________________
 
 - Pinned
+[ ] OneShot: Film puzzle auto-solves itself
 [ ] General: Bring macOS support back
 [ ] Repo: Add documentation
 [ ] Repo: Setup autobuilds
+[ ] OneShot: Wayland support
 
 [x] General: Remove unneeded functionality from the engine
 [x] General: Restructure the file tree and make include paths consistent (relative to either `src/` or `assets/`)
