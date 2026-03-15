@@ -132,7 +132,7 @@ json::value readConfFile(const char *path) {
     return ret;
 }
 
-#define CONF_FILE "mkshot.json"
+#define CONF_FILE "mkshot.json5"
 
 Config::Config() {}
 
@@ -268,7 +268,7 @@ try { exp } catch (...) {}
     
     readGameINI();
     
-    // Now check for an extra mkxp.conf in the user's save directory and merge anything else from that
+    // Now check for an extra configuration file in the user's save directory and merge anything else from that
     userConfPath = mkshot_fs::normalizePath(std::string(customDataPath + "/" CONF_FILE).c_str(), true, true);
     json::value userConf = readConfFile(userConfPath.c_str());
     copyObject(optsJ, userConf);
