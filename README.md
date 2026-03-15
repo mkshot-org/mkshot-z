@@ -7,11 +7,11 @@
 Experimental OneShot (2016) engine reimplementation for modders, derived from [ModShot (mkxp-z)][mshot].
 
 ## Why?
-The original engine OneShot uses (RPG Maker XP / RMXP) is nearly two decades old. It's old, slow and rather sucky.<br>
+The engine OneShot uses (RPG Maker XP / RMXP) is nearly two decades old. It's old, slow and rather sucky.<br>
 Its functionality is too restrictive for extensive modding, and its architecture is ill-suited for modern use cases.
 
 Existing RMXP runtime reimplementations don't improve the situation. Furthermore, they're not suited for modding OneShot in particular.<br>
-Using [mkxp-oneshot][xpshot] for your mods is greatly discouraged: it was made for the game specifically and extending upon it will be really difficult; not only that, you won't even be able to build it without manual intervention (Issue [#36](https://github.com/elizagamedev/mkxp-oneshot/issues/36)).
+Using [mkxp-oneshot][xpshot] for your mods is greatly discouraged: it was made for the game specifically and extending upon it will be really difficult; not only that, you won't even be able to build it without manual intervention (see Issue [#36](https://github.com/elizagamedev/mkxp-oneshot/issues/36)).
 
 This project's goal is to provide a modern, feature-complete and extensible successor to [mkxp-oneshot][xpshot].<br>
 [ModShot (mkxp-z)][mshot] was the chosen one for this, but it's no longer worked on, hence why we use it as the base.
