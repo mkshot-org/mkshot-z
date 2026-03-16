@@ -56,7 +56,7 @@ protected:
 	GLuint program;
     
 private:
-#ifdef MKSHOT_BUILD_XCODE
+#ifdef MKSHOT_BUILD_MACOS
     static std::string shaderCommon;
 #endif
 };

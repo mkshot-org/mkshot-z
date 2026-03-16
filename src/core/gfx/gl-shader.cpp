@@ -27,39 +27,39 @@
 #include <string.h>
 #include <iostream>
 
-#ifndef MKSHOT_BUILD_XCODE
-#include "shader/common.h.xxd"
-#include "shader/sprite.frag.xxd"
-#include "shader/hue.frag.xxd"
-#include "shader/trans.frag.xxd"
-#include "shader/transSimple.frag.xxd"
-#include "shader/bitmapBlit.frag.xxd"
-#include "shader/plane.frag.xxd"
-#include "shader/gray.frag.xxd"
-#include "shader/flatColor.frag.xxd"
-#include "shader/simple.frag.xxd"
-#include "shader/simpleColor.frag.xxd"
-#include "shader/simpleAlpha.frag.xxd"
-#include "shader/simpleAlphaUni.frag.xxd"
-#include "shader/tilemap.frag.xxd"
-#include "shader/flashMap.frag.xxd"
-#include "shader/bicubic.frag.xxd"
-#include "shader/lanczos3.frag.xxd"
-#include "shader/xbrz.frag.xxd"
-#include "shader/minimal.vert.xxd"
-#include "shader/simple.vert.xxd"
-#include "shader/simpleColor.vert.xxd"
-#include "shader/sprite.vert.xxd"
-#include "shader/tilemap.vert.xxd"
-#include "shader/blur.frag.xxd"
-#include "shader/simpleMatrix.vert.xxd"
-#include "shader/blurH.vert.xxd"
-#include "shader/blurV.vert.xxd"
-#include "shader/tilemap-vx.vert.xxd"
-#include "shader/obscured.frag.xxd"
+#ifndef MKSHOT_BUILD_MACOS
+#include "bicubic.frag.h"
+#include "bitmap-blit.frag.h"
+#include "blur-h.vert.h"
+#include "blur-v.vert.h"
+#include "blur.frag.h"
+#include "common.hpp.h"
+#include "flash-map.frag.h"
+#include "flat-color.frag.h"
+#include "gray.frag.h"
+#include "hue.frag.h"
+#include "lanczos3.frag.h"
+#include "minimal.vert.h"
+#include "obscured.frag.h"
+#include "plane.frag.h"
+#include "simple-alpha-uni.frag.h"
+#include "simple-alpha.frag.h"
+#include "simple-color.frag.h"
+#include "simple-color.vert.h"
+#include "simple-matrix.vert.h"
+#include "simple.frag.h"
+#include "simple.vert.h"
+#include "sprite.frag.h"
+#include "sprite.vert.h"
+#include "tilemap-vx.vert.h"
+#include "tilemap.frag.h"
+#include "tilemap.vert.h"
+#include "trans-simple.frag.h"
+#include "trans.frag.h"
+#include "xbrz.frag.h"
 #endif
 
-#ifdef MKSHOT_BUILD_XCODE
+#ifdef MKSHOT_BUILD_MACOS
 #include "core/fs/fs.hpp"
 #define INIT_SHADER(vert, frag, name) \
 { \
@@ -77,7 +77,7 @@
 
 #define GET_U(name) u_##name = gl.GetUniformLocation(program, #name)
 
-#ifdef MKSHOT_BUILD_XCODE
+#ifdef MKSHOT_BUILD_MACOS
     std::string Shader::shaderCommon = "";
 #endif
 
@@ -105,7 +105,7 @@ static void printProgramLog(GLuint program)
 
 Shader::Shader()
 {
-#ifdef MKSHOT_BUILD_XCODE
+#ifdef MKSHOT_BUILD_MACOS
     if (Shader::shaderCommon.empty())
         Shader::shaderCommon = mkshot_fs::contentsOfAssetAsString("Shaders/common", "h");
 #endif
@@ -133,7 +133,7 @@ void Shader::unbind()
 	glState.program.set(0);
 }
 
-#ifdef MKSHOT_BUILD_XCODE
+#ifdef MKSHOT_BUILD_MACOS
 std::string &Shader::commonHeader() {
     return Shader::shaderCommon;
 }
@@ -163,7 +163,7 @@ static void setupShaderSource(GLuint shader, GLenum type,
 		++i;
 	}
 
-#ifndef MKSHOT_BUILD_XCODE
+#ifndef MKSHOT_BUILD_MACOS
 	shaderSrc[i] = (const GLchar*) ___shader_common_h;
 	shaderSrcSize[i] = ___shader_common_h_len;
 #else

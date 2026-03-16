@@ -18,7 +18,7 @@
 
 #ifdef MKSHOT_STEAM
 #include "binding/util.hpp"
-#include "core/steamshim/child.hpp"
+#include "deps/steamshim/child.hpp"
 
 #define STEAMSHIM_GETV(t, v, d)                                                \
   while (STEAMSHIM_alive()) {                                                  \

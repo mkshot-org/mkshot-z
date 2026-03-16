@@ -3,18 +3,23 @@ cmake_minimum_required(VERSION 3.25)
 
 project(mkshot-z
     DESCRIPTION "OneShot (2016) engine reimplementation for modders"
-    LANGUAGES "CXX"
+    LANGUAGES "C" "CXX"
 )
 
-set(CMAKE_CXX_STANDARD 14)
+#IF(APPLE)
+#   enable_language("OBJCXX")
+#ENDIF()
+
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+set(CMAKE_C_STANDARD 11)
+set(CMAKE_C_STANDARD_REQUIRED ON)
+set(CMAKE_C_EXTENSIONS OFF)
 
 ## Environment checks ##
 IF(WIN32)
-    string(TOLOWER "${CMAKE_CXX_COMPILER}" _msyscheck_CXX_COMPILER_PATH)
-
     # and no, msvc isn't supported
     # (never will be)
     IF(NOT DEFINED ENV{MSYSTEM})
@@ -23,17 +28,18 @@ IF(WIN32)
         "Please consult the documentation before proceeding.")
     ENDIF()
 ELSEIF(APPLE)
-    # having bad support is worse than having none
-    # macos will be supported at some point later tho
     message(FATAL_ERROR "macOS isn't supported at the moment.")
 ELSEIF(NOT LINUX)
     message(FATAL_ERROR "This operating system isn't supported. 'Detected: ${CMAKE_SYSTEM_NAME}'.")
 ENDIF()
 
-set(MKSHOT_GCC $<CXX_COMPILER_ID:GNU>)
-set(MKSHOT_CLANG $<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>>)
-if(NOT MKSHOT_GCC And NOT MKSHOT_CLANG)
-    message(FATAL_ERROR "mkshot-z only supports GCC or Clang. Detected: ${CMAKE_CXX_COMPILER_ID}")
+message(STATUS "Detected: ${CMAKE_CXX_COMPILER_ID}")
+IF(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    set(MKSHOT_GCC ON)
+ELSEIF(CMAKE_CXX_COMPILER_ID MATCHES "^Clang|AppleClang")
+    set(MKSHOT_CLANG ON)
+ELSE()
+    message(FATAL_ERROR "mkshot-z only supports GCC or Clang.")
 endif()
 
 
@@ -41,6 +47,7 @@ endif()
 option(MKSHOT_DYNAMIC "Build and link mkshot-z dependencies dynamically." OFF)
 option(MKSHOT_FORCE_32BIT "Force the compiler to build in 32-bit mode." OFF)
 option(MKSHOT_GLES2 "Use OpenGL ES 2.0 instead of OpenGL." OFF)
+option(MKSHOT_HTTP "Add support for HTTP requests." OFF)
 option(MKSHOT_KEEP_CWD "Keep Current Working Directory on startup." OFF)
 
 set(MKSHOT_STEAMWORKS_PATH "" CACHE PATH "Path to Steamworks SDK. Provide this to enable the Steam features.")
@@ -72,3 +79,6 @@ IF(GIT_EXECUTABLE)
 ELSE()
     message(WARNING "Git executable not found. Hash value will fallback to '${MKSHOT_VER_HASH}'.")
 ENDIF()
+
+add_subdirectory(embed)
+add_subdirectory(src)

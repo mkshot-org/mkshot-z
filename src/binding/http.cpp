@@ -18,7 +18,7 @@
 
 #include <stdio.h>
 
-#include "util/json5pp.hpp"
+#include "deps/json5pp.hpp"
 #include "binding/util.hpp"
 
 #include <ruby/thread.h>

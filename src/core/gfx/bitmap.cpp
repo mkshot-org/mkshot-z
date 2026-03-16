@@ -52,7 +52,7 @@
 #include "sigslot.hpp"
 
 extern "C" {
-#include "libnsgif/gif.h"
+#include "deps/libnsgif/gif.h"
 }
 
 #define GUARD_MEGA \
@@ -1900,7 +1900,7 @@ static void applyShadow(SDL_Surface *&in, const SDL_PixelFormat &fm, const SDL_C
     /* We allocate an output surface one pixel wider and higher than the input,
      * (implicitly) blit a copy of the input with RGB values set to black into
      * it with x/y offset by 1, then blend the input surface over it at origin
-     * (0,0) using the bitmap blit equation (see shader/bitmapBlit.frag) */
+     * (0,0) using the bitmap blit equation (see shaders/bitmapBlit.frag) */
     
     for (int y = 0; y < in->h+1; ++y)
         for (int x = 0; x < in->w+1; ++x)

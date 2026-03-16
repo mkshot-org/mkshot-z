@@ -54,12 +54,10 @@ namespace systemImpl
 	WineHostType getRealHostType();
 }
 
-#ifdef MKSHOT_BUILD_XCODE
+#ifdef __APPLE__
 std::string getPlistValue(const char *key);
 void openSettingsWindow();
 bool isMetalSupported();
 #endif
 
 namespace mkshot_sys = systemImpl;
-
-

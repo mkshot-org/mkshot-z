@@ -15,9 +15,7 @@
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 ** GNU General Public License for more details.
 */
-
-#ifndef steamshim_mac_helpers_h
-#define steamshim_mac_helpers_h
+#pragma once
 
 #include <string>
 

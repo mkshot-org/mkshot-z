@@ -32,15 +32,15 @@
 #include <algorithm>
 #include <cctype>
 
-#ifdef MKSHOT_BUILD_XCODE
+#ifdef MKSHOT_BUILD_MACOS
 #include "core/fs/fs.hpp"
 #endif
 
 #include <SDL_ttf.h>
 
-#ifndef MKSHOT_BUILD_XCODE
+#ifndef MKSHOT_BUILD_MACOS
 
-#include "wqymicrohei.ttf.xxd"
+#include "wqymicrohei.ttf.h"
 #define BUNDLED_FONT wqymicrohei
 
 #define BUNDLED_FONT_DECL(FONT) \
@@ -56,11 +56,11 @@ BUNDLED_FONT_DECL(BUNDLED_FONT)
 #define BNDL_F_D(f) BUNDLED_FONT_D(f)
 #define BNDL_F_L(f) BUNDLED_FONT_L(f)
 
-#endif // !MKSHOT_BUILD_XCODE
+#endif // !MKSHOT_BUILD_MACOS
 
 static SDL_RWops *openBundledFont()
 {
-#ifndef MKSHOT_BUILD_XCODE
+#ifndef MKSHOT_BUILD_MACOS
     return SDL_RWFromConstMem(BNDL_F_D(BUNDLED_FONT), BNDL_F_L(BUNDLED_FONT));
 #else
     return SDL_RWFromFile(mkshot_fs::getPathForAsset("Fonts/liberation", "ttf").c_str(), "rb");

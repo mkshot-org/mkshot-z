@@ -24,7 +24,7 @@ typedef int PipeType;
 #endif
 #include <stdlib.h>
 
-#include "core/steamshim/child.h"
+#include "deps/steamshim/child.h"
 
 #ifdef STEAMSHIM_DEBUG
 #define dbgpipe printf

@@ -285,7 +285,7 @@ static void mriBindingInit() {
     /* Set mkshot-z git hash constants */
     std::string ver_hash;
 
-#if defined(MKSHOT_BUILD_XCODE)
+#if defined(MKSHOT_BUILD_MACOS)
     ver_hash = getPlistValue("MKShotVerHash");
 #elif defined(MKSHOT_VER_HASH)
     ver_hash = MKSHOT_VER_HASH;
@@ -407,13 +407,13 @@ RB_METHOD(mkshotPuts) {
 RB_METHOD(mkshotPlatform) {
     RB_UNUSED_PARAM;
     
-#if MKSHOT_PLATFORM == MKSHOT_PLATFORM_MACOS
+#ifdef __APPLE__
     std::string platform("macOS");
     
     if (mkshot_sys::isRosetta())
         platform += " (Rosetta)";
     
-#elif MKSHOT_PLATFORM == MKSHOT_PLATFORM_WINDOWS
+#elif defined _WIN32
     std::string platform("Windows");
     
     if (mkshot_sys::isWine()) {
@@ -427,7 +427,7 @@ RB_METHOD(mkshotPlatform) {
                 break;
         }
     }
-#else
+#elif defined __linux__
     std::string platform("Linux");
 #endif
     
@@ -1168,7 +1168,7 @@ static void mriBindingExecute() {
     VALUE lpaths = rb_gv_get(":");
     rb_ary_clear(lpaths);
     
-#if defined(MKSHOT_BUILD_XCODE)
+#if defined(MKSHOT_BUILD_MACOS)
     std::string resPath = mkshot_fs::getResourcePath();
     resPath += "/Ruby/" + std::to_string(RUBY_API_VERSION_MAJOR) + "." + std::to_string(RUBY_API_VERSION_MINOR) + ".0";
     rb_ary_push(lpaths, rb_str_new(resPath.c_str(), resPath.size()));

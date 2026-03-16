@@ -323,7 +323,7 @@ void Journal::nikoPrepare()
 	std::string name;
 	std::string cwd = mkshot_fs::getCurrentDirectory();
 
-#if MKSHOT_PLATFORM == MKSHOT_PLATFORM_MACOS
+#ifdef MKSHOT_BUILD_MACOS
 	name = "_______.app/Contents/MacOS/_______";
 #else
 	name = "_______";

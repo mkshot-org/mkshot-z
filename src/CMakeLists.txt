@@ -2,6 +2,7 @@ include(FetchContent)
 
 ## Dependencies ##
 find_package(Vorbis REQUIRED CONFIG)
+find_package(Theora REQUIRED CONFIG)
 find_package(PhysFS REQUIRED CONFIG)
 find_package(uchardet REQUIRED CONFIG)
 find_package(pixman REQUIRED CONFIG)
@@ -10,32 +11,24 @@ find_package(SDL2_image REQUIRED CONFIG)
 find_package(SDL2_ttf REQUIRED CONFIG)
 find_package(SDL2_sound REQUIRED CONFIG)
 find_package(OpenAL REQUIRED CONFIG)
+find_package(Ruby REQUIRED CONFIG)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
     Vorbis::vorbisfile
-    uchardet::uchardet
+    Theora::theoradec
     physfs::physfs
+    uchardet::uchardet
+    pixman::pixman
+    SDL2::SDL2
+    SDL2_image::SDL2_image
+    SDL2_ttf::SDL2_ttf
+    SDL2_sound::SDL2_sound
+    OpenAL::OpenAL
+    Ruby::Ruby
 )
 
-## Options / Defines ##
-target_compile_definitions(${PROJECT_NAME} PRIVATE MKSHOT_VER_HASH="${MKSHOT_VER_HASH}")
-
-IF(MKSHOT_FORCE_32BIT)
-    add_compile_options("-m32")
-    add_link_options("-m32")
-ENDIF()
-
-IF(MKSHOT_KEEP_CWD)
-    target_compile_definitions(${PROJECT_NAME} PRIVATE KEEP_CWD)
-ENDIF()
-
-IF(MKSHOT_GLES)
-    target_compile_options(${PROJECT_NAME} PRIVATE GLES2)
-ENDIF()
-
-## Sources / Includes ##
-include_directories("${CMAKE_SOURCE_DIR}/deps")
-list(APPEND MKSHOT_INCLUDES "${CMAKE_CURRENT_SOURCE_DIR}")
+##  General Sources / Includes ##
+list(APPEND MKSHOT_INCLUDES "${CMAKE_CURRENT_SOURCE_DIR}" "${CMAKE_SOURCE_DIR}/embed/include")
 
 set(MKSHOT_SOURCES
     main.cpp
@@ -120,51 +113,55 @@ set(MKSHOT_SOURCES
     core/shared-state.cpp
 
     util/ini-config.cpp
-    util/xdg-user-dirs.cpp
-)
 
-set(MKSHOT_SHADER
-    shader/bicubic.frag
-    shader/bitmap-blit.frag
-    shader/blur-h.vert
-    shader/blur-v.vert
-    shader/blur.frag
-    shader/common.hpp
-    shader/flash-map.frag
-    shader/flat-color.frag
-    shader/gray.frag
-    shader/hue.frag
-    shader/lanczos3.frag
-    shader/minimal.vert
-    shader/obscured.frag
-    shader/plane.frag
-    shader/simple-alpha-uni.frag
-    shader/simple-alpha.frag
-    shader/simple-color.frag
-    shader/simple-color.vert
-    shader/simple-matrix.vert
-    shader/simple.frag
-    shader/simple.vert
-    shader/sprite.frag
-    shader/sprite.vert
-    shader/tilemap-vx.vert
-    shader/tilemap.frag
-    shader/tilemap.vert
-    shader/trans-simple.frag
-    shader/trans.frag
-    shader/xbrz.frag
+    deps/libnsgif/gif.c
+    deps/libnsgif/lzw.c
+
+    deps/theoraplay/play.c
 )
 
 IF(WIN32)
     list(APPEND MKSHOT_SOURCES util/win-console.cpp)
 ELSEIF(LINUX)
-    list(APPEND MKSHOT_SOURCES core/oneshot/gnome-fun.cpp core/oneshot/xfconf-fun.cpp)
+    list(APPEND MKSHOT_SOURCES core/oneshot/gnome-fun.cpp core/oneshot/xfconf-fun.cpp util/xdg-user-dirs.cpp)
+ELSEIF(APPLE)
+    list(APPEND MKSHOT_SOURCES core/oneshot/apple.mm core/fs/fs-impl-apple.mm core/sys/sys-impl-apple.mm)
 ENDIF()
 
 IF(MKSHOT_HTTP)
     list(APPEND MKSHOT_SOURCES binding/http.cpp core/net/net.cpp)
 ENDIF()
 
+
+## Compiler flags / defines ##
+target_compile_definitions(${PROJECT_NAME} PRIVATE MKSHOT_VER_HASH="${MKSHOT_VER_HASH}")
+
+IF(MKSHOT_FORCE_32BIT)
+    add_compile_options("-m32")
+    add_link_options("-m32")
+ENDIF()
+
+IF(MKSHOT_GLES2)
+    target_compile_definitions(${PROJECT_NAME} PRIVATE GLES2)
+ENDIF()
+
+IF(MKSHOT_KEEP_CWD)
+    target_compile_definitions(${PROJECT_NAME} PRIVATE KEEP_CWD)
+ENDIF()
+
+IF(MKSHOT_STEAMWORKS_PATH)
+ENDIF()
+
+
+## Steam ##
 IF(MKSHOT_STEAM)
-    list(APPEND MKSHOT_SOURCES binding/steam.cpp core/steam/steam.cpp)
+    list(APPEND MKSHOT_SOURCES
+        binding/steam.cpp
+        core/steam/steam.cpp
+    )
+
+    set(MKSHOT_SHIM_SOURCES deps/steamshim/parent.cpp deps/steamshim/child.c)
+    IF(APPLE)
+        list(APPEND MKSHOT_SHIM_SOURCES deps/steamshim/mac_helpers.mm)
+    ENDIF()
 ENDIF()

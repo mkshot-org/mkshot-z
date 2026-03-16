@@ -16,8 +16,8 @@
 ** GNU General Public License for more details.
 */
 
-#ifndef MKSHOT_BUILD_XCODE
-#include "icon.png.xxd"
+#ifndef MKSHOT_BUILD_MACOS
+#include "icon.png.h"
 #endif
 
 #include <alc.h>
@@ -61,10 +61,10 @@ __declspec(dllexport) int AmdPowerXpressRequestHighPerformance = 1;
 #endif
 
 #ifdef MKSHOT_STEAM
-#include "core/steamshim/child.h"
+#include "deps/steamshim/child.h"
 #endif
 
-#ifdef MKSHOT_BUILD_XCODE
+#ifdef MKSHOT_BUILD_MACOS
 #include <Availability.h>
 #include "TouchBar.hpp"
 #if !defined(__MAC_10_15) || __MAC_OS_X_VERSION_MAX_ALLOWED < __MAC_10_15
@@ -194,8 +194,8 @@ static void setupWindowIcon(const Config &conf, SDL_Window *win) {
     } else {
         /* Windows and macOS have their own native ways of dealing
          * with default window icon; don't interfering with them */
-#if !defined(__WIN32__) && !defined(MKSHOT_BUILD_XCODE)
-#ifndef MKSHOT_BUILD_XCODE
+#if !defined(__WIN32__) && !defined(MKSHOT_BUILD_MACOS)
+#ifndef MKSHOT_BUILD_MACOS
         iconIO = SDL_RWFromConstMem(___assets_icon_png, ___assets_icon_png_len);
 #else
         iconIO = SDL_RWFromFile(mkshot_fs::getPathForAsset("icon", "png").c_str(), "rb");
@@ -357,7 +357,7 @@ int main(int argc, char *argv[]) {
 
     // LoadLibrary properly initializes EGL, it won't work otherwise.
     // Doesn't completely do it though, needs a small patch to SDL
-#ifdef MKSHOT_BUILD_XCODE
+#ifdef MKSHOT_BUILD_MACOS
     SDL_setenv("ANGLE_DEFAULT_PLATFORM", (conf.preferMetalRenderer) ? "metal" : "opengl", true);
     SDL_GL_LoadLibrary("@rpath/libEGL.dylib");
 #endif
@@ -376,7 +376,7 @@ int main(int argc, char *argv[]) {
       return 0;
     }
     
-#ifdef MKSHOT_BUILD_XCODE
+#ifdef MKSHOT_BUILD_MACOS
     {
         std::string downloadsPath = "/Users/" + mkshot_sys::getUserName() + "/Downloads";
         
@@ -393,7 +393,7 @@ int main(int argc, char *argv[]) {
     }
 #endif
     
-#if defined(MKSHOT_BUILD_XCODE)
+#if defined(MKSHOT_BUILD_MACOS)
 #define DEBUG_FSELECT_MSG "Select the folder from which to load game files. This is the folder containing OneShot game files."
 #define DEBUG_FSELECT_PROMPT "Load Game"
     if (conf.manualFolderSelect) {
@@ -455,7 +455,7 @@ int main(int argc, char *argv[]) {
     /* Load and post key bindings */
     rtData.bindingUpdateMsg.post(loadBindings(conf));
     
-#ifdef MKSHOT_BUILD_XCODE
+#ifdef MKSHOT_BUILD_MACOS
     if (conf.manualFolderSelect) {
         /* Update window title */
         eventThread.requestWindowRename(conf.windowTitle.c_str());
@@ -561,7 +561,7 @@ static SDL_GLContext initGL(SDL_Window *win, Config &conf,
 
 // This breaks scaling for Retina screens.
 // Using Metal should be rendering this irrelevant anyway, hopefully
-#ifndef MKSHOT_BUILD_XCODE
+#ifndef MKSHOT_BUILD_MACOS
   if (!conf.enableBlitting)
     gl.BlitFramebuffer = 0;
 #endif

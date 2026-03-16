@@ -23,14 +23,14 @@
 #include "core/sys/sys.hpp"
 #include "util/dbg-writer.hpp"
 
-#if MKSHOT_PLATFORM == MKSHOT_PLATFORM_WINDOWS
+#ifdef MKSHOT_BUILD_MACOS
+#include <dispatch/dispatch.h>
+#elif MKSHOT_PLATFORM == MKSHOT_PLATFORM_WINDOWS
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
 #endif
 #include <windows.h>
 #include <shlobj.h>
-#elif MKSHOT_PLATFORM == MKSHOT_PLATFORM_MACOS
-#include <dispatch/dispatch.h>
 #else
 #include "util/xdg-user-dirs.hpp"
 #include "core/oneshot/gnome-fun.hpp"
@@ -445,7 +445,7 @@ bool Oneshot::msgbox(int type, const char *body, const char *title)
 	}
 
 	int result;
-#if MKSHOT_PLATFORM == MKSHOT_PLATFORM_MACOS
+#if MKSHOT_BUILD_MACOS
 	int *btn = &result;
 	// Message boxes and UI changes must be performed from the main thread
 	// on macOS Mojave and above. This block ensures the message box

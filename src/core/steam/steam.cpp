@@ -17,7 +17,7 @@
 */
 
 #include "core/steam/steam.hpp"
-#include "core/steamshim/child.hpp"
+#include "deps/steamshim/child.hpp"
 
 #include <map>
 #include <SDL.h>

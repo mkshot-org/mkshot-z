@@ -44,7 +44,7 @@ typedef int PipeType;
 #include <stdlib.h>
 
 #ifdef __APPLE__
-#include "core/steamshim/mac_helpers.h"
+#include "deps/steamshim/mac_helpers.h"
 #endif
 
 #include "steam/steam_api_flat.h"

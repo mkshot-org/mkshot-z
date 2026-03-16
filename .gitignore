@@ -1,3 +1,6 @@
+embed/include/**
+!embed/include/.gitkeep
+
 # Build directories and files
 *.o
 *.obj

@@ -35,9 +35,9 @@
 
 #include "core/oneshot/oneshot.hpp"
 
-#ifndef MKSHOT_BUILD_XCODE
+#ifndef MKSHOT_BUILD_MACOS
 #include "core/settings-menu.hpp"
-#include "gamecontrollerdb.txt.xxd"
+#include "gamecontrollerdb.txt.h"
 #else
 #include "core/sys/sys.hpp"
 #include "core/fs/fs.hpp"
@@ -179,7 +179,7 @@ void EventThread::process(RGSSThreadData &rtData)
     
     bool terminate = false;
     
-#ifdef MKSHOT_BUILD_XCODE
+#ifdef MKSHOT_BUILD_MACOS
     SDL_GameControllerAddMappingsFromFile(mkshot_fs::getPathForAsset("gamecontrollerdb", "txt").c_str());
 #else
     SDL_GameControllerAddMappingsFromRW(
@@ -211,7 +211,7 @@ void EventThread::process(RGSSThreadData &rtData)
     SDL_StopTextInput();
     
     textInputBuffer.clear();
-#ifndef MKSHOT_BUILD_XCODE
+#ifndef MKSHOT_BUILD_MACOS
     SettingsMenu *sMenu = 0;
 #else
     // Will always be 0
@@ -225,7 +225,7 @@ void EventThread::process(RGSSThreadData &rtData)
             Debug() << "event-thread: Event error";
             break;
         }
-#ifndef MKSHOT_BUILD_XCODE
+#ifndef MKSHOT_BUILD_MACOS
         if (sMenu && sMenu->onEvent(event))
         {
             if (sMenu->destroyReq())
@@ -362,7 +362,7 @@ void EventThread::process(RGSSThreadData &rtData)
                         break;
                     }
 
-#ifndef MKSHOT_BUILD_XCODE
+#ifndef MKSHOT_BUILD_MACOS
                     if (!sMenu)
                     {
                         sMenu = new SettingsMenu(rtData);
@@ -568,7 +568,7 @@ void EventThread::process(RGSSThreadData &rtData)
                         break;
                         
                     case REQUEST_SETTINGS :
-#ifndef MKSHOT_BUILD_XCODE
+#ifndef MKSHOT_BUILD_MACOS
                         if (!sMenu)
                         {
                             sMenu = new SettingsMenu(rtData);
@@ -625,7 +625,7 @@ void EventThread::process(RGSSThreadData &rtData)
     if (SDL_GameControllerGetAttached(ctrl))
         SDL_GameControllerClose(ctrl);
     
-#ifndef MKSHOT_BUILD_XCODE
+#ifndef MKSHOT_BUILD_MACOS
     delete sMenu;
 #endif
 }
@@ -848,7 +848,7 @@ SDL_GameController *EventThread::controller() const
 
 void EventThread::notifyFrame()
 {
-#ifdef MKSHOT_BUILD_XCODE
+#ifdef MKSHOT_BUILD_MACOS
     uint32_t frames = round(shState->graphics().averageFrameRate());
     updateTouchBarFPSDisplay(frames);
 #endif
@@ -856,7 +856,7 @@ void EventThread::notifyFrame()
         return;
     
     SDL_Event event;
-#ifdef MKSHOT_BUILD_XCODE
+#ifdef MKSHOT_BUILD_MACOS
     event.user.code = frames;
 #else
     event.user.code = round(shState->graphics().averageFrameRate());
