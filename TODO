@@ -19,7 +19,7 @@ _________________________
 [ ] Configuration: JSON5 -> TOML
 [ ] Audio: SDL_sound + OpenAL -> Miniaudio
 [ ] Audio: Add support for OGG/Opus, MP3, WAV, FLAC, WEBM/Vorbis, WEBM/Opus
-[ ] Audio: FMOD/SoLoud-like dynamic audio through bindings
+[ ] Audio: FMOD/SoLoud-like dynamic audio manupulation through bindings
 [ ] Images: Add support for JPEG-XL, WEBP, APNG
 [ ] Video: Theora -> WEBM/VP8, WEBM/VP9
 [ ] Video: Better animated custscenes/movies implementation
