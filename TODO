@@ -17,7 +17,7 @@ _________________________
 [ ] OneShot: Wayland compatibility (see issues #2, #3)
 [ ] General: C++14 -> C++20
 [ ] Configuration: JSON5 -> TOML
-[ ] OneShot: Use a rewrite of tinyfiledialogs in C++ for managing popups
+[ ] OneShot: Use a fork of tinyfiledialogs for managing popups
 [ ] Audio: SDL_sound + OpenAL -> Miniaudio
 [ ] Audio: Add support for OGG/Opus, MP3, WAV, FLAC, WEBM/Vorbis, WEBM/Opus
 [ ] Audio: FMOD/SoLoud-like dynamic audio manupulation through bindings
