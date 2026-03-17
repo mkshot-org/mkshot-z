@@ -1,28 +1,3 @@
-mkshot-z - Experimental OneShot (2016) engine reimplementation for modders.
-Copyright (C) 2026 Team Reverium <https://github.com/reverium>
-
-Derived from ModShot-mkxp-z:
-Copyright (C) 2024 hat_kid <https://github.com/thehatkid>
-
-Derived from mkxp-z:
-Copyright (C) 2013-2023 Amaryllis Kulla <ancurio@mapleshrine.eu>, 
-Struma, Splendide Imaginarius, and others.
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-Full source code available at:
-mkshot-z: <https://github.com/reverium/mkshot-z>
-ModShot:  <https://github.com/thehatkid/ModShot-mkxp-z>
-mkxp-z:   <https://github.com/mkxp-z/mkxp-z>
-
                     GNU GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007
 
