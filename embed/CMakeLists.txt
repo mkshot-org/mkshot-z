@@ -38,7 +38,7 @@ set(MKSHOT_EMBED
 )
 
 # this stuff in particular is copied into the install directory
-set(MKSHOT_ASSETS ${CMAKE_SOURCE_DIR}/LICENSE)
+set(MKSHOT_ASSETS "${CMAKE_SOURCE_DIR}/LICENSE" PARENT_SCOPE)
 
 IF(WIN32)
     list(APPEND MKSHOT_EMBED assets/icon.ico)
@@ -54,11 +54,11 @@ IF(MKSHOT_STEAM AND MKSHOT_STEAM_APPID)
 ENDIF()
 
 file(MAKE_DIRECTORY include)
-message(STATUS "Creating a C-style arrays for embedding resources into the executable...")
 FOREACH(__input_fullpath ${MKSHOT_EMBED})
     string(REGEX REPLACE "(assets|scripts|shaders)/" "" __input_file "${__input_fullpath}")
     set(__output_file include/${__input_file}.h)
     
+    message(STATUS "Generating a C-style array from ${__input_fullpath} for embedding into the executable...")
     execute_process(
         COMMAND xxd -i ${__input_fullpath} ${__output_file}
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}

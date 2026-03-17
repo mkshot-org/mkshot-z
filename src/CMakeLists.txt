@@ -1,6 +1,6 @@
 ##  General Sources / Includes ##
 include_directories(${RUBY_INCLUDE_DIRS})
-set(MKSHOT_INCLUDE
+set(MKSHOT_INCLUDES
     "${CMAKE_CURRENT_SOURCE_DIR}"
     "${CMAKE_SOURCE_DIR}/embed/include"
 )
@@ -93,7 +93,7 @@ set(MKSHOT_SOURCES
     ${CMAKE_SOURCE_DIR}/deps/libnsgif/lzw.c
 
     ${CMAKE_SOURCE_DIR}/deps/theoraplay/play.c
-)
+PARENT_SCOPE)
 
 IF(WIN32)
     list(APPEND MKSHOT_SOURCES util/win-console.cpp)
@@ -111,9 +111,9 @@ ENDIF()
 ## Compiler flags / defines ##
 set(MKSHOT_DEFINES
     MKSHOT_VER_HASH="${MKSHOT_VER_HASH}"
-)
-set(MKSHOT_CFLAGS)
-set(MKSHOT_LDFLAGS)
+PARENT_SCOPE)
+set(MKSHOT_CFLAGS "" PARENT_SCOPE)
+set(MKSHOT_LDFLAGS "" PARENT_SCOPE)
 
 IF(MKSHOT_FORCE_32BIT)
     list(APPEND MKSHOT_CFLAGS "-m32")
@@ -135,7 +135,7 @@ IF(MKSHOT_STEAM)
     )
     list(APPEND MKSHOT_DEFINES MKSHOT_STEAM)
 
-    set(STEAMSHIM_MM "" PATH)
+    set(STEAMSHIM_MM "" PATH PARENT_SCOPE)
     IF(APPLE)
         set(STEAMSHIM_MM "${CMAKE_SOURCE_DIR}/deps/steamshim/mac_helpers.mm")
     ENDIF()
@@ -150,6 +150,7 @@ ENDIF()
 
 add_executable("${PROJECT_NAME}" ${MKSHOT_SOURCES})
 target_compile_definitions("${PROJECT_NAME}" PRIVATE ${MKSHOT_DEFINES})
-target_include_directories("${PROJECT_NAME}" PRIVATE ${MKSHOT_INCLUDE})
+target_include_directories("${PROJECT_NAME}" PRIVATE ${MKSHOT_INCLUDES})
 target_compile_options("${PROJECT_NAME}" PRIVATE ${MKSHOT_CFLAGS})
+target_link_libraries("${PROJECT_NAME}" PRIVATE ${MKSHOT_LINKLIBS})
 target_link_options("${PROJECT_NAME}" PRIVATE ${MKSHOT_LDFLAGS})

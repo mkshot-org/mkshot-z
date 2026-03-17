@@ -1,22 +1,25 @@
-[o] = wip
-[x] = temporarily stale
+[=] = wip
+[-] = temporarily stale
 
 everything is sorted by priority
 _________________________
 
 ^ Pinned
-[ ] General: Bring macOS support back
+[=] General: Bring macOS support back
 [ ] Repo: Setup autobuilds
 
 -----
 
-[o] General: Meson/Xcode + Makefiles -> CMake + Conan
-[o] General: Embed assets without involving xxd
-[ ] General: SDL2 -> SDL3
-[ ] General: Refactor cross-platform handling, it's horrible.
+[=] General: SDL2 -> SDL3
+[-] General: Meson/Xcode + Makefiles -> CMake + Conan
+[-] General: Embed assets without involving xxd
+[=] General: Portable code. I'm speechless.
+[ ] OneShot: Wayland compatibility (see issues #2, #3)
 [ ] General: C++14 -> C++20
 [ ] Configuration: JSON5 -> TOML
 [ ] Audio: SDL_sound + OpenAL -> Miniaudio
 [ ] Audio: Add support for OGG/Opus, MP3, WAV, FLAC, WEBM/Vorbis, WEBM/Opus
+[ ] Audio: FMOD/SoLoud-like dynamic audio through bindings
 [ ] Images: Add support for JPEG-XL, WEBP, APNG
 [ ] Video: Theora -> WEBM/VP8, WEBM/VP9
+[ ] Video: Better animated custscenes/movies implementation
