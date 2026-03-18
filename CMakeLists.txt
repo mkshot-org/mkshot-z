@@ -48,7 +48,6 @@ ENDIF()
 
 ## Options ##
 option(MKSHOT_DYNAMIC "Build and link mkshot-z dependencies dynamically." OFF)
-option(MKSHOT_FORCE_32BIT "Force the compiler to build in 32-bit mode." OFF)
 option(MKSHOT_GLES2 "Use OpenGL ES 2.0 instead of OpenGL." OFF)
 option(MKSHOT_HTTP "Add support for HTTP requests." OFF)
 option(MKSHOT_KEEP_CWD "Keep Current Working Directory on startup." OFF)
