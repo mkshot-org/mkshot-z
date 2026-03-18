@@ -18,9 +18,9 @@
 
 #pragma once
 
-include "util/util.hpp"
+#include "util/util.hpp"
 
-#include <SDL_rect.h>
+#include <SDL3/SDL_rect.h>
 
 struct Vec2
 {

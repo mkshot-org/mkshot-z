@@ -18,12 +18,12 @@
 
 #include "core/event-thread.hpp"
 
-#include <SDL_events.h>
-#include <SDL_messagebox.h>
-#include <SDL_timer.h>
-#include <SDL_thread.h>
-#include <SDL_touch.h>
-#include <SDL_rect.h>
+#include <SDL3/SDL_events.h>
+#include <SDL3/SDL_messagebox.h>
+#include <SDL3/SDL_timer.h>
+#include <SDL3/SDL_thread.h>
+#include <SDL3/SDL_touch.h>
+#include <SDL3/SDL_rect.h>
 
 #include <al.h>
 #include <alc.h>
@@ -723,9 +723,9 @@ void EventThread::updateCursorState(bool inWindow,
     bool inScreen = inWindow && SDL_PointInRect(&pos, &screen);
     
     if (inScreen)
-        SDL_ShowCursor(showCursor || hideCursorTimerID ? SDL_TRUE : SDL_FALSE);
+        SDL_ShowCursor(showCursor || hideCursorTimerID ? true : false);
     else
-        SDL_ShowCursor(SDL_TRUE);
+        SDL_ShowCursor(true);
 }
 
 void EventThread::requestTerminate()

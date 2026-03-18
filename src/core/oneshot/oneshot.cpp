@@ -36,7 +36,7 @@
 #include "core/oneshot/gnome-fun.hpp"
 #endif
 
-#include <SDL.h>
+#include <SDL3/SDL.h>
 
 #ifdef __WIN32__
 static std::string wideToUTF8(const wchar_t *wcStr)
@@ -445,7 +445,7 @@ bool Oneshot::msgbox(int type, const char *body, const char *title)
 	}
 
 	int result;
-#if __APPLE__
+#ifdef __APPLE__
 	int *btn = &result;
 	// Message boxes and UI changes must be performed from the main thread
 	// on macOS Mojave and above. This block ensures the message box

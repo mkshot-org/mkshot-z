@@ -18,7 +18,7 @@
 
 #pragma once
 
-include <ruby.h>
+#include <ruby.h>
 #include <ruby/version.h>
 
 #include "util/exception.hpp"

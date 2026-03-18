@@ -35,8 +35,8 @@
 #include <pwd.h>
 #endif
 
-#include <SDL_stdinc.h>
-#include <SDL_loadso.h>
+#include <SDL3/SDL_stdinc.h>
+#include <SDL3/SDL_loadso.h>
 
 #ifdef __WIN32__
 static std::string wideToUTF8(const wchar_t *wcStr)

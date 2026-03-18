@@ -16,7 +16,7 @@
 ** GNU General Public License for more details.
 */
 
-#include <SDL_filesystem.h>
+#include <SDL3/SDL_filesystem.h>
 
 #include "core/fs/fs-impl.hpp"
 #include "util/exception.hpp"

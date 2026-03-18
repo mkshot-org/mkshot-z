@@ -18,8 +18,8 @@
 
 #pragma once
 
-include <unordered_map>
-#include <SDL_gamecontroller.h>
+#include <unordered_map>
+#include <SDL3/SDL_gamepad.h>
 #include <string>
 #include <vector>
 

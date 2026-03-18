@@ -18,7 +18,7 @@
 
 #pragma once
 
-include "core/gfx/util.hpp"
+#include "core/gfx/util.hpp"
 
 struct TexPoolPrivate;
 

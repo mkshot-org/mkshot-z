@@ -18,10 +18,10 @@
 
 #pragma once
 
-include "core/input/input.hpp"
+#include "core/input/input.hpp"
 
-#include <SDL_scancode.h>
-#include <SDL_gamecontroller.h>
+#include <SDL3/SDL_scancode.h>
+#include <SDL3/SDL_gamepad.h>
 #include <stdint.h>
 #include <assert.h>
 #include <vector>

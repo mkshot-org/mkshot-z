@@ -18,7 +18,7 @@
 
 #pragma once
 
-include "core/config.hpp"
+#include "core/config.hpp"
 #include "core/gfx/gfx.hpp"
 #include "core/gfx/vertex.hpp"
 #include "core/gfx/util.hpp"

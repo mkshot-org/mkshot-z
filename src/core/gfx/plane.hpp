@@ -18,7 +18,7 @@
 
 #pragma once
 
-include "util/disposable.hpp"
+#include "util/disposable.hpp"
 #include "core/gfx/viewport.hpp"
 
 class Bitmap;

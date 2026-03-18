@@ -18,7 +18,7 @@
 
 #pragma once
 
-include "util/intru-list.hpp"
+#include "util/intru-list.hpp"
 #include "core/audio/al-util.hpp"
 #include "util/boost-hash.hpp"
 

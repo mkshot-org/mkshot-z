@@ -16,7 +16,7 @@
 ** GNU General Public License for more details.
 */
 
-#include <SDL_joystick.h>
+#include <SDL3/SDL_joystick.h>
 #include <string>
 
 

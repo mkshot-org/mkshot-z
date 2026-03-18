@@ -18,7 +18,7 @@
 
 #pragma once
 
-include "core/gfx/scene.hpp"
+#include "core/gfx/scene.hpp"
 #include "binding/util.hpp"
 #include "core/gfx/gfx.hpp"
 

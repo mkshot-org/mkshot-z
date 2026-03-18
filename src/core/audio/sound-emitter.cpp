@@ -25,7 +25,7 @@
 #include "util/util.hpp"
 #include "util/dbg-writer.hpp"
 
-#include <SDL_sound.h>
+#include <SDL3/SDL_sound.h>
 
 #define SE_CACHE_MEM (10*1024*1024) // 10 MB
 

@@ -19,7 +19,7 @@
 #include "core/oneshot/gnome-fun.hpp"
 #include "util/dbg-writer.hpp"
 
-#include <SDL_loadso.h>
+#include <SDL3/SDL_loadso.h>
 
 #ifdef __linux__
 #define GTK2_LIBNAME "libgtk-x11-2.0.so.0"

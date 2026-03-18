@@ -18,7 +18,7 @@
 
 #pragma once
 
-include "util/util.hpp"
+#include "util/util.hpp"
 
 /* Concerning the 'pos' parameter:
  *   RGSS3 actually doesn't specify a format for this,

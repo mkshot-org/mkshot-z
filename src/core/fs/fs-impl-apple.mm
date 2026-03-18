@@ -17,8 +17,8 @@
 */
 
 #import <AppKit/AppKit.h>
-#import <SDL_syswm.h>
-#import <SDL_filesystem.h>
+#import <SDL3/SDL_syswm.h>
+#import <SDL3/SDL_filesystem.h>
 
 #import "core/fs/fs-impl.hpp"
 #import "util/exception.hpp"

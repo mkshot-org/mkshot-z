@@ -50,10 +50,10 @@ extern "C" {
 #include <assert.h>
 #include <string>
 
-#include <SDL_cpuinfo.h>
-#include <SDL_filesystem.h>
-#include <SDL_loadso.h>
-#include <SDL_power.h>
+#include <SDL3/SDL_cpuinfo.h>
+#include <SDL3/SDL_filesystem.h>
+#include <SDL3/SDL_loadso.h>
+#include <SDL3/SDL_power.h>
 
 extern const char module_rgss1[];
 extern const char module_rgss2[];

@@ -18,7 +18,7 @@
 
 #pragma once
 
-include "core/gfx/vertex.hpp"
+#include "core/gfx/vertex.hpp"
 #include "core/gfx/util.hpp"
 #include "core/gfx/meta.hpp"
 #include "core/shared-state.hpp"

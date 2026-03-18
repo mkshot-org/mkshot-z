@@ -18,7 +18,7 @@
 
 #pragma once
 
-include <SDL_rwops.h>
+#include <SDL3/SDL_rwops.h>
 #include <string>
 
 #include "core/fs/fs-impl.hpp"

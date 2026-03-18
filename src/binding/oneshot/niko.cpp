@@ -26,7 +26,7 @@ RB_METHOD(nikoPrepare)
 {
 	RB_UNUSED_PARAM;
 
-#ifndef __WIN32__
+#ifndef SDL_PLATFORM_WIN32
 	// Needed on non-Windows to prepare (start) Journal program
 	shState->oneshot().journal->nikoPrepare();
 #endif

@@ -16,16 +16,16 @@
 ** GNU General Public License for more details.
 */
 
-#ifndef __APPLE__
+#ifndef SDL_PLATFORM_APPLE
 #include "icon.png.h"
 #endif
 
 #include <alc.h>
 
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_sound.h>
-#include <SDL_ttf.h>
+#include <SDL3/SDL.h>
+#include <SDL3_image/SDL_image.h>
+#include <SDL3/SDL_sound.h>
+#include <SDL3_ttf/SDL_ttf.h>
 
 #include <assert.h>
 #include <string.h>
@@ -47,7 +47,7 @@
 
 #include "core/oneshot/i18n.hpp"
 
-#ifdef __WIN32__
+#ifdef SDL_PLATFORM_WIN32
 #include <Winsock2.h>
 #include "util/win-console.hpp"
 
@@ -64,7 +64,7 @@ __declspec(dllexport) int AmdPowerXpressRequestHighPerformance = 1;
 #include "steamshim/child.h"
 #endif
 
-#ifdef __APPLE__
+#ifdef SDL_PLATFORM_APPLE
 #include <Availability.h>
 #include "TouchBar.h"
 #if !defined(__MAC_10_15) || __MAC_OS_X_VERSION_MAX_ALLOWED < __MAC_10_15
@@ -195,15 +195,15 @@ static void setupWindowIcon(const Config &conf, SDL_Window *win) {
         /* Windows and macOS have their own native ways of dealing
          * with default window icon; don't interfering with them */
          // oh my god who made the previous version
-#if !defined(__APPLE__)
+#ifndef SDL_PLATFORM_APPLE
         iconIO = SDL_RWFromConstMem(___assets_icon_png, ___assets_icon_png_len);
-#elif !defined(__WIN32__)
+#elif !defined(SDL_PLATFORM_WIN32)
         iconIO = SDL_RWFromFile(mkshot_fs::getPathForAsset("icon", "png").c_str(), "rb");
 #endif
     }
 
     if (iconIO != NULL) {
-        SDL_Surface *icon = IMG_Load_RW(iconIO, SDL_TRUE);
+        SDL_Surface *icon = IMG_Load_RW(iconIO, true);
 
         if (icon) {
             SDL_SetWindowIcon(win, icon);
@@ -223,7 +223,7 @@ int main(int argc, char *argv[]) {
 #endif
 
     /* initialize SDL first */
-    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER | SDL_INIT_TIMER) < 0) {
+    if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER | SDL_INIT_TIMER)) {
       showInitError(std::string("Error initializing SDL: ") + SDL_GetError());
       return 0;
     }
@@ -235,7 +235,7 @@ int main(int argc, char *argv[]) {
 
 #ifndef KEEP_CWD
     char dataDir[512]{};
-#if defined(__linux__)
+#ifdef __linux__
     char *tmp{};
     tmp = getenv("SRCDIR");
     if (tmp) {
@@ -252,7 +252,7 @@ int main(int argc, char *argv[]) {
     Config conf;
     conf.read(argc, argv);
 
-#if defined(__WIN32__)
+#ifdef SDL_PLATFORM_WIN32
     // Create a debug console in debug mode
     if (conf.winConsole) {
       if (setupWindowsConsole()) {
@@ -330,7 +330,7 @@ int main(int argc, char *argv[]) {
 
       return 0;
     }
-#if defined(__WIN32__)
+#ifdef SDL_PLATFORM_WIN32
     WSAData wsadata = {0};
     if (WSAStartup(0x101, &wsadata) || wsadata.wVersion != 0x101) {
       char buf[200];
@@ -356,7 +356,7 @@ int main(int argc, char *argv[]) {
 
     // LoadLibrary properly initializes EGL, it won't work otherwise.
     // Doesn't completely do it though, needs a small patch to SDL
-#ifdef __APPLE__
+#ifdef SDL_PLATFORM_APPLE
     SDL_setenv("ANGLE_DEFAULT_PLATFORM", (conf.preferMetalRenderer) ? "metal" : "opengl", true);
     SDL_GL_LoadLibrary("@rpath/libEGL.dylib");
 #endif
@@ -375,7 +375,7 @@ int main(int argc, char *argv[]) {
       return 0;
     }
     
-#ifdef __APPLE__
+#ifdef SDL_PLATFORM_APPLE
     {
         std::string downloadsPath = "/Users/" + mkshot_sys::getUserName() + "/Downloads";
         
@@ -392,7 +392,7 @@ int main(int argc, char *argv[]) {
     }
 #endif
     
-#ifdef __APPLE__
+#ifdef SDL_PLATFORM_APPLE
 #define DEBUG_FSELECT_MSG "Select the folder from which to load game files. This is the folder containing OneShot game files."
 #define DEBUG_FSELECT_PROMPT "Load Game"
     if (conf.manualFolderSelect) {
@@ -454,7 +454,7 @@ int main(int argc, char *argv[]) {
     /* Load and post key bindings */
     rtData.bindingUpdateMsg.post(loadBindings(conf));
     
-#ifdef __APPLE__
+#ifdef SDL_PLATFORM_APPLE
     if (conf.manualFolderSelect) {
         /* Update window title */
         eventThread.requestWindowRename(conf.windowTitle.c_str());
@@ -512,7 +512,7 @@ int main(int argc, char *argv[]) {
     alcCloseDevice(alcDev);
     SDL_DestroyWindow(win);
 
-#if defined(__WIN32__)
+#ifdef SDL_PLATFORM_WIN32
     if (wsadata.wVersion)
       WSACleanup();
 #endif
@@ -560,7 +560,7 @@ static SDL_GLContext initGL(SDL_Window *win, Config &conf,
 
 // This breaks scaling for Retina screens.
 // Using Metal should be rendering this irrelevant anyway, hopefully
-#ifndef __APPLE__
+#ifndef SDL_PLATFORM_APPLE
   if (!conf.enableBlitting)
     gl.BlitFramebuffer = 0;
 #endif

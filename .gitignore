@@ -10,7 +10,6 @@ embed/include/**
 *.pdb
 *.gcno
 *.gcda
-*.AppImage
 *.dSYM
 *.dmg
 *.lock.json

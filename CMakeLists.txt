@@ -6,9 +6,9 @@ project(mkshot-z
     LANGUAGES "C" "CXX"
 )
 
-#IF(APPLE)
-#   enable_language("OBJCXX")
-#ENDIF()
+IF(APPLE)
+   enable_language("OBJCXX")
+ENDIF()
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -48,14 +48,21 @@ ENDIF()
 
 ## Options ##
 option(MKSHOT_DYNAMIC "Build and link mkshot-z dependencies dynamically." OFF)
-set(MKSHOT_STATIC $<NOT:MKSHOT_DYNAMIC>)
 option(MKSHOT_FORCE_32BIT "Force the compiler to build in 32-bit mode." OFF)
 option(MKSHOT_GLES2 "Use OpenGL ES 2.0 instead of OpenGL." OFF)
 option(MKSHOT_HTTP "Add support for HTTP requests." OFF)
 option(MKSHOT_KEEP_CWD "Keep Current Working Directory on startup." OFF)
 
+# there are no special conditions for dynamic linking
+# so we'll use MKSHOT_STATIC for conditions instead
+IF(MKSHOT_DYNAMIC)
+    set(MKSHOT_STATIC OFF)
+ELSE()
+    set(MKSHOT_STATIC ON)
+ENDIF()
+
 # Steam
-set(MKSHOT_STEAMWORKS_PATH "" CACHE PATH "Path to Steamworks SDK. Provide this to enable the Steam features.")
+set(MKSHOT_STEAMWORKS_PATH "" CACHE PATH "Path to Steamworks SDK directory. Provide this to enable the Steam features.")
 set(MKSHOT_STEAM_APPID "" CACHE STRING "Steam AppID value. Set this to use 'SteamAPI_RestartAppIfNecessary()'.")
 option(MKSHOT_STEAMSHIM_DEBUG "Whether to show Steamshim debug output console." OFF)
 set(MKSHOT_STEAM OFF)

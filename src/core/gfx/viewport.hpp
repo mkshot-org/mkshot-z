@@ -18,7 +18,7 @@
 
 #pragma once
 
-include "core/gfx/scene.hpp"
+#include "core/gfx/scene.hpp"
 #include "core/gfx/flashable.hpp"
 #include "util/disposable.hpp"
 #include "util/util.hpp"

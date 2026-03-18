@@ -33,8 +33,8 @@ set(MKSHOT_LINKLIBS
 IF(MKSHOT_STEAMWORKS_PATH)
     message(STATUS "Searching for Steamworks SDK in '${MKSHOT_STEAMWORKS_PATH}'...")
 
-    # Look for the actual header to verify the path
-    find_path(STEAM_INCLUDE_DIR steam/steam_api.h
+    # look for the actual header to verify the path
+    find_path(MKSHOT_STEAMWORKS_PATH steam/steam_api.h
         PATHS "${MKSHOT_STEAMWORKS_PATH}/public"
         NO_DEFAULT_PATH
     )

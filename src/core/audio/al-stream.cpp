@@ -26,9 +26,9 @@
 #include "util/sdl.hpp"
 #include "util/dbg-writer.hpp"
 
-#include <SDL_mutex.h>
-#include <SDL_thread.h>
-#include <SDL_timer.h>
+#include <SDL3/SDL_mutex.h>
+#include <SDL3/SDL_thread.h>
+#include <SDL3/SDL_timer.h>
 
 ALStream::ALStream(LoopMode loopMode,
 		           const std::string &threadId)

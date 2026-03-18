@@ -23,7 +23,7 @@
 #include "core/sys/sys.hpp"
 #include "core/oneshot/oneshot.hpp"
 
-#include <SDL.h>
+#include <SDL3/SDL.h>
 #include "util/CRC.hpp"
 
 RB_METHOD(oneshotSetYesNo)

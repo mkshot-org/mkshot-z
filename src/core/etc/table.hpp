@@ -18,7 +18,7 @@
 
 #pragma once
 
-include "util/serializable.hpp"
+#include "util/serializable.hpp"
 
 #include <stdint.h>
 #include "sigslot.hpp"

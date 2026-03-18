@@ -18,10 +18,10 @@
 
 #pragma once
 
-include <al.h>
+#include <al.h>
 #include <alext.h>
 
-#include <SDL_audio.h>
+#include <SDL3/SDL_audio.h>
 #include <assert.h>
 
 namespace AL

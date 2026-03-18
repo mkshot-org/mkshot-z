@@ -18,7 +18,7 @@
 
 #pragma once
 
-include "sigslot.hpp"
+#include "sigslot.hpp"
 
 #define shState SharedState::instance
 #define glState shState->_glState()

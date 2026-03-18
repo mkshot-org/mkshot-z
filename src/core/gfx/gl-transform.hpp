@@ -43,7 +43,7 @@
 
 #pragma once
 
-include "core/etc/internal.hpp"
+#include "core/etc/internal.hpp"
 
 #include <math.h>
 #include <string.h>

@@ -18,7 +18,7 @@
 
 #pragma once
 
-include "core/gfx/flashable.hpp"
+#include "core/gfx/flashable.hpp"
 #include "binding/util.hpp"
 #include "binding/types.hpp"
 

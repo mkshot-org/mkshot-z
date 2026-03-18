@@ -18,7 +18,7 @@
 
 #pragma once
 
-include "sigslot.hpp"
+#include "sigslot.hpp"
 
 #include "util/serializable.hpp"
 #include "core/etc/internal.hpp"

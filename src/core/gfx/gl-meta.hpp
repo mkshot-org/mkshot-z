@@ -18,11 +18,11 @@
 
 #pragma once
 
-include "core/gfx/fun.hpp"
+#include "core/gfx/fun.hpp"
 #include "core/gfx/util.hpp"
 #include "core/gfx/vertex.hpp"
 
-#include <SDL_surface.h>
+#include <SDL3/SDL_surface.h>
 
 namespace GLMeta
 {

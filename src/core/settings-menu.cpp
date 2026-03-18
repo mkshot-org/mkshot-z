@@ -18,11 +18,11 @@
 
 #include "settingsmenu.hpp"
 
-#include <SDL_video.h>
-#include <SDL_ttf.h>
-#include <SDL_surface.h>
-#include <SDL_keyboard.h>
-#include <SDL_rect.h>
+#include <SDL3/SDL_video.h>
+#include <SDL3_ttf/SDL_ttf.h>
+#include <SDL3/SDL_surface.h>
+#include <SDL3/SDL_keyboard.h>
+#include <SDL3/SDL_rect.h>
 
 #include "core/input/keybinds.hpp"
 #include "core/event-thread.hpp"

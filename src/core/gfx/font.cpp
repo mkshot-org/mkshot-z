@@ -36,7 +36,7 @@
 #include "core/fs/fs.hpp"
 #endif
 
-#include <SDL_ttf.h>
+#include <SDL3_ttf/SDL_ttf.h>
 
 #ifndef __APPLE__
 

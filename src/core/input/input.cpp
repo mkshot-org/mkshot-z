@@ -24,10 +24,10 @@
 #include "util/exception.hpp"
 #include "util/util.hpp"
 
-#include <SDL_scancode.h>
-#include <SDL_keyboard.h>
-#include <SDL_mouse.h>
-#include <SDL_clipboard.h>
+#include <SDL3/SDL_scancode.h>
+#include <SDL3/SDL_keyboard.h>
+#include <SDL3/SDL_mouse.h>
+#include <SDL3/SDL_clipboard.h>
 
 #include <vector>
 #include <cmath>
@@ -1484,7 +1484,7 @@ int Input::getControllerPowerLevel()
 
 bool Input::getTextInputMode()
 {
-    return (SDL_IsTextInputActive() == SDL_TRUE);
+    return (SDL_IsTextInputActive() == true);
 }
 
 void Input::setTextInputMode(bool mode)

@@ -18,11 +18,11 @@
 
 #pragma once
 
-include "core/audio/al-util.hpp"
+#include "core/audio/al-util.hpp"
 #include "util/sdl.hpp"
 
 #include <string>
-#include <SDL_rwops.h>
+#include <SDL3/SDL_rwops.h>
 
 struct ALDataSource;
 

@@ -35,10 +35,10 @@
 #include <pwd.h>
 #endif
 
-#include <SDL.h>
+#include <SDL3/SDL.h>
 
 #ifdef __WIN32__
-#include <SDL_syswm.h>
+#include <SDL3/SDL_syswm.h>
 
 static std::wstring utf8ToWide(const char *str)
 {

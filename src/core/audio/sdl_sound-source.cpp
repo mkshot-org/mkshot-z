@@ -19,7 +19,7 @@
 #include "core/audio/al-data-source.hpp"
 #include "util/exception.hpp"
 
-#include <SDL_sound.h>
+#include <SDL3/SDL_sound.h>
 
 struct SDLSoundSource : ALDataSource
 {

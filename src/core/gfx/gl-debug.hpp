@@ -18,7 +18,7 @@
 
 #pragma once
 
-include "core/gfx/fun.hpp"
+#include "core/gfx/fun.hpp"
 
 #include <stdio.h>
 #include <algorithm>

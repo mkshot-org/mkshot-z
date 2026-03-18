@@ -18,7 +18,7 @@
 
 #pragma once
 
-include "core/etc/internal.hpp"
+#include "core/etc/internal.hpp"
 #include "core/gfx/util.hpp"
 #include "core/gfx/state.hpp"
 

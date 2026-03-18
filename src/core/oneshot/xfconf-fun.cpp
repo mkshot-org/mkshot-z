@@ -21,7 +21,7 @@
 
 #include <vector>
 
-#include <SDL_loadso.h>
+#include <SDL3/SDL_loadso.h>
 
 #ifdef __linux__
 #define XFCONF_LIBNAME "libxfconf-0.so"

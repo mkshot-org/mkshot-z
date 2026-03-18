@@ -17,7 +17,7 @@
 */
 
 #include "core/config.hpp"
-#include <SDL_filesystem.h>
+#include <SDL3/SDL_filesystem.h>
 #include <assert.h>
 
 #include <stdint.h>

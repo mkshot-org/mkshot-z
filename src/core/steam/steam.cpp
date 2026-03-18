@@ -20,7 +20,7 @@
 #include "steamshim/child.hpp"
 
 #include <map>
-#include <SDL.h>
+#include <SDL3/SDL.h>
 
 /* All achievement API names to check each for unlocked state */
 static const char *const achievementNames[] = {

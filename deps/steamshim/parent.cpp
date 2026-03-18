@@ -18,6 +18,8 @@
 
 // Copyright (C) 2013 - 2015 Ryan C. Gordon
 
+// TODO: it's basically C code being treated as C++
+
 #ifdef __WIN32__
 #define WIN32_LEAN_AND_MEAN 1
 #define UNICODE
@@ -242,15 +244,6 @@ static bool launchChild(ProcessType *pid) {
   char buf[300];
   strncpy(buf, execPath().c_str(), sizeof(buf));
   GArgv[0] = buf;
-#else
-  // check for AppImage mount path
-  char *appimageDir = getenv("APPDIR");
-  if (appimageDir) {
-    strcat(appimageDir, "/usr/bin");
-    if (chdir(appimageDir) != 0)
-      dbgpipe("Failed to change CWD to %s\n", appimageDir);
-  }
-  GArgv[0] = strdup("./" GAME_LAUNCH_NAME);
 #endif
   dbgpipe("Starting %s\n", GArgv[0]);
   execvp(GArgv[0], GArgv);
@@ -459,7 +452,7 @@ static bool processCommand(const uint8 *buf, unsigned int buflen, PipeType fd) {
   const ShimCmd cmd = (ShimCmd) * (buf++);
   buflen--;
 
-#if STEAMSHIM_DEBUG
+#ifdef STEAMSHIM_DEBUG
   if (false) {
   }
 #define PRINTGOTCMD(x) else if (cmd == x) printf("Parent got " #x ".\n")
@@ -685,8 +678,7 @@ static void deinitSteamworks(void) {
 
 static int mainline(void) {
 
-#if (defined(__APPLE__) && STEAM_APPID != 0) || \
-    (!defined(__APPLE__) && defined(STEAM_APPID))
+#ifdef STEAM_APPID
   if (SteamAPI_RestartAppIfNecessary(STEAM_APPID))
     return 0;
 #elif defined(__APPLE__)

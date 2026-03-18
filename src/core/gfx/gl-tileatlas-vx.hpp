@@ -18,7 +18,7 @@
 
 #pragma once
 
-include <stdlib.h>
+#include <stdlib.h>
 
 struct FloatRect;
 struct TEXFBO;

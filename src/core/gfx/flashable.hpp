@@ -18,7 +18,7 @@
 
 #pragma once
 
-include "core/etc/etc.hpp"
+#include "core/etc/etc.hpp"
 #include "core/etc/internal.hpp"
 
 class Flashable

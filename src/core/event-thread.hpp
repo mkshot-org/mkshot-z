@@ -18,11 +18,11 @@
 
 #pragma once
 
-include <SDL_scancode.h>
-#include <SDL_mouse.h>
-#include <SDL_mutex.h>
-#include <SDL_atomic.h>
-#include <SDL_gamecontroller.h>
+#include <SDL3/SDL_scancode.h>
+#include <SDL3/SDL_mouse.h>
+#include <SDL3/SDL_mutex.h>
+#include <SDL3/SDL_atomic.h>
+#include <SDL3/SDL_gamepad.h>
 
 #include <string>
 

@@ -18,7 +18,7 @@
 
 #pragma once
 
-include "util/intru-list.hpp"
+#include "util/intru-list.hpp"
 #include "util/exception.hpp"
 #include "core/shared-state.hpp"
 #include "core/gfx/gfx.hpp"

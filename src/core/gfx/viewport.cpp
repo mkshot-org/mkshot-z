@@ -25,7 +25,7 @@
 #include "core/gfx/state.hpp"
 #include "core/gfx/gfx.hpp"
 
-#include <SDL_rect.h>
+#include <SDL3/SDL_rect.h>
 
 #include "sigslot.hpp"
 
