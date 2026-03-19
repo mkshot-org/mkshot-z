@@ -15,7 +15,7 @@ _________________________
 [-] General: Embed assets without involving xxd
 [=] General: Portable code. I'm speechless.
 [ ] OneShot: Wayland compatibility (see issues #2, #3)
-[ ] General: C++14 -> C++20
+[=] General: C++14 -> C++20
 [ ] Configuration: JSON5 -> TOML
 [ ] OneShot: Use tinyfiledialogs for managing popups
 [ ] Audio: SDL_sound + OpenAL -> Miniaudio
