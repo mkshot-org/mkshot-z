@@ -21,9 +21,9 @@
 #include "util/dbg-writer.hpp"
 
 #include "core/gfx/gl-tileatlasvx.hpp"
-#include "core/etc/etc-internal.hpp"
+#include "core/gfx/etc-internal.hpp"
 #include "core/gfx/bitmap.hpp"
-#include "core/etc/table.hpp"
+#include "core/gfx/table.hpp"
 #include "core/gfx/viewport.hpp"
 #include "core/gfx/gl-util.hpp"
 #include "core/shared-state.hpp"

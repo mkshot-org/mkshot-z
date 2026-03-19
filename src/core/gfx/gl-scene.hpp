@@ -20,8 +20,8 @@
 
 #include "util/util.hpp"
 #include "util/intru-list.hpp"
-#include "core/etc/etc.hpp"
-#include "core/etc/etc-internal.hpp"
+#include "core/gfx/etc.hpp"
+#include "core/gfx/etc-internal.hpp"
 
 class SceneElement;
 class Viewport;

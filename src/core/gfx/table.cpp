@@ -16,7 +16,7 @@
 ** GNU General Public License for more details.
 */
 
-#include "core/etc/table.hpp"
+#include "core/gfx/table.hpp"
 
 #include <string.h>
 #include <algorithm>

@@ -16,7 +16,7 @@
 ** GNU General Public License for more details.
 */
 
-#include "core/etc/etc.hpp"
+#include "core/gfx/etc.hpp"
 
 #include "util/serial.hpp"
 #include "util/exception.hpp"

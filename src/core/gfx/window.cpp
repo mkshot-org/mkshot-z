@@ -21,8 +21,8 @@
 #include "core/gfx/viewport.hpp"
 #include "core/shared-state.hpp"
 #include "core/gfx/bitmap.hpp"
-#include "core/etc/etc.hpp"
-#include "core/etc/etc-internal.hpp"
+#include "core/gfx/etc.hpp"
+#include "core/gfx/etc-internal.hpp"
 #include "core/gfx/gl-tilequad.hpp"
 
 #include "core/gfx/gl-util.hpp"

@@ -18,7 +18,7 @@
 
 #include "binding/rb_util.hpp"
 #include "util/serializable.hpp"
-#include "core/etc/table.hpp"
+#include "core/gfx/table.hpp"
 #include <algorithm>
 
 static int num2TableSize(VALUE v) {

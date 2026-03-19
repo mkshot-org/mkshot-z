@@ -18,10 +18,6 @@
 
 #pragma once
 
-#include "util/util.hpp"
-
-#include <SDL3/SDL_rect.h>
-
 struct Vec2
 {
 	float x, y;
@@ -289,5 +285,3 @@ struct NormValue
 		return unNorm;
 	}
 };
-
-

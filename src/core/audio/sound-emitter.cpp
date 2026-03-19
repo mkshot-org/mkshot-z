@@ -181,7 +181,7 @@ void SoundEmitter::stop()
 		AL::Source::stop(alSrcs[i]);
 }
 
-struct SoundOpenHandler : FileSystem::OpenHandler
+struct SoundOpenHandler : FS::OpenHandler
 {
 	SoundBuffer *buffer;
 

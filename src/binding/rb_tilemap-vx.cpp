@@ -18,7 +18,7 @@
 
 #include "core/gfx/bitmap.hpp"
 #include "core/shared-state.hpp"
-#include "core/etc/table.hpp"
+#include "core/gfx/table.hpp"
 #include "core/gfx/tilemap-vx.hpp"
 #include "core/gfx/viewport.hpp"
 

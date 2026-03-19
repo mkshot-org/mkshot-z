@@ -20,7 +20,7 @@
 
 #include <string>
 
-namespace systemImpl
+namespace mkshot_sys
 {
 	enum WineHostType
 	{
@@ -45,5 +45,3 @@ std::string getPlistValue(const char *key);
 void openSettingsWindow();
 bool isMetalSupported();
 #endif
-
-namespace mkshot_sys = systemImpl;

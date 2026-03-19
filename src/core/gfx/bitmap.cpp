@@ -421,7 +421,7 @@ struct BitmapPrivate
     }
 };
 
-struct BitmapOpenHandler : FileSystem::OpenHandler
+struct BitmapOpenHandler : FS::OpenHandler
 {
     // Non-GIF
     SDL_Surface *surface;

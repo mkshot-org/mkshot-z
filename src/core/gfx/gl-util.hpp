@@ -19,7 +19,7 @@
 #pragma once
 
 #include "core/gfx/gl-fun.hpp"
-#include "core/etc/etc-internal.hpp"
+#include "core/gfx/etc-internal.hpp"
 #include "core/shared-state.hpp"
 #include "core/config.hpp"
 

@@ -20,19 +20,19 @@
 #import <SDL3/SDL_syswm.h>
 #import <SDL3/SDL_filesystem.h>
 
-#import "core/fs/fs-impl.hpp"
+#import "core/fs/fs.hpp"
 #import "util/exception.hpp"
 
-#define PATHTONS(str) [NSFileManager.defaultManager stringWithFileSystemRepresentation:str length:strlen(str)]
+#define PATHTONS(str) [NSFileManager.defaultManager stringWithFSRepresentation:str length:strlen(str)]
 #define NSTOPATH(str) [NSFileManager.defaultManager fileSystemRepresentationWithPath:str]
 
-bool filesystemImpl::fileExists(const char *path)
+bool mkshot_fs::fileExists(const char *path)
 {
     BOOL isDir;
     return [NSFileManager.defaultManager fileExistsAtPath:PATHTONS(path) isDirectory:&isDir] && !isDir;
 }
 
-std::string filesystemImpl::contentsOfFileAsString(const char *path)
+std::string mkshot_fs::contentsOfFileAsString(const char *path)
 {
     NSStringEncoding enc;
 
@@ -44,17 +44,17 @@ std::string filesystemImpl::contentsOfFileAsString(const char *path)
     return std::string(fileContents.UTF8String);
 }
 
-bool filesystemImpl::setCurrentDirectory(const char *path)
+bool mkshot_fs::setCurrentDirectory(const char *path)
 {
     return [NSFileManager.defaultManager changeCurrentDirectoryPath:PATHTONS(path)];
 }
 
-std::string filesystemImpl::getCurrentDirectory()
+std::string mkshot_fs::getCurrentDirectory()
 {
     return std::string(NSTOPATH(NSFileManager.defaultManager.currentDirectoryPath));
 }
 
-std::string filesystemImpl::normalizePath(const char *path, bool preferred, bool absolute)
+std::string mkshot_fs::normalizePath(const char *path, bool preferred, bool absolute)
 {
     NSString *nsPathOrig = PATHTONS(path);
     NSString *nsPath = [NSURL fileURLWithPath:nsPathOrig].URLByStandardizingPath.path;
@@ -71,7 +71,7 @@ std::string filesystemImpl::normalizePath(const char *path, bool preferred, bool
     return std::string(NSTOPATH(nsPath));
 }
 
-std::string filesystemImpl::getDefaultGameRoot()
+std::string mkshot_fs::getDefaultGameRoot()
 {
     NSString *path = [NSString stringWithFormat:@"%@/../", NSBundle.mainBundle.bundlePath];
     return normalizePath(NSTOPATH(path), true, true);
@@ -88,7 +88,7 @@ NSString *getPathForAsset_internal(const char *baseName, const char *ext)
     return [assetBundle pathForResource:@(baseName) ofType:@(ext)];
 }
 
-std::string filesystemImpl::getPathForAsset(const char *baseName, const char *ext)
+std::string mkshot_fs::getPathForAsset(const char *baseName, const char *ext)
 {
     NSString *assetPath = getPathForAsset_internal(baseName, ext);
 
@@ -98,7 +98,7 @@ std::string filesystemImpl::getPathForAsset(const char *baseName, const char *ex
     return std::string(NSTOPATH(getPathForAsset_internal(baseName, ext)));
 }
 
-std::string filesystemImpl::contentsOfAssetAsString(const char *baseName, const char *ext)
+std::string mkshot_fs::contentsOfAssetAsString(const char *baseName, const char *ext)
 {
     NSString *path = getPathForAsset_internal(baseName, ext);
     NSString *fileContents = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:NULL];
@@ -109,12 +109,12 @@ std::string filesystemImpl::contentsOfAssetAsString(const char *baseName, const 
     return std::string(fileContents.UTF8String);
 }
 
-std::string filesystemImpl::getResourcePath()
+std::string mkshot_fs::getResourcePath()
 {
     return std::string(NSTOPATH(NSBundle.mainBundle.resourcePath));
 }
 
-std::string filesystemImpl::selectPath(SDL_Window *win, const char *msg, const char *prompt)
+std::string mkshot_fs::selectPath(SDL_Window *win, const char *msg, const char *prompt)
 {
     NSOpenPanel *panel = [NSOpenPanel openPanel];
     panel.canChooseDirectories = true;

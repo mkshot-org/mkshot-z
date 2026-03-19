@@ -33,7 +33,7 @@ struct Quad;
 struct ShaderSet;
 
 class Scene;
-class FileSystem;
+class FS;
 class EventThread;
 class Graphics;
 class Input;
@@ -60,7 +60,7 @@ struct SharedState
 	Scene *screen() const;
 	void setScreen(Scene &screen);
 
-	FileSystem &fileSystem() const;
+	FS &fileSystem() const;
 
 	EventThread &eThread() const;
 	RGSSThreadData &rtData() const;

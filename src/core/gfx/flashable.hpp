@@ -18,8 +18,8 @@
 
 #pragma once
 
-#include "core/etc/etc.hpp"
-#include "core/etc/etc-internal.hpp"
+#include "core/gfx/etc.hpp"
+#include "core/gfx/etc-internal.hpp"
 
 class Flashable
 {

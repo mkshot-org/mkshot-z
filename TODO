@@ -11,6 +11,7 @@ _________________________
 -----
 
 [=] General: SDL2 -> SDL3
+[ ] Get rid of PhysFS and RGSSAD support entirely
 [-] General: Meson/Xcode + Makefiles -> CMake + Conan
 [-] General: Embed assets without involving xxd
 [=] General: Portable code. I'm speechless.

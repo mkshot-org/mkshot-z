@@ -67,7 +67,7 @@ struct SharedStatePrivate
 	SDL_Window *sdlWindow;
 	Scene *screen;
 
-	FileSystem fileSystem;
+	FS fileSystem;
 
 	EventThread &eThread;
 	RGSSThreadData &rtData;
@@ -233,7 +233,7 @@ void SharedState::setScreen(Scene &screen)
 GSATT(void*, bindingData)
 GSATT(SDL_Window*, sdlWindow)
 GSATT(Scene*, screen)
-GSATT(FileSystem&, fileSystem)
+GSATT(FS&, fileSystem)
 GSATT(EventThread&, eThread)
 GSATT(RGSSThreadData&, rtData)
 GSATT(Config&, config)

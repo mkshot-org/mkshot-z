@@ -17,7 +17,7 @@
 */
 
 #include "core/gfx/bitmap.hpp"
-#include "core/etc/table.hpp"
+#include "core/gfx/table.hpp"
 #include "core/gfx/tilemap.hpp"
 #include "core/gfx/viewport.hpp"
 

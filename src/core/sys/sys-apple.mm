@@ -24,20 +24,20 @@
 
 #import "SettingsMenuController.hpp"
 
-std::string systemImpl::getLanguage()
+std::string mkshot_sys::getLanguage()
 {
     NSString *languageCode = NSLocale.currentLocale.languageCode;
     NSString *countryCode = NSLocale.currentLocale.countryCode;
     return std::string([NSString stringWithFormat:@"%@_%@", languageCode, countryCode].UTF8String);
 }
 
-std::string systemImpl::getUserName()
+std::string mkshot_sys::getUserName()
 {
     NSString *name = NSUserName();
     return std::string(name.UTF8String);
 }
 
-std::string systemImpl::getUserFullName()
+std::string mkshot_sys::getUserFullName()
 {
     NSString *name = NSFullUserName();
 
@@ -47,18 +47,18 @@ std::string systemImpl::getUserFullName()
     return std::string(name.UTF8String);
 }
 
-int systemImpl::getScalingFactor()
+int mkshot_sys::getScalingFactor()
 {
     return NSApplication.sharedApplication.mainWindow.backingScaleFactor;
 }
 
-bool systemImpl::isWine()
+bool mkshot_sys::isWine()
 {
     // Always false on Mac builds, see sys.cpp
     return false;
 }
 
-bool systemImpl::isRosetta()
+bool mkshot_sys::isRosetta()
 {
     int translated = 0;
     size_t size = sizeof(translated);
@@ -71,7 +71,7 @@ bool systemImpl::isRosetta()
     return translated;
 }
 
-systemImpl::WineHostType systemImpl::getRealHostType()
+mkshot_sys::WineHostType mkshot_sys::getRealHostType()
 {
     return WineHostType::Mac;
 }

@@ -19,7 +19,7 @@
 #include "core/gfx/viewport.hpp"
 
 #include "core/shared-state.hpp"
-#include "core/etc/etc.hpp"
+#include "core/gfx/etc.hpp"
 #include "util/util.hpp"
 #include "core/gfx/gl-quad.hpp"
 #include "core/gfx/gl-state.hpp"

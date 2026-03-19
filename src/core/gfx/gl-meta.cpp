@@ -22,7 +22,7 @@
 #include "core/gfx/gl-state.hpp"
 #include "core/gfx/gl-quad.hpp"
 #include "core/config.hpp"
-#include "core/etc/etc.hpp"
+#include "core/gfx/etc.hpp"
 
 namespace FBO
 {

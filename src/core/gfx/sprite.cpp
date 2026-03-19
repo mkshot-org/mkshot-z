@@ -22,8 +22,8 @@
 #include "core/gfx/bitmap.hpp"
 #include "util/dbg-writer.hpp"
 #include "core/config.hpp"
-#include "core/etc/etc.hpp"
-#include "core/etc/etc-internal.hpp"
+#include "core/gfx/etc.hpp"
+#include "core/gfx/etc-internal.hpp"
 #include "util/util.hpp"
 
 #include "core/gfx/gl-util.hpp"

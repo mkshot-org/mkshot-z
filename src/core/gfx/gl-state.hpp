@@ -18,7 +18,7 @@
 
 #pragma once
 
-#include "core/etc/etc.hpp"
+#include "core/gfx/etc.hpp"
 
 #include <stack>
 #include <assert.h>

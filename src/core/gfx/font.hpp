@@ -18,7 +18,7 @@
 
 #pragma once
 
-#include "core/etc/etc.hpp"
+#include "core/gfx/etc.hpp"
 #include "util/util.hpp"
 
 #include <vector>
@@ -36,7 +36,7 @@ public:
 	SharedFontState(const Config &conf);
 	~SharedFontState();
 
-	/* Called from FileSystem during font cache initialization
+	/* Called from FS during font cache initialization
 	 * (when "Fonts/" is scanned for available assets).
 	 * 'io' is an opened handle to a possible font file,
 	 * 'filename' is the corresponding path */

@@ -20,9 +20,9 @@
 
 #include "core/gfx/tilemap-common.hpp"
 #include "core/gfx/bitmap.hpp"
-#include "core/etc/table.hpp"
+#include "core/gfx/table.hpp"
 #include "util/dbg-writer.hpp"
-#include "core/etc/etc-internal.hpp"
+#include "core/gfx/etc-internal.hpp"
 #include "core/gfx/gl-util.hpp"
 #include "core/gfx/gl-meta.hpp"
 #include "core/shared-state.hpp"

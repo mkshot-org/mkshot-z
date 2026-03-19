@@ -53,7 +53,7 @@ static std::string wideToUTF8(const wchar_t *wcStr)
 }
 #endif
 
-std::string systemImpl::getLanguage()
+std::string mkshot_sys::getLanguage()
 {
 	std::string ret;
 
@@ -102,7 +102,7 @@ std::string systemImpl::getLanguage()
 	return ret;
 }
 
-std::string systemImpl::getUserName()
+std::string mkshot_sys::getUserName()
 {
 	std::string ret;
 
@@ -146,7 +146,7 @@ std::string systemImpl::getUserName()
 	return ret;
 }
 
-std::string systemImpl::getUserFullName()
+std::string mkshot_sys::getUserFullName()
 {
 	std::string ret;
 
@@ -191,13 +191,13 @@ std::string systemImpl::getUserFullName()
 	return ret;
 }
 
-int systemImpl::getScalingFactor()
+int mkshot_sys::getScalingFactor()
 {
 	// HiDPI scaling not supported outside of macOS for now
 	return 1;
 }
 
-bool systemImpl::isWine()
+bool mkshot_sys::isWine()
 {
 #ifdef __WIN32__
 	void *ntdll = SDL_LoadObject("ntdll.dll");
@@ -208,13 +208,13 @@ bool systemImpl::isWine()
 #endif
 }
 
-bool systemImpl::isRosetta()
+bool mkshot_sys::isRosetta()
 {
 	// Always false on non-Mac environment, see impl-apple.mm
 	return false;
 }
 
-systemImpl::WineHostType systemImpl::getRealHostType()
+mkshot_sys::WineHostType mkshot_sys::getRealHostType()
 {
 #ifdef __WIN32__
 	void *ntdll = SDL_LoadObject("ntdll.dll");

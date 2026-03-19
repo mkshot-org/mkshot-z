@@ -40,20 +40,17 @@ set(MKSHOT_SOURCES
 
     core/audio/al-stream.cpp
     core/audio/audio.cpp
-    core/audio/sdl_sound-source.cpp
+    core/audio/sdl-sound-source.cpp
     core/audio/sound-emitter.cpp
     core/audio/stream.cpp
     core/audio/vorbis-source.cpp
 
-    core/etc/etc.cpp
-    core/etc/table.cpp
-
-    core/fs/fs-impl.cpp
     core/fs/fs.cpp
 
     core/gfx/autotiles-vx.cpp
     core/gfx/autotiles.cpp
     core/gfx/bitmap.cpp
+    core/gfx/etc.cpp
     core/gfx/font.cpp
     core/gfx/gfx.cpp
     core/gfx/gl-debug.cpp
@@ -69,6 +66,7 @@ set(MKSHOT_SOURCES
     core/gfx/gl-vertex.cpp
     core/gfx/plane.cpp
     core/gfx/sprite.cpp
+    core/gfx/table.cpp
     core/gfx/tilemap-vx.cpp
     core/gfx/tilemap.cpp
     core/gfx/viewport.cpp
@@ -138,7 +136,7 @@ IF(MKSHOT_STEAM)
     set(STEAMSHIM_DEFINES "")
     set(STEAMSHIM_CFLAGS "")
     set(STEAMSHIM_LDFLAGS "")
-    
+
     add_executable("steamshim" "${CMAKE_SOURCE_DIR}/deps/steamshim/parent.cpp" "${CMAKE_SOURCE_DIR}/deps/steamshim/child.h" "${STEAMSHIM_MM}")
     target_include_directories("steamshim" PRIVATE "${CMAKE_SOURCE_DIR}/deps/steamshim")
 ENDIF()

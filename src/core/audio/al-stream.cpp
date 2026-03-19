@@ -194,7 +194,7 @@ void ALStream::closeSource()
 	delete source;
 }
 
-struct ALStreamOpenHandler : FileSystem::OpenHandler
+struct ALStreamOpenHandler : FS::OpenHandler
 {
 	SDL_IOStream *srcIO;
 	bool looped;

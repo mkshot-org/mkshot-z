@@ -29,7 +29,7 @@
 #include "core/shared-state.hpp"
 #include "core/gfx/font.hpp"
 #include "core/input/input.hpp"
-#include "core/etc/etc-internal.hpp"
+#include "core/gfx/etc-internal.hpp"
 #include "util/util.hpp"
 #include "core/oneshot/i18n.hpp"
 

@@ -19,8 +19,8 @@
 #include "core/gfx/window-vx.hpp"
 
 #include "core/gfx/bitmap.hpp"
-#include "core/etc/etc.hpp"
-#include "core/etc/etc-internal.hpp"
+#include "core/gfx/etc.hpp"
+#include "core/gfx/etc-internal.hpp"
 #include "core/gfx/gl-quad.hpp"
 #include "core/gfx/gl-quadarray.hpp"
 #include "core/shared-state.hpp"

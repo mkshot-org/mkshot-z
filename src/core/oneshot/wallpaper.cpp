@@ -24,21 +24,27 @@
 #include <string>
 
 #ifdef __WIN32__
+
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
 #endif
+
 #include <windows.h>
-#elif defined(__linux__)
+#endif
+
+#ifdef __linux__
 #include <vector>
 #include <map>
 #include <fstream>
 #include <iomanip>
+#endif
 
 #include "core/oneshot/gnome-fun.hpp"
 #include "core/oneshot/xfconf-fun.hpp"
 #include "util/xdg-user-dirs.hpp"
-#elif defined(__APPLE__)
-#include "core/oneshot/oneshot-apple.h"
+
+#ifdef __APPLE__
+#include "core/oneshot/oneshot-apple.hpp"
 #endif
 
 namespace fs = std::experimental::filesystem;
@@ -258,7 +264,7 @@ Wallpaper::~Wallpaper()
 
 void Wallpaper::set(const char *name, int color)
 {
-	fs::path pathFS(name);
+	stdfs::path pathFS(name);
 
 	if (!pathFS.is_absolute())
 		pathFS = mkshot_fs::getCurrentDirectory() + "/Wallpaper/" + std::string(name);

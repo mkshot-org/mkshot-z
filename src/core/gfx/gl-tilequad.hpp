@@ -18,7 +18,7 @@
 
 #pragma once
 
-#include "core/etc/etc-internal.hpp"
+#include "core/gfx/etc-internal.hpp"
 
 /* Tiled Quads
  *

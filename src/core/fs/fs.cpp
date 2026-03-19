@@ -23,14 +23,15 @@
 #include "util/exception.hpp"
 #include "util/util.hpp"
 #include "core/gfx/font.hpp"
-#include "core/rgssad/rgssad.hpp"
 
 #include "core/event-thread.hpp"
 #include "core/shared-state.hpp"
 
+#include <SDL3/SDL_filesystem.h>
 #include <physfs.h>
 
 #include <algorithm>
+#include <fstream>
 #include <stack>
 #include <stdio.h>
 #include <string.h>
@@ -44,6 +45,91 @@
 #ifdef __WIN32__
 #include <direct.h>
 #endif
+
+namespace stdfs = std::filesystem;
+
+// https://stackoverflow.com/questions/12774207/fastest-way-to-check-if-a-file-exist-using-standard-c-c11-c
+bool mkshot_fs::fileExists(const char *path) {
+    stdfs::path stdPath(path);
+    return (stdfs::exists(stdPath) && !stdfs::is_directory(stdPath));
+}
+
+// https://stackoverflow.com/questions/2912520/read-file-contents-into-a-string-in-c
+std::string mkshot_fs::contentsOfFileAsString(const char *path) {
+    std::string ret;
+    try {
+        std::ifstream ifs(path);
+        ret = std::string ( (std::istreambuf_iterator<char>(ifs) ),
+                            (std::istreambuf_iterator<char>()    ) );
+    } catch (...) {
+        throw Exception(Exception::NoFileError, "Failed to read file at %s", path);
+    }
+
+    return ret;
+}
+
+// chdir and getcwd do not support unicode on Windows
+bool mkshot_fs::setCurrentDirectory(const char *path) {
+    stdfs::path stdPath(path);
+    stdfs::current_path(stdPath);
+    bool ret;
+
+    try {
+        ret = stdfs::equivalent(stdfs::current_path(), stdPath);
+    } catch (...) {
+        Debug() << "Failed to check current path." << path;
+        ret = false;
+    }
+    return ret;
+}
+
+std::string mkshot_fs::getCurrentDirectory() {
+    std::string ret;
+    try {
+        ret = std::string(stdfs::current_path().string());
+    } catch (...) {
+        throw Exception(Exception::MKShotError, "Failed to retrieve current path");
+    }
+    return ret;
+}
+
+
+std::string mkshot_fs::normalizePath(const char *path, bool preferred, bool absolute) {
+    stdfs::path stdPath(path);
+    
+    if (!stdPath.is_absolute() && absolute)
+        stdPath = stdfs::current_path() / stdPath;
+
+    stdPath = stdPath.lexically_normal();
+    std::string ret(stdPath);
+    for (size_t i = 0; i < ret.length(); i++) {
+        char sep;
+        char sep_alt;
+#ifdef __WIN32__
+        if (preferred) {
+            sep = '\\';
+            sep_alt = '/';
+        }
+        else
+#endif
+        {
+            sep = '/';
+            sep_alt = '\\';
+        }
+        
+        if (ret[i] == sep_alt)
+            ret[i] = sep;
+    }
+    return ret;
+}
+
+std::string mkshot_fs::getDefaultGameRoot() {
+    char *p = SDL_GetBasePath();
+    std::string ret(p);
+    SDL_free(p);
+    return ret;
+}
+
 
 struct SDLRWIoContext {
   SDL_IOStream *io;
@@ -264,7 +350,7 @@ static void strTolower(std::string &str) {
 
 const Uint32 SDL_IOStream_PHYSFS = SDL_IOStream_UNKNOWN + 10;
 
-struct FileSystemPrivate {
+struct FSPrivate {
   /* Maps: lower case full filepath,
    * To:   mixed case full filepath */
   BoostHash<std::string, std::string> pathCache;
@@ -291,7 +377,7 @@ static void throwPhysfsError(const char *desc) {
   throw Exception(Exception::PHYSFSError, "%s: %s", desc, englishStr);
 }
 
-FileSystem::FileSystem(const char *argv0, bool allowSymlinks) {
+FS::FS(const char *argv0, bool allowSymlinks) {
   if (PHYSFS_init(argv0) == 0)
     throwPhysfsError("Error initializing PhysFS");
 
@@ -306,21 +392,21 @@ FileSystem::FileSystem(const char *argv0, bool allowSymlinks) {
   if (er == 0)
     throwPhysfsError("Error registering PhysFS RGSS archiver");
 
-  p = new FileSystemPrivate;
+  p = new FSPrivate;
   p->havePathCache = false;
 
   if (allowSymlinks)
     PHYSFS_permitSymbolicLinks(1);
 }
 
-FileSystem::~FileSystem() {
+FS::~FS() {
   delete p;
 
   if (PHYSFS_deinit() == 0)
     Debug() << "PhyFS failed to deinit.";
 }
 
-void FileSystem::addPath(const char *path, const char *mountpoint, bool reload) {
+void FS::addPath(const char *path, const char *mountpoint, bool reload) {
   /* Try the normal mount first */
     int state = PHYSFS_mount(path, mountpoint, 1);
   if (!state) {
@@ -339,7 +425,7 @@ void FileSystem::addPath(const char *path, const char *mountpoint, bool reload) 
     if (reload) reloadPathCache();
 }
 
-void FileSystem::removePath(const char *path, bool reload) {
+void FS::removePath(const char *path, bool reload) {
     
     if (!PHYSFS_unmount(path)) {
         PHYSFS_ErrorCode err = PHYSFS_getLastErrorCode();
@@ -350,7 +436,7 @@ void FileSystem::removePath(const char *path, bool reload) {
 }
 
 struct CacheEnumData {
-  FileSystemPrivate *p;
+  FSPrivate *p;
   std::stack<std::vector<std::string> *> fileLists;
 
 #ifdef __APPLE__
@@ -358,7 +444,7 @@ struct CacheEnumData {
   char buf[512];
 #endif
 
-  CacheEnumData(FileSystemPrivate *p) : p(p) {
+  CacheEnumData(FSPrivate *p) : p(p) {
 #ifdef __APPLE__
     nfd2nfc = iconv_open("utf-8", "utf-8-mac");
 #endif
@@ -438,7 +524,7 @@ static PHYSFS_EnumerateCallbackResult cacheEnumCB(void *d, const char *origdir,
   return PHYSFS_ENUM_OK;
 }
 
-void FileSystem::createPathCache() {
+void FS::createPathCache() {
   Debug() << "Loading path cache...";
 
   CacheEnumData data(p);
@@ -450,7 +536,7 @@ void FileSystem::createPathCache() {
   Debug() << "Path cache completed.";
 }
 
-void FileSystem::reloadPathCache() {
+void FS::reloadPathCache() {
     if (!p->havePathCache) return;
     
     p->fileLists.clear();
@@ -459,7 +545,7 @@ void FileSystem::reloadPathCache() {
 }
 
 struct FontSetsCBData {
-  FileSystemPrivate *p;
+  FSPrivate *p;
   SharedFontState *sfs;
 };
 
@@ -520,14 +606,14 @@ findFontsFolderCB(void *data, const char *, const char *fname) {
   return PHYSFS_ENUM_OK;
 }
 
-void FileSystem::initFontSets(SharedFontState &sfs) {
+void FS::initFontSets(SharedFontState &sfs) {
   FontSetsCBData d = {p, &sfs};
 
   PHYSFS_enumerate("", findFontsFolderCB, &d);
 }
 
 struct OpenReadEnumData {
-  FileSystem::OpenHandler &handler;
+  FS::OpenHandler &handler;
   SDL_IOStream io;
 
   /* The filename (without directory) we're looking for */
@@ -546,7 +632,7 @@ struct OpenReadEnumData {
    * doesn't get changed before we get back into our code */
   const char *physfsError;
 
-  OpenReadEnumData(FileSystem::OpenHandler &handler, const char *filename,
+  OpenReadEnumData(FS::OpenHandler &handler, const char *filename,
                    size_t filenameN,
                    BoostHash<std::string, std::string> *pathTrans)
       : handler(handler), filename(filename), filenameN(filenameN),
@@ -608,7 +694,7 @@ openReadEnumCB(void *d, const char *dirpath, const char *filename) {
   return PHYSFS_ENUM_OK;
 }
 
-void FileSystem::openRead(OpenHandler &handler, const char *filename) {
+void FS::openRead(OpenHandler &handler, const char *filename) {
   std::string filename_nm = normalize(filename, false, false);
   char buffer[512];
   size_t len = strcpySafe(buffer, filename_nm.c_str(), sizeof(buffer), -1);
@@ -656,7 +742,7 @@ void FileSystem::openRead(OpenHandler &handler, const char *filename) {
     throw Exception(Exception::NoFileError, "%s", filename);
 }
 
-void FileSystem::openReadRaw(SDL_IOStream &io, const char *filename,
+void FS::openReadRaw(SDL_IOStream &io, const char *filename,
                              bool freeOnClose) {
 
   PHYSFS_File *handle = PHYSFS_openRead(normalize(filename, 0, 0).c_str());
@@ -668,16 +754,16 @@ void FileSystem::openReadRaw(SDL_IOStream &io, const char *filename,
     return;
 }
 
-std::string FileSystem::normalize(const char *pathname, bool preferred,
+std::string FS::normalize(const char *pathname, bool preferred,
                             bool absolute) {
-    return filesystemImpl::normalizePath(pathname, preferred, absolute);
+    return mkshot_fs::normalizePath(pathname, preferred, absolute);
 }
 
-bool FileSystem::exists(const char *filename) {
+bool FS::exists(const char *filename) {
   return PHYSFS_exists(normalize(filename, false, false).c_str());
 }
 
-const char *FileSystem::desensitize(const char *filename) {
+const char *FS::desensitize(const char *filename) {
   std::string fn_lower(filename);
     
   std::transform(fn_lower.begin(), fn_lower.end(), fn_lower.begin(), [](unsigned char c){

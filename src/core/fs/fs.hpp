@@ -18,29 +18,43 @@
 
 #pragma once
 
-#include <SDL_RWops.h>
+#include <SDL3/SDL_iostream.h>
+#include <SDL3/SDL_video.h>
 #include <string>
 
-#include "core/fs/fs-impl.hpp"
+namespace mkshot_fs {
+	bool fileExists(const char *path);
 
-namespace mkshot_fs = filesystemImpl;
+	std::string contentsOfFileAsString(const char *path);
 
-struct FileSystemPrivate;
+	bool setCurrentDirectory(const char *path);
+
+	std::string getCurrentDirectory();
+	std::string normalizePath(const char *path, bool preferred, bool absolute);
+	std::string getDefaultGameRoot();
+#ifdef __APPLE__
+	std::string getPathForAsset(const char *baseName, const char *ext);
+	std::string contentsOfAssetAsString(const char *baseName, const char *ext);
+	std::string getResourcePath();
+	std::string selectPath(SDL_Window *win, const char *msg, const char *prompt);
+#endif
+};
+
+struct FSPrivate;
 class SharedFontState;
 
-class FileSystem
+class FS
 {
 public:
-	FileSystem(const char *argv0,
+	FS(const char *argv0,
 	           bool allowSymlinks);
-	~FileSystem();
+	~FS();
 
 	void addPath(const char *path, const char *mountpoint = 0, bool reload = false);
     void removePath(const char *path, bool reload = false);
 
 	/* Call these after the last 'addPath()' */
 	void createPathCache();
-    
     void reloadPathCache();
 
 	/* Scans "Fonts/" and creates inventory of
@@ -76,9 +90,7 @@ public:
 	const char *desensitize(const char *filename);
 
 private:
-	FileSystemPrivate *p;
+	FSPrivate *p;
 };
 
 extern const Uint32 SDL_IOStream_PHYSFS;
-
-

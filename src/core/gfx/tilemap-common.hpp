@@ -18,7 +18,7 @@
 
 #pragma once
 
-#include "core/etc/table.hpp"
+#include "core/gfx/table.hpp"
 #include "core/gfx/gl-util.hpp"
 #include "core/gfx/gl-meta.hpp"
 #include "core/shared-state.hpp"
@@ -27,7 +27,7 @@
 #include "core/gfx/gl-shader.hpp"
 #include "core/gfx/gl-vertex.hpp"
 #include "core/gfx/gl-quad.hpp"
-#include "core/etc/etc-internal.hpp"
+#include "core/gfx/etc-internal.hpp"
 
 #include <stdint.h>
 #include <assert.h>

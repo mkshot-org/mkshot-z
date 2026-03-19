@@ -25,8 +25,8 @@
 #include "core/config.hpp"
 #include "util/dbg-writer.hpp"
 #include "util/disposable.hpp"
-#include "core/etc/etc.hpp"
-#include "core/etc/etc-internal.hpp"
+#include "core/gfx/etc.hpp"
+#include "core/gfx/etc-internal.hpp"
 #include "core/event-thread.hpp"
 #include "core/fs/fs.hpp"
 #include "core/gfx/gl-fun.hpp"
@@ -419,7 +419,7 @@ struct Movie
     }
 };
 
-struct MovieOpenHandler : FileSystem::OpenHandler
+struct MovieOpenHandler : FS::OpenHandler
 {
     SDL_IOStream *srcIO;
     

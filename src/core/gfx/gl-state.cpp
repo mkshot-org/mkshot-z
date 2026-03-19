@@ -18,7 +18,7 @@
 
 #include "core/gfx/gl-state.hpp"
 #include "core/config.hpp"
-#include "core/etc/etc.hpp"
+#include "core/gfx/etc.hpp"
 #include "core/gfx/gl-fun.hpp"
 #include "core/gfx/gfx.hpp"
 #include "core/gfx/gl-shader.hpp"
