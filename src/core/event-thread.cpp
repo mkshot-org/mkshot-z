@@ -25,9 +25,13 @@
 #include <SDL3/SDL_touch.h>
 #include <SDL3/SDL_rect.h>
 
-#include <al.h>
-#include <alc.h>
-#include <alext.h>
+
+// This is a temporary measure just so it builds on my machine.
+// TODO: get rid of this nonsense when we migrate to Miniaudio
+#include <AL/al.h>
+#include <AL/alc.h>
+#include <AL/alext.h>
+
 #include <cmath>
 
 #include "core/shared-state.hpp"

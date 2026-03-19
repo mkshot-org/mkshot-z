@@ -51,23 +51,19 @@ ENDIF()
 
 
 ## Options ##
-option(MKSHOT_DYNAMIC "Build and link mkshot-z dependencies dynamically." OFF)
 option(MKSHOT_GLES2 "Use OpenGL ES 2.0 instead of OpenGL." OFF)
 option(MKSHOT_HTTP "Add support for HTTP requests." OFF)
 option(MKSHOT_KEEP_CWD "Keep Current Working Directory on startup." OFF)
-
-# there are no special conditions for dynamic linking
-# so we'll use MKSHOT_STATIC for conditions instead
-IF(MKSHOT_DYNAMIC)
-    set(MKSHOT_STATIC OFF)
-ELSE()
-    set(MKSHOT_STATIC ON)
-ENDIF()
+option(MKSHOT_SDL_STATIC "Link SDL statically." OFF)
+option(MKSHOT_LANG_STATIC "Link the language libraries (libgcc, libstdc++, etc.) statically." ON)
 
 # Steam
 set(MKSHOT_STEAMWORKS_PATH "" CACHE PATH "Path to Steamworks SDK directory. Provide this to enable the Steam features.")
 set(MKSHOT_STEAM_APPID "" CACHE STRING "Steam AppID value. Set this to use 'SteamAPI_RestartAppIfNecessary()'.")
 option(MKSHOT_STEAMSHIM_DEBUG "Whether to show Steamshim debug output console." OFF)
+
+# This will be ON if MKSHOT_STEAMWORKS_PATH is valid.
+# Steam features won't be enabled otherwise.
 set(MKSHOT_STEAM OFF)
 
 ## Prerequisites ##

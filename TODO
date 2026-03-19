@@ -1,25 +1,23 @@
-[=] = wip
-[-] = temporarily stale
+"=" = wip
+"-" = temporarily stale
 
 everything is sorted by priority
 _________________________
 
-^ Pinned
-[=] General: Bring macOS support back
-[ ] Repo: Setup autobuilds
-
------
-
 [=] General: SDL2 -> SDL3
 [ ] Get rid of PhysFS and RGSSAD support entirely
 [-] General: Meson/Xcode + Makefiles -> CMake + Conan
-[-] General: Embed assets without involving xxd
-[=] General: Portable code. I'm speechless.
---- ( ) Move the macro spaghetti into build config header
---- ( ) Rewrite the internal GUI (i.e. keybinds menu) to use Dear IMGUI
-[ ] OneShot: Wayland compatibility (see issues #2, #3)
-[=] General: C++14 -> C++20
+   \(-) Fully functional CMake setup
+    (-) General: Embed assets without involving xxd
+    (-) Dependency management with Conan2
+    (-) Steam support
+    (-) macOS support
+[=] General: Code modernization and portability enchancements
+   \(=) C++14 -> C++20
+    (=) Move the macro spaghetti into a build configuration header
+    ( ) Rewrite the internal GUI (i.e. keybinds menu) to use Dear IMGUI
 [ ] Configuration: JSON5 -> TOML
+[ ] Repo: Setup autobuilds
 [ ] OneShot: Use tinyfiledialogs for managing popups
 [ ] Audio: SDL_sound + OpenAL -> Miniaudio
 [ ] Audio: Add support for OGG/Opus, MP3, WAV, FLAC, WEBM/Vorbis, WEBM/Opus
@@ -28,3 +26,8 @@ _________________________
 [ ] Video: Theora -> WEBM/VP8, WEBM/VP9
 [ ] Video: Better animated custscenes/movies implementation
 [ ] OneShot: Reimplementation of the Journal program
+
+
+Delayed for indefinite amount of time:
+[ ] OneShot: Wayland compatibility (see issue #2)
+[ ] OneShot: Fix the film puzzle on Linux (see issue #3)

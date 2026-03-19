@@ -21,6 +21,8 @@
 #include "core/fs/fs.hpp"
 #include "util/dbg-writer.hpp"
 
+#include <algorithm>
+#include <filesystem>
 #include <string>
 
 #ifdef __WIN32__
@@ -37,6 +39,7 @@
 #include <map>
 #include <fstream>
 #include <iomanip>
+#include <unistd.h>
 #endif
 
 #include "core/oneshot/gnome-fun.hpp"
@@ -47,7 +50,7 @@
 #include "core/oneshot/oneshot-apple.hpp"
 #endif
 
-namespace fs = std::experimental::filesystem;
+namespace fs = std::filesystem;
 
 #ifdef __WIN32__
 static std::wstring utf8ToWide(const char *str)
@@ -264,7 +267,7 @@ Wallpaper::~Wallpaper()
 
 void Wallpaper::set(const char *name, int color)
 {
-	stdfs::path pathFS(name);
+	fs::path pathFS(name);
 
 	if (!pathFS.is_absolute())
 		pathFS = mkshot_fs::getCurrentDirectory() + "/Wallpaper/" + std::string(name);

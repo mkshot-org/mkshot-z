@@ -2,7 +2,6 @@
 
 ## Dependencies ##
 find_package(PkgConfig QUIET REQUIRED)
-find_package(Ruby REQUIRED)
 
 set(MKSHOT_PC
     vorbisfile
@@ -15,9 +14,8 @@ set(MKSHOT_PC
     sdl3-ttf
     sdl3-sound
     openal
+    ruby-3.4
 )
-
-set(MKSHOT_LIBS ${RUBY_LIBRARIES})
 
 FOREACH(__pc ${MKSHOT_PC})
     pkg_check_modules(MKSHOT_${__pc} REQUIRED IMPORTED_TARGET GLOBAL ${__pc})
@@ -30,16 +28,12 @@ set(MKSHOT_LINKLIBS ${MKSHOT_LIBS} PARENT_SCOPE)
 IF(MKSHOT_STEAMWORKS_PATH)
     message(STATUS "Searching for Steamworks SDK in '${MKSHOT_STEAMWORKS_PATH}'...")
 
-    # look for the actual header to verify the path
-    find_path(MKSHOT_STEAMWORKS_PATH steam/steam_api.h
-        PATHS "${MKSHOT_STEAMWORKS_PATH}/public"
-        NO_DEFAULT_PATH
-    )
+    set(STEAMWORKS_FOUND OFF)
 
-    IF(STEAM_INCLUDE_DIR)
+    IF(STEAMWORKS_FOUND)
         set(MKSHOT_STEAM ON)
-        message(STATUS "The Steamworks SDK has been found and validated, enabling Steam features.")
+        message(STATUS "Steamworks SDK found and validated, enabling Steam features...")
     ELSE()
-        message(FATAL_ERROR "MKSHOT_STEAMWORKS_PATH was set, but steam/steam_api.h was not found!")
+        message(FATAL_ERROR "Steamworks SDK not found in the given MKSHOT_STEAMWORKS_PATH.")
     ENDIF()
 ENDIF()

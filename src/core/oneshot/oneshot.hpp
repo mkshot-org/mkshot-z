@@ -21,6 +21,7 @@
 #include "core/gfx/etc-internal.hpp"
 
 #include <string>
+#include <vector>
 
 struct RGSSThreadData;
 

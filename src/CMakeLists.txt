@@ -1,5 +1,4 @@
 ##  General Sources / Includes ##
-include_directories(${RUBY_INCLUDE_DIRS})
 set(MKSHOT_INCDIRS
     "${CMAKE_SOURCE_DIR}/deps"
     "${CMAKE_SOURCE_DIR}/embed/include"
@@ -119,6 +118,10 @@ ENDIF()
 
 IF(MKSHOT_KEEP_CWD)
     list(APPEND MKSHOT_DEFINES "KEEP_CWD")
+ENDIF()
+
+IF(MKSHOT_SDL_STATIC)
+    list(APPEND MKSHOT_DEFINES "SDL_STATIC_LIB")
 ENDIF()
 
 IF(MKSHOT_STEAM)

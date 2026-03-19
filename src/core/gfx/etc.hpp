@@ -21,7 +21,7 @@
 #include "sigslot.hpp"
 
 #include "util/serializable.hpp"
-#include "core/etc-internal.hpp"
+#include "core/gfx/etc-internal.hpp"
 
 struct SDL_Color;
 

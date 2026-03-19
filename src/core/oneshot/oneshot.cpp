@@ -311,30 +311,43 @@ void Oneshot::update()
 		screenRect.w = 640;
 		screenRect.h = 480;
 
-		// Update obscured map and texture for window portion offscreen
-		for (int i = 0, max = SDL_GetNumVideoDisplays(); i < max; ++i) {
-			SDL_Rect bounds;
-			SDL_GetDisplayBounds(i, &bounds);
+        // Get displays
+        int display_count;
+        SDL_DisplayID* displays = SDL_GetDisplays(&display_count);
+        if (displays == NULL) {
+            Debug() << "[OneShot] Error getting displays: " << SDL_GetError();
+            return;
+        }
 
-			// Get intersection of window and the screen
-			SDL_Rect intersect;
+        // Update obscured map and texture for window portion offscreen
+        for (int i = 0; i < display_count; ++i) {
+            SDL_Rect bounds;
+            // Use the ID from the array, not the index 'i'
+            if (SDL_GetDisplayBounds(displays[i], &bounds) != 0)
+                continue;
 
-			if (!SDL_IntersectRect(&screenRect, &bounds, &intersect))
-				continue;
+            // Get intersection of window and the screen
+            SDL_Rect intersect;
+            if (!SDL_GetRectIntersection(&screenRect, &bounds, &intersect))
+                continue;
 
-			intersect.x -= screenRect.x;
-			intersect.y -= screenRect.y;
+            intersect.x -= screenRect.x;
+            intersect.y -= screenRect.y;
 
-			// If it's entirely within the bounds of the screen,
-			// we don't need to check out any other monitors
-			if (intersect.x == 0 && intersect.y == 0 && intersect.w == 640 && intersect.h == 480)
-				return;
+            // If it's entirely within the bounds of the screen,
+            // we don't need to check out any other monitors
+            if (intersect.x == 0 && intersect.y == 0 && intersect.w == 640 && intersect.h == 480) {
+                SDL_free(displays);
+                return;
+            }
 
-			for (int y = intersect.y; y < intersect.y + intersect.h; ++y) {
-				int start = y * 640 + intersect.x;
-				std::fill(obscuredFrame.begin() + start, obscuredFrame.begin() + (start + intersect.w), false);
-			}
-		}
+            for (int y = intersect.y; y < intersect.y + intersect.h; ++y) {
+                int start = y * 640 + intersect.x;
+                std::fill(obscuredFrame.begin() + start, obscuredFrame.begin() + (start + intersect.w), false);
+            }
+        }
+
+        SDL_free(displays); // MUST FREE AT THE END
 
 		// Update the obscured map, and return prematurely if we don't have
 		// any changes to make to the texture

@@ -66,7 +66,7 @@ struct JournalData
 	volatile int msgLen;
 	volatile char msgBuf[JOURNAL_BUFFER_SIZE];
 
-#ifdef __WIN32__
+#ifndef __WIN32__
 	std::string pipePath;
 	int pipeFD;
 #endif
@@ -83,7 +83,7 @@ struct JournalPrivate
 
 	JournalData journal;
 
-#ifdef __WIN32__
+#ifndef __WIN32__
 	JournalData niko;
 #endif
 
@@ -97,7 +97,7 @@ struct JournalPrivate
 
 		memset((char *)journal.msgBuf, 0, JOURNAL_BUFFER_SIZE);
 
-#ifdef __WIN32__
+#ifndef __WIN32__
 		niko.thread = nullptr;
 		niko.mutex = SDL_CreateMutex();
 
@@ -130,7 +130,7 @@ struct JournalPrivate
 	{
 		SDL_DestroyMutex(journal.mutex);
 
-#ifdef __WIN32__
+#ifndef __WIN32__
 		SDL_DestroyMutex(niko.mutex);
 #endif
 	}
@@ -197,7 +197,7 @@ int journal_server(void *data)
 	return 0;
 }
 
-#ifdef __WIN32__
+#ifndef __WIN32__
 int journal_niko_server(void *data)
 {
 	JournalPrivate *p = static_cast<JournalPrivate *>(data);
@@ -227,7 +227,7 @@ Journal::Journal()
 {
 	p = new JournalPrivate();
 
-#ifdef __WIN32__
+#ifndef __WIN32__
 	mkfifo(p->journal.pipePath.c_str(), 0666);
 	mkfifo(p->niko.pipePath.c_str(), 0666);
 #endif
@@ -235,7 +235,7 @@ Journal::Journal()
 
 Journal::~Journal()
 {
-#ifdef __WIN32__
+#ifndef __WIN32__
 	unlink(p->journal.pipePath.c_str());
 	remove(p->journal.pipePath.c_str());
 	unlink(p->niko.pipePath.c_str());

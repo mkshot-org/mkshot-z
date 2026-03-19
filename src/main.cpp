@@ -20,7 +20,9 @@
 #include "icon.png.h"
 #endif
 
-#include <alc.h>
+// This is a temporary measure just so it builds on my machine.
+// TODO: get rid of this nonsense when we migrate to Miniaudio
+#include <AL/alc.h>
 
 #include <SDL3/SDL.h>
 #include <SDL3_image/SDL_image.h>

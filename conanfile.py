@@ -12,7 +12,6 @@ class mkshot(ConanFile):
     requires = (
         "vorbis/1.3.7",
         "physfs/3.2.0",
-        "uchardet/0.0.8",
         "pixman/0.46.2",
         "sdl/3.4.0",
         "sdl_image/3.4.0",

@@ -32,6 +32,7 @@
 
 #include <algorithm>
 #include <fstream>
+#include <filesystem>
 #include <stack>
 #include <stdio.h>
 #include <string.h>
@@ -46,12 +47,12 @@
 #include <direct.h>
 #endif
 
-namespace stdfs = std::filesystem;
+namespace fs = std::filesystem;
 
 // https://stackoverflow.com/questions/12774207/fastest-way-to-check-if-a-file-exist-using-standard-c-c11-c
 bool mkshot_fs::fileExists(const char *path) {
-    stdfs::path stdPath(path);
-    return (stdfs::exists(stdPath) && !stdfs::is_directory(stdPath));
+    fs::path stdPath(path);
+    return (fs::exists(stdPath) && !fs::is_directory(stdPath));
 }
 
 // https://stackoverflow.com/questions/2912520/read-file-contents-into-a-string-in-c
@@ -70,12 +71,12 @@ std::string mkshot_fs::contentsOfFileAsString(const char *path) {
 
 // chdir and getcwd do not support unicode on Windows
 bool mkshot_fs::setCurrentDirectory(const char *path) {
-    stdfs::path stdPath(path);
-    stdfs::current_path(stdPath);
+    fs::path stdPath(path);
+    fs::current_path(stdPath);
     bool ret;
 
     try {
-        ret = stdfs::equivalent(stdfs::current_path(), stdPath);
+        ret = fs::equivalent(fs::current_path(), stdPath);
     } catch (...) {
         Debug() << "Failed to check current path." << path;
         ret = false;
@@ -86,7 +87,7 @@ bool mkshot_fs::setCurrentDirectory(const char *path) {
 std::string mkshot_fs::getCurrentDirectory() {
     std::string ret;
     try {
-        ret = std::string(stdfs::current_path().string());
+        ret = std::string(fs::current_path().string());
     } catch (...) {
         throw Exception(Exception::MKShotError, "Failed to retrieve current path");
     }
@@ -95,10 +96,10 @@ std::string mkshot_fs::getCurrentDirectory() {
 
 
 std::string mkshot_fs::normalizePath(const char *path, bool preferred, bool absolute) {
-    stdfs::path stdPath(path);
+    fs::path stdPath(path);
 
     if (!stdPath.is_absolute() && absolute)
-        stdPath = stdfs::current_path() / stdPath;
+        stdPath = fs::current_path() / stdPath;
 
     stdPath = stdPath.lexically_normal();
     std::string ret(stdPath);
