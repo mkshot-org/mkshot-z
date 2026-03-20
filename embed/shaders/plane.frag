@@ -1,7 +1,7 @@
 /*
 ** mkshot-z - Experimental OneShot (2016) engine reimplementation for modders.
 **
-** Copyright (C) 2026 Team Reverium <https://github.com/reverium>
+** Copyright (C) 2026 Reverium <https://github.com/reverium>
 ** Copyright (C) 2024 hat_kid <https://github.com/thehatkid> (ModShot-mkxp-z)
 ** Copyright (C) 2013-2023 Amaryllis Kulla and mkxp-z contributors
 **
@@ -32,22 +32,22 @@ void main()
 {
 	/* Sample source color */
 	vec4 frag = texture2D(texture, v_texCoord);
-	
+
 	/* Apply gray */
 	float luma = dot(frag.rgb, lumaF);
 	frag.rgb = mix(frag.rgb, vec3(luma), tone.w);
-	
+
 	/* Apply tone */
 	frag.rgb += tone.rgb;
 
 	/* Apply opacity */
 	frag.a *= opacity;
-	
+
 	/* Apply color */
 	frag.rgb = mix(frag.rgb, color.rgb, color.a);
 
 	/* Apply flash */
 	frag.rgb = mix(frag.rgb, flash.rgb, flash.a);
-	
+
 	gl_FragColor = frag;
 }

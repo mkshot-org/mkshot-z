@@ -1,7 +1,7 @@
 /*
 ** mkshot-z - Experimental OneShot (2016) engine reimplementation for modders.
 **
-** Copyright (C) 2026 Team Reverium <https://github.com/reverium>
+** Copyright (C) 2026 Reverium <https://github.com/reverium>
 ** Copyright (C) 2024 hat_kid <https://github.com/thehatkid> (ModShot-mkxp-z)
 ** Copyright (C) 2013-2023 Amaryllis Kulla and mkxp-z contributors
 **
@@ -45,61 +45,61 @@
 struct SpritePrivate
 {
     Bitmap *bitmap;
-    
+
     sigslot::connection bitmapDispCon;
-    
+
     Quad quad;
     Transform trans;
-    
+
     Rect *srcRect;
     sigslot::connection srcRectCon;
-    
+
     bool mirrored;
     int bushDepth;
     float efBushDepth;
     NormValue bushOpacity;
     NormValue opacity;
     BlendType blendType;
-    
+
     Bitmap *pattern;
     BlendType patternBlendType;
     bool patternTile;
     NormValue patternOpacity;
     Vec2 patternScroll;
     Vec2 patternZoom;
-    
+
     bool obscured;
-    
+
     bool invert;
-    
+
     IntRect sceneRect;
     Vec2i sceneOrig;
-    
+
     /* Would this sprite be visible on
      * the screen if drawn? */
     bool isVisible;
-    
+
     Color *color;
     Tone *tone;
-    
+
     struct
     {
         int amp;
         int length;
         int speed;
         float phase;
-        
+
         /* Wave effect is active (amp != 0) */
         bool active;
         /* qArray needs updating */
         bool dirty;
         SimpleQuadArray qArray;
     } wave;
-    
+
     EtcTemps tmp;
-    
+
     sigslot::connection prepareCon;
-    
+
     SpritePrivate()
     : bitmap(0),
     srcRect(&tmp.rect),
@@ -117,33 +117,33 @@ struct SpritePrivate
     isVisible(false),
     color(&tmp.color),
     tone(&tmp.tone)
-    
+
     {
         sceneRect.x = sceneRect.y = 0;
-        
+
         updateSrcRectCon();
-        
+
         prepareCon = shState->prepareDraw.connect
         (&SpritePrivate::prepare, this);
-        
+
         patternScroll = Vec2(0,0);
         patternZoom = Vec2(1, 1);
-        
+
         wave.amp = 0;
         wave.length = 180;
         wave.speed = 360;
         wave.phase = 0.0f;
         wave.dirty = false;
     }
-    
+
     ~SpritePrivate()
     {
         srcRectCon.disconnect();
         prepareCon.disconnect();
-        
+
         bitmapDisposal();
     }
-    
+
     void bitmapDisposal()
     {
         bitmap = 0;
@@ -154,21 +154,21 @@ struct SpritePrivate
     {
         if (nullOrDisposed(bitmap))
             return;
-        
+
         /* Calculate effective (normalized) bush depth */
         float texBushDepth = (bushDepth / trans.getScale().y) -
         (srcRect->y + srcRect->height) +
         bitmap->height();
-        
+
         efBushDepth = 1.0f - texBushDepth / bitmap->height();
     }
-    
+
     void onSrcRectChange()
     {
         FloatRect rect = srcRect->toFloatRect();
         Vec2i bmSize;
         Vec2i bmSizeHires;
-        
+
         if (!nullOrDisposed(bitmap))
         {
             bmSize = Vec2i(bitmap->width(), bitmap->height());
@@ -177,12 +177,12 @@ struct SpritePrivate
                 bmSizeHires = Vec2i(bitmap->getHires()->width(), bitmap->getHires()->height());
             }
         }
-        
+
         /* Clamp the rectangle so it doesn't reach outside
          * the bitmap bounds */
         rect.w = clamp<int>(rect.w, 0, bmSize.x-rect.x);
         rect.h = clamp<int>(rect.h, 0, bmSize.y-rect.y);
-        
+
         if (bmSizeHires.x && bmSizeHires.y && bmSize.x && bmSize.y)
         {
             FloatRect rectHires(rect.x * bmSizeHires.x / bmSize.x,
@@ -195,13 +195,13 @@ struct SpritePrivate
         {
             quad.setTexRect(mirrored ? rect.hFlipped() : rect);
         }
-        
+
         quad.setPosRect(FloatRect(0, 0, rect.w, rect.h));
         recomputeBushDepth();
-        
+
         wave.dirty = true;
     }
-    
+
     void updateSrcRectCon()
     {
         /* Cut old connection */
@@ -210,17 +210,17 @@ struct SpritePrivate
         srcRectCon = srcRect->valueChanged.connect
         (&SpritePrivate::onSrcRectChange, this);
     }
-    
+
     void updateVisibility()
     {
         isVisible = false;
-        
+
         if (nullOrDisposed(bitmap))
             return;
-        
+
         if (!opacity)
             return;
-        
+
         if (wave.active)
         {
             /* Don't do expensive wave bounding box
@@ -228,9 +228,9 @@ struct SpritePrivate
             isVisible = true;
             return;
         }
-        
+
         /* Compare sprite bounding box against the scene */
-        
+
         /* If sprite is zoomed/rotated, just opt out for now
          * for simplicity's sake */
         const Vec2 &scale = trans.getScale();
@@ -239,99 +239,99 @@ struct SpritePrivate
             isVisible = true;
             return;
         }
-        
+
         IntRect self;
         self.setPos(trans.getPositionI() - (trans.getOriginI() + sceneOrig));
         self.w = bitmap->width();
         self.h = bitmap->height();
-        
+
         isVisible = SDL_HasIntersection(&self, &sceneRect);
     }
-    
+
     void emitWaveChunk(SVertex *&vert, float phase, int width,
                        float zoomY, int chunkY, int chunkLength)
     {
         float wavePos = phase + (chunkY / (float) wave.length) * (float) (M_PI * 2);
         float chunkX = sin(wavePos) * wave.amp;
-        
+
         FloatRect tex(0, chunkY / zoomY, width, chunkLength / zoomY);
         FloatRect pos = tex;
         pos.x = chunkX;
-        
+
         Quad::setTexPosRect(vert, mirrored ? tex.hFlipped() : tex, pos);
         vert += 4;
     }
-    
+
     void updateWave()
     {
         if (nullOrDisposed(bitmap))
             return;
-        
+
         if (wave.amp == 0)
         {
             wave.active = false;
             return;
         }
-        
+
         wave.active = true;
-        
+
         int width = srcRect->width;
         int height = srcRect->height;
         float zoomY = trans.getScale().y;
-        
+
         if (wave.amp < -(width / 2))
         {
             wave.qArray.resize(0);
             wave.qArray.commit();
-            
+
             return;
         }
-        
+
         /* RMVX does this, and I have no fucking clue why */
         if (wave.amp < 0)
         {
             wave.qArray.resize(1);
-            
+
             int x = -wave.amp;
             int w = width - x * 2;
-            
+
             FloatRect tex(x, srcRect->y, w, srcRect->height);
-            
+
             Quad::setTexPosRect(&wave.qArray.vertices[0], tex, tex);
             wave.qArray.commit();
-            
+
             return;
         }
-        
+
         /* The length of the sprite as it appears on screen */
         int visibleLength = height * zoomY;
-        
+
         /* First chunk length (aligned to 8 pixel boundary */
         int firstLength = ((int) trans.getPosition().y) % 8;
-        
+
         /* Amount of full 8 pixel chunks in the middle */
         int chunks = (visibleLength - firstLength) / 8;
-        
+
         /* Final chunk length */
         int lastLength = (visibleLength - firstLength) % 8;
-        
+
         wave.qArray.resize(!!firstLength + chunks + !!lastLength);
         SVertex *vert = &wave.qArray.vertices[0];
-        
+
         float phase = (wave.phase * (float) M_PI) / 180.0f;
-        
+
         if (firstLength > 0)
             emitWaveChunk(vert, phase, width, zoomY, 0, firstLength);
-        
+
         for (int i = 0; i < chunks; ++i)
             emitWaveChunk(vert, phase, width, zoomY, firstLength + i * 8, 8);
-        
+
         if (lastLength > 0)
             emitWaveChunk(vert, phase, width, zoomY, firstLength + chunks * 8, lastLength);
-        
+
         wave.qArray.commit();
     }
-    
+
     void prepare()
     {
         if (wave.dirty)
@@ -339,7 +339,7 @@ struct SpritePrivate
             updateWave();
             wave.dirty = false;
         }
-        
+
         updateVisibility();
     }
 };
@@ -393,50 +393,50 @@ DEF_ATTR_SIMPLE(Sprite, Obscured,    bool,    p->obscured)
 void Sprite::setBitmap(Bitmap *bitmap)
 {
     guardDisposed();
-    
+
     if (p->bitmap == bitmap)
         return;
-    
+
     p->bitmap = bitmap;
-    
+
     p->bitmapDispCon.disconnect();
-    
+
     if (nullOrDisposed(bitmap))
     {
         p->bitmap = 0;
         return;
     }
-    
+
     p->bitmapDispCon = bitmap->wasDisposed.connect(&SpritePrivate::bitmapDisposal, p);
-    
+
     bitmap->ensureNonMega();
-    
+
     *p->srcRect = bitmap->rect();
     p->onSrcRectChange();
     p->quad.setPosRect(p->srcRect->toFloatRect());
-    
+
     p->wave.dirty = true;
 }
 
 void Sprite::setX(int value)
 {
     guardDisposed();
-    
+
     if (p->trans.getPosition().x == value)
         return;
-    
+
     p->trans.setPosition(Vec2(value, getY()));
 }
 
 void Sprite::setY(int value)
 {
     guardDisposed();
-    
+
     if (p->trans.getPosition().y == value)
         return;
-    
+
     p->trans.setPosition(Vec2(getX(), value));
-    
+
     if (rgssVer >= 2)
     {
         p->wave.dirty = true;
@@ -447,43 +447,43 @@ void Sprite::setY(int value)
 void Sprite::setOX(int value)
 {
     guardDisposed();
-    
+
     if (p->trans.getOrigin().x == value)
         return;
-    
+
     p->trans.setOrigin(Vec2(value, getOY()));
 }
 
 void Sprite::setOY(int value)
 {
     guardDisposed();
-    
+
     if (p->trans.getOrigin().y == value)
         return;
-    
+
     p->trans.setOrigin(Vec2(getOX(), value));
 }
 
 void Sprite::setZoomX(float value)
 {
     guardDisposed();
-    
+
     if (p->trans.getScale().x == value)
         return;
-    
+
     p->trans.setScale(Vec2(value, getZoomY()));
 }
 
 void Sprite::setZoomY(float value)
 {
     guardDisposed();
-    
+
     if (p->trans.getScale().y == value)
         return;
-    
+
     p->trans.setScale(Vec2(getZoomX(), value));
     p->recomputeBushDepth();
-    
+
     if (rgssVer >= 2)
         p->wave.dirty = true;
 }
@@ -491,20 +491,20 @@ void Sprite::setZoomY(float value)
 void Sprite::setAngle(float value)
 {
     guardDisposed();
-    
+
     if (p->trans.getRotation() == value)
         return;
-    
+
     p->trans.setRotation(value);
 }
 
 void Sprite::setMirror(bool mirrored)
 {
     guardDisposed();
-    
+
     if (p->mirrored == mirrored)
         return;
-    
+
     p->mirrored = mirrored;
     p->onSrcRectChange();
 }
@@ -512,10 +512,10 @@ void Sprite::setMirror(bool mirrored)
 void Sprite::setBushDepth(int value)
 {
     guardDisposed();
-    
+
     if (p->bushDepth == value)
         return;
-    
+
     p->bushDepth = value;
     p->recomputeBushDepth();
 }
@@ -523,7 +523,7 @@ void Sprite::setBushDepth(int value)
 void Sprite::setBlendType(int type)
 {
     guardDisposed();
-    
+
     switch (type)
     {
         default :
@@ -542,12 +542,12 @@ void Sprite::setBlendType(int type)
 void Sprite::setPattern(Bitmap *value)
 {
     guardDisposed();
-    
+
     if (p->pattern == value)
         return;
-    
+
     p->pattern = value;
-    
+
     if (!nullOrDisposed(value))
         value->ensureNonMega();
 }
@@ -555,7 +555,7 @@ void Sprite::setPattern(Bitmap *value)
 void Sprite::setPatternBlendType(int type)
 {
     guardDisposed();
-    
+
     switch (type)
     {
         default :
@@ -593,7 +593,7 @@ void Sprite::initDynAttribs()
     p->srcRect = new Rect;
     p->color = new Color;
     p->tone = new Tone;
-    
+
     p->updateSrcRectCon();
 }
 
@@ -601,9 +601,9 @@ void Sprite::initDynAttribs()
 void Sprite::update()
 {
     guardDisposed();
-    
+
     Flashable::update();
-    
+
     p->wave.phase += p->wave.speed / 180;
     p->wave.dirty = true;
 }
@@ -613,19 +613,19 @@ void Sprite::draw()
 {
     if (!p->isVisible)
         return;
-    
+
     if (emptyFlashFlag)
         return;
-    
+
     ShaderBase *base;
-    
+
     bool renderEffect = p->color->hasEffect() ||
     p->tone->hasEffect()  ||
     flashing              ||
     p->bushDepth != 0     ||
     p->invert             ||
     (p->pattern && !p->pattern->isDisposed());
-    
+
     int scalingMethod = NearestNeighbor;
 
     int sourceWidthHires = p->bitmap->hasHires() ? p->bitmap->getHires()->width() : p->bitmap->width();
@@ -668,11 +668,11 @@ void Sprite::draw()
     if (p->obscured)
     {
         ObscuredShader &shader = shState->shaders().obscured;
-        
+
         shader.bind();
         shader.applyViewportProj();
         shader.setObscured(shState->graphics().obscuredTex());
-        
+
         base = &shader;
     }
     else if (renderEffect)
@@ -684,16 +684,16 @@ void Sprite::draw()
         }
 
         SpriteShader &shader = shState->shaders().sprite;
-        
+
         shader.bind();
         shader.applyViewportProj();
         shader.setSpriteMat(p->trans.getMatrix());
-        
+
         shader.setTone(p->tone->norm);
         shader.setOpacity(p->opacity.norm);
         shader.setBushDepth(p->efBushDepth);
         shader.setBushOpacity(p->bushOpacity.norm);
-        
+
         if (p->pattern && p->patternOpacity > 0) {
             if (p->pattern->hasHires()) {
                 Debug() << "BUG: High-res Sprite pattern not implemented";
@@ -710,16 +710,16 @@ void Sprite::draw()
         else {
             shader.setShouldRenderPattern(false);
         }
-        
+
         shader.setInvert(p->invert);
-        
+
         /* When both flashing and effective color are set,
          * the one with higher alpha will be blended */
         const Vec4 *blend = (flashing && flashColor.w > p->color->norm.w) ?
         &flashColor : &p->color->norm;
-        
+
         shader.setColor(*blend);
-        
+
         base = &shader;
     }
     else if (p->opacity != 255)
@@ -732,7 +732,7 @@ void Sprite::draw()
 
         AlphaSpriteShader &shader = shState->shaders().alphaSprite;
         shader.bind();
-        
+
         shader.setSpriteMat(p->trans.getMatrix());
         shader.setAlpha(p->opacity.norm);
         shader.applyViewportProj();
@@ -758,7 +758,7 @@ void Sprite::draw()
         {
             Lanczos3SpriteShader &shader = shState->shaders().lanczos3Sprite;
             shader.bind();
-            
+
             shader.setTexSize(Vec2i(sourceWidthHires, sourceHeightHires));
             shader.setSpriteMat(p->trans.getMatrix());
             shader.applyViewportProj();
@@ -786,11 +786,11 @@ void Sprite::draw()
             shader.applyViewportProj();
             base = &shader;
         }
-        }        
+        }
     }
-    
+
     glState.blendMode.pushSet(p->blendType);
-    
+
     p->bitmap->bindTex(*base, false);
 
     if (scalingMethod == xBRZ)
@@ -798,14 +798,14 @@ void Sprite::draw()
         XbrzShader &shader = shState->shaders().xbrz;
         shader.setTargetScale(Vec2((float)(shState->config().xbrzScalingFactor), (float)(shState->config().xbrzScalingFactor)));
     }
-    
+
     TEX::setSmooth(scalingMethod == Bilinear);
 
     if (p->wave.active)
         p->wave.qArray.draw();
     else
         p->quad.draw();
-    
+
     TEX::setSmooth(false);
 
     glState.blendMode.pop();
@@ -816,7 +816,7 @@ void Sprite::onGeometryChange(const Scene::Geometry &geo)
     /* Offset at which the sprite will be drawn
      * relative to screen origin */
     p->trans.setGlobalOffset(geo.offset());
-    
+
     p->sceneRect.setSize(geo.rect.size());
     p->sceneOrig = geo.orig;
 }
@@ -824,6 +824,6 @@ void Sprite::onGeometryChange(const Scene::Geometry &geo)
 void Sprite::releaseResources()
 {
     unlink();
-    
+
     delete p;
 }

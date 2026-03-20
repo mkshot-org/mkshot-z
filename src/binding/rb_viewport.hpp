@@ -1,7 +1,7 @@
 /*
 ** mkshot-z - Experimental OneShot (2016) engine reimplementation for modders.
 **
-** Copyright (C) 2026 Team Reverium <https://github.com/reverium>
+** Copyright (C) 2026 Reverium <https://github.com/reverium>
 ** Copyright (C) 2024 hat_kid <https://github.com/thehatkid> (ModShot-mkxp-z)
 ** Copyright (C) 2013-2023 Amaryllis Kulla and mkxp-z contributors
 **
@@ -78,7 +78,7 @@ viewportElementInitialize(int argc, VALUE *argv, VALUE self)
 	/* Construct object */
 	C *ve = new C(viewport);
 
-    
+
 	/* Set property objects */
 	rb_iv_set(self, "viewport", viewportObj);
     GFX_UNLOCK;

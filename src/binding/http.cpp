@@ -1,7 +1,7 @@
 /*
 ** mkshot-z - Experimental OneShot (2016) engine reimplementation for modders.
 **
-** Copyright (C) 2026 Team Reverium <https://github.com/reverium>
+** Copyright (C) 2026 Reverium <https://github.com/reverium>
 ** Copyright (C) 2024 hat_kid <https://github.com/thehatkid> (ModShot-mkxp-z)
 ** Copyright (C) 2013-2023 Amaryllis Kulla and mkxp-z contributors
 **
@@ -38,14 +38,14 @@ VALUE stringMap2hash(mkshot_net::StringMap &map) {
 mkshot_net::StringMap hash2StringMap(VALUE hash) {
     mkshot_net::StringMap ret;
     Check_Type(hash, T_HASH);
-    
+
     VALUE keys = rb_funcall(hash, rb_intern("keys"), 0);
     for (int i = 0; i < RARRAY_LEN(keys); i++) {
         VALUE key = rb_ary_entry(keys, i);
         VALUE val = rb_hash_aref(hash, key);
         SafeStringValue(key);
         SafeStringValue(val);
-        
+
         ret.emplace(RSTRING_PTR(key), RSTRING_PTR(val));
     }
     return ret;
@@ -59,22 +59,22 @@ VALUE getResponseBody(mkshot_net::HTTPResponse &res) {
     auto it = res.headers().find("Content-Type");
     if (it == res.headers().end())
         return rb_str_new(res.body().c_str(), res.body().length());
-    
+
     std::string &ctype = it->second;
-    
+
     if (strContainsStr(ctype, "text/plain")        || strContainsStr(ctype, "application/json") ||
         strContainsStr(ctype, "application/xml")   || strContainsStr(ctype, "text/html")        ||
         strContainsStr(ctype, "text/css")          || strContainsStr(ctype, "text/javascript")  ||
         strContainsStr(ctype, "application/x-sh")  || strContainsStr(ctype, "image/svg+xml")    ||
         strContainsStr(ctype, "application/x-httpd-php"))
         return rb_utf8_str_new(res.body().c_str(), res.body().length());
-    
+
     return rb_str_new(res.body().c_str(), res.body().length());
 }
 
 VALUE formResponse(mkshot_net::HTTPResponse &res) {
     VALUE ret = rb_hash_new();
-    
+
     rb_hash_aset(ret, ID2SYM(rb_intern("status")), INT2NUM(res.status()));
     rb_hash_aset(ret, ID2SYM(rb_intern("body")), getResponseBody(res));
     rb_hash_aset(ret, ID2SYM(rb_intern("headers")), stringMap2hash(res.headers()));
@@ -83,22 +83,22 @@ VALUE formResponse(mkshot_net::HTTPResponse &res) {
 
 void* httpGetInternal(void *req) {
     VALUE ret;
-    
+
     GUARD_EXC(
               mkshot_net::HTTPResponse res = ((mkshot_net::HTTPRequest*)req)->get();
               ret = formResponse(res);
               );
-    
+
     return (void*)ret;
 }
 
 RB_METHOD(httpGet) {
     RB_UNUSED_PARAM;
-    
+
     VALUE path, rheaders, redirect;
     rb_scan_args(argc, argv, "12", &path, &rheaders, &redirect);
     SafeStringValue(path);
-    
+
     bool rd;
     rb_bool_arg(redirect, &rd);
     mkshot_net::HTTPRequest req(RSTRING_PTR(path), rd);
@@ -116,25 +116,25 @@ typedef struct {
 
 void* httpPostInternal(void *args) {
     VALUE ret;
-    
+
     mkshot_net::HTTPRequest *req = ((httpPostInternalArgs*)args)->req;
     mkshot_net::StringMap *postData = ((httpPostInternalArgs*)args)->postData;
-    
+
     GUARD_EXC(
               mkshot_net::HTTPResponse res = req->post(*postData);
               ret = formResponse(res);
               );
-    
+
     return (void*)ret;
 }
 
 RB_METHOD(httpPost) {
     RB_UNUSED_PARAM;
-    
+
     VALUE path, postDataHash, rheaders, redirect;
     rb_scan_args(argc, argv, "22", &path, &postDataHash, &rheaders, &redirect);
     SafeStringValue(path);
-    
+
     bool rd;
     rb_bool_arg(redirect, &rd);
     mkshot_net::HTTPRequest req(RSTRING_PTR(path), rd);
@@ -142,7 +142,7 @@ RB_METHOD(httpPost) {
         auto headers = hash2StringMap(rheaders);
         req.headers().insert(headers.begin(), headers.end());
     }
-    
+
     mkshot_net::StringMap postData = hash2StringMap(postDataHash);
     httpPostInternalArgs args {&req, &postData};
     return (VALUE)rb_thread_call_without_gvl(httpPostInternal, &args, 0, 0);
@@ -156,35 +156,35 @@ typedef struct {
 
 void* httpPostBodyInternal(void *args) {
     VALUE ret;
-    
+
     mkshot_net::HTTPRequest *req = ((httpPostBodyInternalArgs*)args)->req;
     const char *reqbody = ((httpPostBodyInternalArgs*)args)->body;
     const char *reqctype = ((httpPostBodyInternalArgs*)args)->ctype;
-    
+
     GUARD_EXC(
               mkshot_net::HTTPResponse res = req->post(reqbody, reqctype);
               ret = formResponse(res);
               );
-    
+
     return (void*)ret;
 }
 
 RB_METHOD(httpPostBody) {
     RB_UNUSED_PARAM;
-    
+
     VALUE path, body, ctype, rheaders;
     rb_scan_args(argc, argv, "31", &path, &body, &ctype, &rheaders);
     SafeStringValue(path);
     SafeStringValue(body);
     SafeStringValue(ctype);
-    
-    
+
+
     mkshot_net::HTTPRequest req(RSTRING_PTR(path));
     if (rheaders != Qnil) {
         auto headers = hash2StringMap(rheaders);
         req.headers().insert(headers.begin(), headers.end());
     }
-    
+
     httpPostBodyInternalArgs args {&req, RSTRING_PTR(body), RSTRING_PTR(ctype)};
     return (VALUE)rb_thread_call_without_gvl(httpPostBodyInternal, &args, 0, 0);
 }
@@ -192,19 +192,19 @@ RB_METHOD(httpPostBody) {
 VALUE json2rb(json5pp::value const &v) {
     if (v.is_null())
         return Qnil;
-    
+
     if (v.is_number())
         return rb_float_new(v.as_number());
-    
+
     if (v.is_string())
         return rb_utf8_str_new_cstr(v.as_string().c_str());
-    
+
     if (v.is_boolean())
         return rb_bool_new(v.as_boolean());
-    
+
     if (v.is_integer())
         return LL2NUM(v.as_integer());
-    
+
     if (v.is_array()) {
         auto &a = v.as_array();
         VALUE ret = rb_ary_new();
@@ -213,7 +213,7 @@ VALUE json2rb(json5pp::value const &v) {
         }
         return ret;
     }
-    
+
     if (v.is_object()) {
         auto &o = v.as_object();
         VALUE ret = rb_hash_new();
@@ -222,7 +222,7 @@ VALUE json2rb(json5pp::value const &v) {
         }
         return ret;
     }
-    
+
     // This should be unreachable
     return Qnil;
 }
@@ -230,19 +230,19 @@ VALUE json2rb(json5pp::value const &v) {
 json5pp::value rb2json(VALUE v) {
     if (v == Qnil)
         return json5pp::value(nullptr);
-    
+
     if (RB_TYPE_P(v, RUBY_T_FLOAT))
         return json5pp::value(RFLOAT_VALUE(v));
-    
+
     if (RB_TYPE_P(v, RUBY_T_STRING))
         return json5pp::value(RSTRING_PTR(v));
-    
+
     if (v == Qtrue || v == Qfalse)
         return json5pp::value(RTEST(v));
-    
+
     if (RB_TYPE_P(v, RUBY_T_FIXNUM))
         return json5pp::value(NUM2DBL(v));
-    
+
     if (RB_TYPE_P(v, RUBY_T_ARRAY)) {
         json5pp::value ret_value = json5pp::array({});
         auto &ret = ret_value.as_array();
@@ -251,36 +251,36 @@ json5pp::value rb2json(VALUE v) {
         }
         return ret_value;
     }
-    
+
     if (RTEST(rb_funcall(v, rb_intern("is_a?"), 1, rb_cHash))) {
         json5pp::value ret_value = json5pp::object({});
         auto &ret = ret_value.as_object();
-        
-        
+
+
         VALUE keys = rb_funcall(v, rb_intern("keys"), 0);
-        
+
         for (int i = 0; i < RARRAY_LEN(keys); i++) {
             VALUE key = rb_ary_entry(keys, i); SafeStringValue(key);
             VALUE val = rb_hash_aref(v, key);
             ret.emplace(RSTRING_PTR(key), rb2json(val));
         }
-        
+
         return ret_value;
     }
-    
+
     raiseRbExc(Exception(Exception::MKSHOTError, "Invalid value for JSON: %s", RSTRING_PTR(rb_inspect(v))));
-    
+
     // This should be unreachable
     return json5pp::value(0);
 }
 
 RB_METHOD(httpJsonParse) {
     RB_UNUSED_PARAM;
-    
+
     VALUE jsonv;
     rb_scan_args(argc, argv, "1", &jsonv);
     SafeStringValue(jsonv);
-    
+
     json5pp::value v;
     try {
         v = json5pp::parse5(RSTRING_PTR(jsonv));
@@ -288,16 +288,16 @@ RB_METHOD(httpJsonParse) {
     catch (const std::exception &e) {
         raiseRbExc(Exception(Exception::MKSHOTError, "Failed to parse JSON: %s", e.what()));
     }
-    
+
     return json2rb(v);
 }
 
 RB_METHOD(httpJsonStringify) {
     RB_UNUSED_PARAM;
-    
+
     VALUE obj;
     rb_scan_args(argc, argv, "1", &obj);
-    
+
     json5pp::value v = rb2json(obj);
     return rb_utf8_str_new_cstr(v.stringify5(json5pp::rule::space_indent<>()).c_str());
 }
@@ -307,7 +307,7 @@ void httpBindingInit() {
     _rb_define_module_function(mNet, "get", httpGet);
     _rb_define_module_function(mNet, "post", httpPost);
     _rb_define_module_function(mNet, "post_body", httpPostBody);
-    
+
     VALUE mNetJSON = rb_define_module_under(mNet, "JSON");
     _rb_define_module_function(mNetJSON, "stringify", httpJsonStringify);
     _rb_define_module_function(mNetJSON, "parse", httpJsonParse);

@@ -1,7 +1,7 @@
 /*
 ** mkshot-z - Experimental OneShot (2016) engine reimplementation for modders.
 **
-** Copyright (C) 2026 Team Reverium <https://github.com/reverium>
+** Copyright (C) 2026 Reverium <https://github.com/reverium>
 ** Copyright (C) 2024 hat_kid <https://github.com/thehatkid> (ModShot-mkxp-z)
 ** Copyright (C) 2013-2023 Amaryllis Kulla and mkxp-z contributors
 **
@@ -26,24 +26,24 @@ DEF_TYPE(Window);
 RB_METHOD(windowInitialize) {
     GFX_LOCK;
     Window *w = viewportElementInitialize<Window>(argc, argv, self);
-    
+
     setPrivateData(self, w);
-    
+
     w->initDynAttribs();
-    
+
     wrapProperty(self, &w->getCursorRect(), "cursor_rect", RectType);
-    
+
     GFX_UNLOCK;
     return self;
 }
 
 RB_METHOD(windowUpdate) {
     RB_UNUSED_PARAM;
-    
+
     Window *w = getPrivateData<Window>(self);
-    
+
     GFX_GUARD_EXC(w->update(););
-    
+
     return Qnil;
 }
 
@@ -68,13 +68,13 @@ DEF_GFX_PROP_I(Window, ContentsOpacity)
 void windowBindingInit() {
     VALUE klass = rb_define_class("Window", rb_cObject);
     rb_define_alloc_func(klass, classAllocate<&WindowType>);
-    
+
     disposableBindingInit<Window>(klass);
     viewportElementBindingInit<Window>(klass);
-    
+
     _rb_define_method(klass, "initialize", windowInitialize);
     _rb_define_method(klass, "update", windowUpdate);
-    
+
     INIT_PROP_BIND(Window, Windowskin, "windowskin");
     INIT_PROP_BIND(Window, Contents, "contents");
     INIT_PROP_BIND(Window, Stretch, "stretch");

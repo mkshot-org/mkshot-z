@@ -1,7 +1,7 @@
 /*
 ** mkshot-z - Experimental OneShot (2016) engine reimplementation for modders.
 **
-** Copyright (C) 2026 Team Reverium <https://github.com/reverium>
+** Copyright (C) 2026 Reverium <https://github.com/reverium>
 ** Copyright (C) 2024 hat_kid <https://github.com/thehatkid> (ModShot-mkxp-z)
 ** Copyright (C) 2013-2023 Amaryllis Kulla and mkxp-z contributors
 **
@@ -41,7 +41,7 @@ public:
 	Bitmap(SDL_Surface *imgSurf, SDL_Surface *imgSurfHires, bool forceMega = false);
 
 	/* Clone constructor */
-    
+
     // frame is -2 for "any and all", -1 for "current", anything else for a specific frame
 	Bitmap(const Bitmap &other, int frame = -2);
 	~Bitmap();
@@ -90,7 +90,7 @@ public:
 
 	Color getPixel(int x, int y) const;
 	void setPixel(int x, int y, const Color &color);
-    
+
     bool getRaw(void *output, int output_size);
     void replaceRaw(void *pixel_data, int size);
     void saveToFile(const char *filename);
@@ -126,7 +126,7 @@ public:
 	void ensureNonMega() const;
     void ensureNonAnimated() const;
     void ensureAnimated() const;
-    
+
     // Animation functions
     void stop();
     void play();
@@ -135,23 +135,23 @@ public:
     void gotoAndPlay(int frame);
     int numFrames() const;
     int currentFrameI() const;
-    
+
     int addFrame(Bitmap &source, int position = -1);
     void removeFrame(int position = -1);
-    
+
     void nextFrame();
     void previousFrame();
     std::vector<TEXFBO> &getFrames() const;
-    
+
     void setAnimationFPS(float FPS);
     float getAnimationFPS() const;
-    
+
     void setLooping(bool loop);
     bool getLooping() const;
 
     void ensureNotPlaying() const;
     // ----------
-    
+
 	/* Binds the backing texture and sets the correct
 	 * texture size uniform in shader */
 	void bindTex(ShaderBase &shader, bool substituteLoresSize = true);

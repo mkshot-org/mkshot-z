@@ -1,7 +1,7 @@
 /*
 ** mkshot-z - Experimental OneShot (2016) engine reimplementation for modders.
 **
-** Copyright (C) 2026 Team Reverium <https://github.com/reverium>
+** Copyright (C) 2026 Reverium <https://github.com/reverium>
 ** Copyright (C) 2024 hat_kid <https://github.com/thehatkid> (ModShot-mkxp-z)
 ** Copyright (C) 2013-2023 Amaryllis Kulla and mkxp-z contributors
 **
@@ -31,13 +31,13 @@ public:
     std::string &body();
     StringMap &headers();
     ~HTTPResponse();
-    
+
 private:
     int _status;
     std::string _body;
     StringMap _headers;
     HTTPResponse();
-    
+
     friend class HTTPRequest;
 };
 
@@ -45,11 +45,11 @@ class HTTPRequest {
 public:
     HTTPRequest(const char *dest, bool follow_redirects = true);
     ~HTTPRequest();
-    
+
     StringMap &headers();
-    
+
     std::string destination;
-    
+
     HTTPResponse get();
     HTTPResponse post(StringMap &postData);
     HTTPResponse post(const char *body, const char *content_type);

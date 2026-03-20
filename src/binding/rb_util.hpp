@@ -1,7 +1,7 @@
 /*
 ** mkshot-z - Experimental OneShot (2016) engine reimplementation for modders.
 **
-** Copyright (C) 2026 Team Reverium <https://github.com/reverium>
+** Copyright (C) 2026 Reverium <https://github.com/reverium>
 ** Copyright (C) 2024 hat_kid <https://github.com/thehatkid> (ModShot-mkxp-z)
 ** Copyright (C) 2013-2023 Amaryllis Kulla and mkxp-z contributors
 **
@@ -29,23 +29,23 @@ enum RbException {
     PHYSFS,
     SDL,
     MKSHOT,
-    
+
     ErrnoENOENT,
-    
+
     IOError,
-    
+
     TypeError,
     ArgumentError,
-    
+
     RbExceptionsMax
 };
 
 struct RbData {
     VALUE exc[RbExceptionsMax];
-    
+
     /* Input module (RGSS3) */
     VALUE buttoncodeHash;
-    
+
     RbData();
     ~RbData();
 };
@@ -111,18 +111,18 @@ wrapObject(void *p, const rb_data_type_t &type, VALUE underKlass = rb_cObject)
 {
     VALUE klass = rb_const_get(underKlass, rb_intern(type.wrap_struct_name));
     VALUE obj = rb_obj_alloc(klass);
-    
+
     setPrivateData(obj, p);
-    
+
     return obj;
 }
 
 inline VALUE wrapProperty(VALUE self, void *prop, const char *iv, const rb_data_type_t &type,
                           VALUE underKlass = rb_cObject) {
     VALUE propObj = wrapObject(prop, type, underKlass);
-    
+
     rb_iv_set(self, iv, propObj);
-    
+
     return propObj;
 }
 
@@ -181,15 +181,15 @@ static inline VALUE objectLoad(int argc, VALUE *argv, VALUE self) {
     const char *data;
     int dataLen;
     rb_get_args(argc, argv, "s", &data, &dataLen RB_ARG_END);
-    
+
     VALUE obj = rb_obj_alloc(self);
-    
+
     C *c = 0;
-    
+
     GUARD_EXC(c = C::deserialize(data, dataLen););
-    
+
     setPrivateData(obj, c);
-    
+
     return obj;
 }
 
@@ -200,11 +200,11 @@ inline void rb_float_arg(VALUE arg, double *out, int argPos = 0) {
         case RUBY_T_FLOAT:
             *out = RFLOAT_VALUE(arg);
             break;
-            
+
         case RUBY_T_FIXNUM:
             *out = FIX2INT(arg);
             break;
-            
+
         default:
             rb_raise(rb_eTypeError, "Argument %d: Expected float", argPos);
     }
@@ -216,11 +216,11 @@ inline void rb_int_arg(VALUE arg, int *out, int argPos = 0) {
             // FIXME check int range?
             *out = NUM2LONG(arg);
             break;
-            
+
         case RUBY_T_FIXNUM:
             *out = FIX2INT(arg);
             break;
-            
+
         default:
             rb_raise(rb_eTypeError, "Argument %d: Expected fixnum", argPos);
     }
@@ -231,12 +231,12 @@ inline void rb_bool_arg(VALUE arg, bool *out, int argPos = 0) {
         case RUBY_T_TRUE:
             *out = true;
             break;
-            
+
         case RUBY_T_FALSE:
         case RUBY_T_NIL:
             *out = false;
             break;
-            
+
         default:
             rb_raise(rb_eTypeError, "Argument %d: Expected bool", argPos);
     }

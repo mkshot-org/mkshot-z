@@ -1,7 +1,7 @@
 /*
 ** mkshot-z - Experimental OneShot (2016) engine reimplementation for modders.
 **
-** Copyright (C) 2026 Team Reverium <https://github.com/reverium>
+** Copyright (C) 2026 Reverium <https://github.com/reverium>
 ** Copyright (C) 2024 hat_kid <https://github.com/thehatkid> (ModShot-mkxp-z)
 ** Copyright (C) 2013-2023 Amaryllis Kulla and mkxp-z contributors
 **
@@ -30,16 +30,16 @@ DEF_TYPE(Sprite);
 RB_METHOD(spriteInitialize) {
     GFX_LOCK;
     Sprite *s = viewportElementInitialize<Sprite>(argc, argv, self);
-    
+
     setPrivateData(self, s);
-    
+
     /* Wrap property objects */
     s->initDynAttribs();
-    
+
     wrapProperty(self, &s->getSrcRect(), "src_rect", RectType);
     wrapProperty(self, &s->getColor(), "color", ColorType);
     wrapProperty(self, &s->getTone(), "tone", ToneType);
-    
+
     GFX_UNLOCK;
     return self;
 }
@@ -80,36 +80,36 @@ DEF_GFX_PROP_B(Sprite, Obscured)
 
 RB_METHOD(spriteWidth) {
     RB_UNUSED_PARAM;
-    
+
     Sprite *s = getPrivateData<Sprite>(self);
-    
+
     int value = 0;
     GUARD_EXC(value = s->getWidth();)
-    
+
     return rb_fix_new(value);
 }
 
 RB_METHOD(spriteHeight) {
     RB_UNUSED_PARAM;
-    
+
     Sprite *s = getPrivateData<Sprite>(self);
-    
+
     int value = 0;
     GUARD_EXC(value = s->getHeight();)
-    
+
     return rb_fix_new(value);
 }
 
 void spriteBindingInit() {
     VALUE klass = rb_define_class("Sprite", rb_cObject);
     rb_define_alloc_func(klass, classAllocate<&SpriteType>);
-    
+
     disposableBindingInit<Sprite>(klass);
     flashableBindingInit<Sprite>(klass);
     viewportElementBindingInit<Sprite>(klass);
-    
+
     _rb_define_method(klass, "initialize", spriteInitialize);
-    
+
     INIT_PROP_BIND(Sprite, Bitmap, "bitmap");
     INIT_PROP_BIND(Sprite, SrcRect, "src_rect");
     INIT_PROP_BIND(Sprite, X, "x");
@@ -125,12 +125,12 @@ void spriteBindingInit() {
     INIT_PROP_BIND(Sprite, BlendType, "blend_type");
     INIT_PROP_BIND(Sprite, Color, "color");
     INIT_PROP_BIND(Sprite, Tone, "tone");
-    
+
     _rb_define_method(klass, "width", spriteWidth);
     _rb_define_method(klass, "height", spriteHeight);
-    
+
     INIT_PROP_BIND(Sprite, BushOpacity, "bush_opacity");
-    
+
     INIT_PROP_BIND(Sprite, Pattern, "pattern");
     INIT_PROP_BIND(Sprite, PatternBlendType, "pattern_blend_type");
     INIT_PROP_BIND(Sprite, PatternTile, "pattern_tile");
@@ -141,7 +141,7 @@ void spriteBindingInit() {
     INIT_PROP_BIND(Sprite, PatternZoomY, "pattern_zoom_y");
     INIT_PROP_BIND(Sprite, Invert, "invert");
     INIT_PROP_BIND(Sprite, Obscured, "obscured");
-    
+
     INIT_PROP_BIND(Sprite, WaveAmp, "wave_amp");
     INIT_PROP_BIND(Sprite, WaveLength, "wave_length");
     INIT_PROP_BIND(Sprite, WaveSpeed, "wave_speed");

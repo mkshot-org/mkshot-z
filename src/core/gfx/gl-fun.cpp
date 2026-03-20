@@ -1,7 +1,7 @@
 /*
 ** mkshot-z - Experimental OneShot (2016) engine reimplementation for modders.
 **
-** Copyright (C) 2026 Team Reverium <https://github.com/reverium>
+** Copyright (C) 2026 Reverium <https://github.com/reverium>
 ** Copyright (C) 2024 hat_kid <https://github.com/thehatkid> (ModShot-mkxp-z)
 ** Copyright (C) 2013-2023 Amaryllis Kulla and mkxp-z contributors
 **
@@ -32,10 +32,10 @@ static void parseExtensionsCore(_PFNGLGETINTEGERVPROC GetIntegerv, BoostSet<std:
 {
     _PFNGLGETSTRINGIPROC GetStringi =
     (_PFNGLGETSTRINGIPROC) SDL_GL_GetProcAddress("core/gfx/glGetStringi");
-    
+
     GLint extCount = 0;
     GetIntegerv(GL_NUM_EXTENSIONS, &extCount);
-    
+
     for (GLint i = 0; i < extCount; ++i)
         out.insert((const char*) GetStringi(GL_EXTENSIONS, i));
 }
@@ -43,23 +43,23 @@ static void parseExtensionsCore(_PFNGLGETINTEGERVPROC GetIntegerv, BoostSet<std:
 static void parseExtensionsCompat(_PFNGLGETSTRINGPROC GetString, BoostSet<std::string> &out)
 {
     const char *ext = (const char*) GetString(GL_EXTENSIONS);
-    
+
     if (!ext)
         return;
-    
+
     char buffer[0x100];
     size_t bufferI;
-    
+
     while (*ext)
     {
         bufferI = 0;
         while (*ext && *ext != ' ')
             buffer[bufferI++] = *ext++;
-        
+
         buffer[bufferI] = '\0';
-        
+
         out.insert(buffer);
-        
+
         if (*ext == ' ')
             ++ext;
     }
@@ -75,26 +75,26 @@ void initGLFunctions()
 {
 #define EXT_SUFFIX ""
     GL_20_FUN;
-    
+
     /* Determine GL version */
     const char *ver = (const char*) gl.GetString(GL_VERSION);
-    
+
     const char glesPrefix[] = "OpenGL ES ";
     const size_t glesPrefixN = sizeof(glesPrefix)-1;
-    
+
     bool gles = false;
-    
+
     if (!strncmp(ver, glesPrefix, glesPrefixN))
     {
         gles = true;
         gl.glsles = true;
-        
+
         ver += glesPrefixN;
     }
-    
+
     /* Assume single digit */
     int glMajor = *ver - '0';
-    
+
     if (glMajor < 2)
 #ifndef GLES2
         throw Exception(Exception::MKShotError,
@@ -111,21 +111,21 @@ void initGLFunctions()
         // (officially or otherwise) should support ANGLE, so this should never be seen. Probably, anyway. Don't @ me
         throw EXC("A graphics card that supports OpenGL ES 2.0 or later is required.");
 #endif
-    
+
     if (gles)
     {
         GL_ES_FUN;
     }
-    
+
     BoostSet<std::string> ext;
-    
+
     if (glMajor >= 3)
         parseExtensionsCore(gl.GetIntegerv, ext);
     else
         parseExtensionsCompat(gl.GetString, ext);
-    
+
 #define HAVE_EXT(_ext) ext.contains("GL_" #_ext)
-    
+
     /* FBO entrypoints */
     if (glMajor >= 3 || HAVE_EXT(ARB_framebuffer_object))
     {
@@ -143,7 +143,7 @@ void initGLFunctions()
 #undef EXT_SUFFIX
 #define EXT_SUFFIX "EXT"
         GL_FBO_FUN;
-        
+
         if (HAVE_EXT(EXT_framebuffer_blit))
         {
             GL_FBO_BLIT_FUN;
@@ -153,7 +153,7 @@ void initGLFunctions()
     {
         throw EXC("No FBO support available");
     }
-    
+
     /* VAO entrypoints */
     if (HAVE_EXT(ARB_vertex_array_object) || glMajor >= 3)
     {
@@ -173,7 +173,7 @@ void initGLFunctions()
 #define EXT_SUFFIX "OES"
         GL_VAO_FUN;
     }
-    
+
     /* Debug callback entrypoints */
     if (HAVE_EXT(KHR_debug))
     {
@@ -187,18 +187,18 @@ void initGLFunctions()
 #define EXT_SUFFIX "ARB"
         GL_DEBUG_KHR_FUN;
     }
-    
+
     if (HAVE_EXT(GREMEDY_string_marker))
     {
 #undef EXT_SUFFIX
 #define EXT_SUFFIX "GREMEDY"
         GL_GREMEMDY_FUN;
     }
-    
+
     /* Misc caps */
     if (!gles || glMajor >= 3 || HAVE_EXT(EXT_unpack_subimage))
         gl.unpack_subimage = true;
-    
+
     if (!gles || glMajor >= 3 || HAVE_EXT(OES_texture_npot))
         gl.npot_repeat = true;
 }

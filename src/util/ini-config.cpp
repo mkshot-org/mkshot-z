@@ -1,7 +1,7 @@
 /*
 ** mkshot-z - Experimental OneShot (2016) engine reimplementation for modders.
 **
-** Copyright (C) 2026 Team Reverium <https://github.com/reverium>
+** Copyright (C) 2026 Reverium <https://github.com/reverium>
 ** Copyright (C) 2024 hat_kid <https://github.com/thehatkid> (ModShot-mkxp-z)
 ** Copyright (C) 2013-2023 Amaryllis Kulla and mkxp-z contributors
 **
@@ -26,7 +26,7 @@ std::string toLowerCase(const std::string& str)
 	std::transform(lower.begin(), lower.end(), lower.begin(), ::tolower);
 	return lower;
 }
- 
+
 std::string trim(const std::string& str, const std::string& chars = "\t\n\v\f\r ")
 {
 	std::string trimmed = str;
@@ -113,7 +113,7 @@ std::string INIConfiguration::getStringProperty(const std::string& sname, const 
 			return prop;
 		}
 	}
-	
+
 	return def;
 }
 

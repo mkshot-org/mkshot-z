@@ -1,7 +1,7 @@
 /*
 ** mkshot-z - Experimental OneShot (2016) engine reimplementation for modders.
 **
-** Copyright (C) 2026 Team Reverium <https://github.com/reverium>
+** Copyright (C) 2026 Reverium <https://github.com/reverium>
 ** Copyright (C) 2024 hat_kid <https://github.com/thehatkid> (ModShot-mkxp-z)
 ** Copyright (C) 2013-2023 Amaryllis Kulla and mkxp-z contributors
 **
@@ -29,7 +29,7 @@ static std::string copyWithNewlines(const char *input, const unsigned limit)
 {
     std::string output;
 	unsigned noNewlineCount = 0;
-	
+
 	while (*input != '\0')
 	{
 		if ((*input == ' ' || *input == '\t') && noNewlineCount >= limit)
@@ -37,10 +37,10 @@ static std::string copyWithNewlines(const char *input, const unsigned limit)
 			output += '\n';
 			noNewlineCount = 0;
 		}
-		else 
+		else
 		{
 			output += *input;
-			
+
 			if (*input == '\n')
 				noNewlineCount = 0;
 			else

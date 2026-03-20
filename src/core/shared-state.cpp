@@ -1,7 +1,7 @@
 /*
 ** mkshot-z - Experimental OneShot (2016) engine reimplementation for modders.
 **
-** Copyright (C) 2026 Team Reverium <https://github.com/reverium>
+** Copyright (C) 2026 Reverium <https://github.com/reverium>
 ** Copyright (C) 2024 hat_kid <https://github.com/thehatkid> (ModShot-mkxp-z)
 ** Copyright (C) 2013-2023 Amaryllis Kulla and mkxp-z contributors
 **
@@ -103,7 +103,7 @@ struct SharedStatePrivate
 	Quad gpQuad;
 
 	unsigned int stampCounter;
-    
+
     std::chrono::time_point<std::chrono::steady_clock> startupTime;
 
 	SharedStatePrivate(RGSSThreadData *threadData)
@@ -121,12 +121,12 @@ struct SharedStatePrivate
 	      fontState(threadData->config),
 	      stampCounter(0)
 	{}
-	
+
 	void init(RGSSThreadData *threadData)
 	{
-        
+
         startupTime = std::chrono::steady_clock::now();
-        
+
 		/* Shaders have been compiled in ShaderSet's constructor */
 		if (gl.ReleaseShaderCompiler)
 			gl.ReleaseShaderCompiler();
@@ -185,7 +185,7 @@ void SharedState::initInstance(RGSSThreadData *threadData)
 	 * Font depends on SharedState existing */
 
 	rgssVersion = threadData->config.rgssVersion;
-    
+
 	_globalIBO = new GlobalIBO();
 	_globalIBO->ensureSize(1);
 
@@ -398,10 +398,10 @@ SharedState::SharedState(RGSSThreadData *threadData)
 		// then just return
 		if (rtData().rqTerm)
 			return;
-		
+
 		delete p;
 		SharedState::instance = 0;
-		
+
 		throw exc;
 	}
 }

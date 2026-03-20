@@ -1,7 +1,7 @@
 /*
 ** mkshot-z - Experimental OneShot (2016) engine reimplementation for modders.
 **
-** Copyright (C) 2026 Team Reverium <https://github.com/reverium>
+** Copyright (C) 2026 Reverium <https://github.com/reverium>
 ** Copyright (C) 2024 hat_kid <https://github.com/thehatkid> (ModShot-mkxp-z)
 ** Copyright (C) 2013-2023 Amaryllis Kulla and mkxp-z contributors
 **
@@ -35,7 +35,7 @@ class Graphics
 public:
     double getDelta();
     double lastUpdate();
-    
+
 	void update(bool checkForShutdown = true);
 	void freeze();
 	void transition(int duration = 8,
@@ -92,7 +92,7 @@ public:
 	 * if "checkReset" */
 	void repaintWait(const AtomicFlag &exitCond,
 	                 bool checkReset = true);
-    
+
     void lock(bool force = false);
     void unlock(bool force = false);
 
