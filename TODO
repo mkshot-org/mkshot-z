@@ -5,7 +5,7 @@ everything is sorted by priority
 _________________________
 
 [=] General: SDL2 -> SDL3
-[ ] Get rid of PhysFS and RGSSAD support entirely
+[=] Get rid of PhysFS and RGSSAD support entirely
 [-] General: Meson/Xcode + Makefiles -> CMake + Conan
    \(-) Fully functional CMake setup
     (-) General: Embed assets without involving xxd
@@ -13,8 +13,7 @@ _________________________
     (-) Steam support
     (-) macOS support
 [=] General: Code modernization and portability enchancements
-   \(=) C++14 -> C++20
-    (=) Move the macro spaghetti into a build configuration header
+   \( ) Move the macro spaghetti into a build configuration header
     ( ) Rewrite the internal GUI (i.e. keybinds menu) to use Dear IMGUI
 [ ] Configuration: JSON5 -> TOML
 [ ] Ruby: 3.4 -> 4.x
