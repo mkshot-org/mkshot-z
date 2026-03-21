@@ -224,7 +224,7 @@ struct Movie
         ALint procBufs = STREAM_BUFS;
         volatile AudioQueue *audioPacketAndOffset;
         int channels;
-        int sampleRate;
+        int sampleFreq;
         float *sourceSamples;
         ALuint samplesToProcess;
         ALshort *sampleBuffer;
@@ -242,7 +242,7 @@ struct Movie
                 while(audioQueueHead && (remainingSamples > 0)) {
                     audioPacketAndOffset = audioQueueHead;
                     channels = audioPacketAndOffset->audio->channels;
-                    sampleRate = audioPacketAndOffset->audio->freq;
+                    sampleFreq = audioPacketAndOffset->audio->freq;
                     sourceSamples = audioPacketAndOffset->audio->samples + (audioPacketAndOffset->offset * channels);
                     samplesToProcess = (audioPacketAndOffset->audio->frames - audioPacketAndOffset->offset) * channels;
 
@@ -276,7 +276,7 @@ struct Movie
                 SDL_UnlockMutex(audioMutex);
 
                 alBufferData(alBuffers[procBufs], channels == 1 ? AL_FORMAT_MONO16 : AL_FORMAT_STEREO16, audioBuffer,
-                    (MOVIE_AUDIO_BUFFER_SIZE - remainingSamples) * sizeof(ALshort), sampleRate);
+                    (MOVIE_AUDIO_BUFFER_SIZE - remainingSamples) * sizeof(ALshort), sampleFreq);
                 alSourceQueueBuffers(audioSource, 1, &alBuffers[procBufs]);
                 alGetSourcei(audioSource, AL_SOURCE_STATE, &state);
                 if(state != AL_PLAYING) alSourcePlay(audioSource);

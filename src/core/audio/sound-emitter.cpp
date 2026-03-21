@@ -120,8 +120,8 @@ void SoundEmitter::play(const std::string &filename,
                         int volume,
                         int pitch)
 {
-	float _volume = clamp<int>(volume, 0, 100) / 100.0f;
-	float _pitch  = clamp<int>(pitch, 50, 150) / 100.0f;
+	float _volume = std::clamp<int>(volume, 0, 100) / 100.0f;
+	float _pitch  = std::clamp<int>(pitch, 50, 150) / 100.0f;
 
 	SoundBuffer *buffer = allocateBuffer(filename);
 
@@ -211,7 +211,7 @@ struct SoundOpenHandler : FS::OpenHandler
 		ALenum alFormat = chooseALFormat(sampleSize, sample->actual.channels);
 
 		AL::Buffer::uploadData(buffer->alBuffer, alFormat, sample->buffer,
-							   buffer->bytes, sample->actual.rate);
+							   buffer->bytes, sample->actual.freq);
 
 		Sound_FreeSample(sample);
 

@@ -721,7 +721,7 @@ Bitmap::Bitmap(const Bitmap &other, int frame)
         }
         else {
             auto &frames = other.getFrames();
-            GLMeta::blitSource(frames[clamp(frame, 0, (int)frames.size() - 1)]);
+            GLMeta::blitSource(frames[std::clamp(frame, 0, (int)frames.size() - 1)]);
         }
         GLMeta::blitRectangle(rect(), rect(), true);
         GLMeta::blitEnd();
@@ -1471,8 +1471,8 @@ void Bitmap::radialBlur(int angle, int divisions)
         return;
     }
 
-    angle     = clamp<int>(angle, 0, 359);
-    divisions = clamp<int>(divisions, 2, 100);
+    angle     = std::clamp<int>(angle, 0, 359);
+    divisions = std::clamp<int>(divisions, 2, 100);
 
     const int _width = width();
     const int _height = height();
@@ -1693,10 +1693,10 @@ void Bitmap::setPixel(int x, int y, const Color &color)
 
     uint8_t pixel[] =
     {
-        (uint8_t) clamp<double>(color.red,   0, 255),
-        (uint8_t) clamp<double>(color.green, 0, 255),
-        (uint8_t) clamp<double>(color.blue,  0, 255),
-        (uint8_t) clamp<double>(color.alpha, 0, 255)
+        (uint8_t) std::clamp<double>(color.red,   0, 255),
+        (uint8_t) std::clamp<double>(color.green, 0, 255),
+        (uint8_t) std::clamp<double>(color.blue,  0, 255),
+        (uint8_t) std::clamp<double>(color.alpha, 0, 255)
     };
 
     TEX::bind(p->gl.tex);
@@ -1961,10 +1961,10 @@ static void applyShadow(SDL_Surface *&in, const SDL_PixelFormat &fm, const SDL_C
             /* Result colors */
             uint8_t r, g, b, a;
 
-            r = clamp<float>(fr * co3, 0, 1) * 255.0f;
-            g = clamp<float>(fg * co3, 0, 1) * 255.0f;
-            b = clamp<float>(fb * co3, 0, 1) * 255.0f;
-            a = clamp<float>(fa, 0, 1) * 255.0f;
+            r = std::clamp<float>(fr * co3, 0, 1) * 255.0f;
+            g = std::clamp<float>(fg * co3, 0, 1) * 255.0f;
+            b = std::clamp<float>(fb * co3, 0, 1) * 255.0f;
+            a = std::clamp<float>(fa, 0, 1) * 255.0f;
 
             *outP = SDL_MapRGBA(&fm, r, g, b, a);
         }

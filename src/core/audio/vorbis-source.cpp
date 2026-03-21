@@ -31,7 +31,7 @@ static size_t vfRead(void *ptr, size_t size, size_t nmemb, void *io)
 
 static int vfSeek(void *io, ogg_int64_t offset, int whence)
 {
-	return SDL_SeekIO(static_cast<SDL_IOStream*>(io), offset, whence);
+	return SDL_SeekIO(static_cast<SDL_IOStream*>(io), offset, static_cast<SDL_IOWhence>(whence));
 }
 
 static long vfTell(void *io)
@@ -148,7 +148,7 @@ struct VorbisSource : ALDataSource
 		SDL_CloseIO(&src);
 	}
 
-	int sampleRate()
+	int sampleFreq()
 	{
 		return info.rate;
 	}

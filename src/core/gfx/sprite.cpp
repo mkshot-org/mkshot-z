@@ -180,8 +180,8 @@ struct SpritePrivate
 
         /* Clamp the rectangle so it doesn't reach outside
          * the bitmap bounds */
-        rect.w = clamp<int>(rect.w, 0, bmSize.x-rect.x);
-        rect.h = clamp<int>(rect.h, 0, bmSize.y-rect.y);
+        rect.w = std::clamp<int>(rect.w, 0, bmSize.x-rect.x);
+        rect.h = std::clamp<int>(rect.h, 0, bmSize.y-rect.y);
 
         if (bmSizeHires.x && bmSizeHires.y && bmSize.x && bmSize.y)
         {

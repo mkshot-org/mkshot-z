@@ -73,25 +73,25 @@ void Color::set(double red, double green, double blue, double alpha)
 void Color::setRed(double value)
 {
 	red = value;
-	norm.x = clamp<double>(value, 0, 255) / 255;
+	norm.x = std::clamp<double>(value, 0, 255) / 255;
 }
 
 void Color::setGreen(double value)
 {
 	green = value;
-	norm.y = clamp<double>(value, 0, 255) / 255;
+	norm.y = std::clamp<double>(value, 0, 255) / 255;
 }
 
 void Color::setBlue(double value)
 {
 	blue = value;
-	norm.z = clamp<double>(value, 0, 255) / 255;
+	norm.z = std::clamp<double>(value, 0, 255) / 255;
 }
 
 void Color::setAlpha(double value)
 {
 	alpha = value;
-	norm.w = clamp<double>(value, 0, 255) / 255;
+	norm.w = std::clamp<double>(value, 0, 255) / 255;
 }
 
 /* Serializable */
@@ -143,10 +143,10 @@ void Color::updateExternal()
 SDL_Color Color::toSDLColor() const
 {
 	SDL_Color c;
-	c.r = clamp<double>(red, 0, 255);
-	c.g = clamp<double>(green, 0, 255);
-	c.b = clamp<double>(blue, 0, 255);
-	c.a = clamp<double>(alpha, 0, 255);
+	c.r = std::clamp<double>(red, 0, 255);
+	c.g = std::clamp<double>(green, 0, 255);
+	c.b = std::clamp<double>(blue, 0, 255);
+	c.a = std::clamp<double>(alpha, 0, 255);
 
 	return c;
 }
@@ -198,7 +198,7 @@ const Tone& Tone::operator=(const Tone &o)
 void Tone::setRed(double value)
 {
 	red = value;
-	norm.x = (float) clamp<double>(value, -255, 255) / 255;
+	norm.x = (float) std::clamp<double>(value, -255, 255) / 255;
 
 	valueChanged();
 }
@@ -206,7 +206,7 @@ void Tone::setRed(double value)
 void Tone::setGreen(double value)
 {
 	green = value;
-	norm.y = (float) clamp<double>(value, -255, 255) / 255;
+	norm.y = (float) std::clamp<double>(value, -255, 255) / 255;
 
 	valueChanged();
 }
@@ -214,7 +214,7 @@ void Tone::setGreen(double value)
 void Tone::setBlue(double value)
 {
 	blue = value;
-	norm.z = (float) clamp<double>(value, -255, 255) / 255;
+	norm.z = (float) std::clamp<double>(value, -255, 255) / 255;
 
 	valueChanged();
 }
@@ -222,7 +222,7 @@ void Tone::setBlue(double value)
 void Tone::setGray(double value)
 {
 	gray = value;
-	norm.w = (float) clamp<double>(value, 0, 255) / 255;
+	norm.w = (float) std::clamp<double>(value, 0, 255) / 255;
 
 	valueChanged();
 }
@@ -259,10 +259,10 @@ Tone *Tone::deserialize(const char *data, int len)
 
 void Tone::updateInternal()
 {
-	norm.x = (float) clamp<double>(red,   -255, 255) / 255;
-	norm.y = (float) clamp<double>(green, -255, 255) / 255;
-	norm.z = (float) clamp<double>(blue,  -255, 255) / 255;
-	norm.w = (float) clamp<double>(gray,     0, 255) / 255;
+	norm.x = (float) std::clamp<double>(red,   -255, 255) / 255;
+	norm.y = (float) std::clamp<double>(green, -255, 255) / 255;
+	norm.z = (float) std::clamp<double>(blue,  -255, 255) / 255;
+	norm.w = (float) std::clamp<double>(gray,     0, 255) / 255;
 }
 
 

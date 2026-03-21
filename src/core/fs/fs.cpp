@@ -125,7 +125,7 @@ std::string mkshot_fs::normalizePath(const char *path, bool preferred, bool abso
 }
 
 std::string mkshot_fs::getDefaultGameRoot() {
-    char *p = SDL_GetBasePath();
+    const char *p = SDL_GetBasePath();
     std::string ret(p);
     SDL_free(p);
     return ret;
@@ -134,13 +134,14 @@ std::string mkshot_fs::getDefaultGameRoot() {
 
 struct SDLRWIoContext {
     SDL_IOStream *io;
-    std::string filename    ;
+    std::string filename;
 
-    SDLRWIoContext(const c    har *filename)
-        : io(SDL_IOFromFil    e(filename, "r")), filename(filename) {
-      if (!io)
-        throw Exception(Ex    ception::SDLError, "Failed to open file: %s",
-                        SDL_GetError());
+    SDLRWIoContext(const char *filename)
+        : io(SDL_IOFromFile(filename, "r")), filename(filename)
+    {
+        if (!io)
+            throw Exception(Exception::SDLError, "Failed to open file: %s",
+                            SDL_GetError());
     }
 
     ~SDLRWIoContext() { SDL_CloseIO(io); }
@@ -372,17 +373,6 @@ static void throwPhysfsError(const char *desc) {
 FS::FS(const char *argv0, bool allowSymlinks) {
     if (PHYSFS_init(argv0) == 0)
         throwPhysfsError("Error initializing PhysFS");
-
-    // One error (=return 0) turns the whole product to 0
-
-    int er = 1;
-
-    er *= PHYSFS_registerArchiver(&RGSS1_Archiver);
-    er *= PHYSFS_registerArchiver(&RGSS2_Archiver);
-    er *= PHYSFS_registerArchiver(&RGSS3_Archiver);
-
-    if (er == 0)
-        throwPhysfsError("Error registering PhysFS RGSS archiver");
 
     p = new FSPrivate;
     p->havePathCache = false;
